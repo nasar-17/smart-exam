@@ -86,6 +86,68 @@ export default function About({ data }: { data?: any }) {
                     </motion.div>
                 </div>
 
+                {/* Visi & Misi Grid */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: false }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="mt-20 grid grid-cols-1 gap-8 md:grid-cols-2"
+                >
+                    {/* Visi Card */}
+                    <div
+                        className="rounded-2xl p-8"
+                        style={{
+                            background: 'rgba(255, 255, 255, 0.02)',
+                            border: '1px solid rgba(255,255,255,0.06)',
+                            backdropFilter: 'blur(10px)',
+                        }}
+                    >
+                        <h3
+                            className="mb-4 text-xl font-bold text-white flex items-center gap-3"
+                            style={{ fontFamily: "'Sora', sans-serif" }}
+                        >
+                            <span className="h-2 w-2 rounded-full bg-blue-500" />
+                            Visi Kami
+                        </h3>
+                        <p className="text-base leading-relaxed text-gray-400">
+                            Menjadi platform ujian digital terdepan di Indonesia yang berdedikasi menciptakan akses evaluasi pendidikan yang adil, aman, dan inklusif bagi seluruh lapisan masyarakat.
+                        </p>
+                    </div>
+
+                    {/* Misi Card */}
+                    <div
+                        className="rounded-2xl p-8"
+                        style={{
+                            background: 'rgba(255, 255, 255, 0.02)',
+                            border: '1px solid rgba(255,255,255,0.06)',
+                            backdropFilter: 'blur(10px)',
+                        }}
+                    >
+                        <h3
+                            className="mb-4 text-xl font-bold text-white flex items-center gap-3"
+                            style={{ fontFamily: "'Sora', sans-serif" }}
+                        >
+                            <span className="h-2 w-2 rounded-full bg-blue-500" />
+                            Misi Kami
+                        </h3>
+                        <ul className="space-y-3.5 text-base text-gray-400">
+                            <li className="flex gap-2">
+                                <span className="text-blue-400 font-bold">•</span>
+                                Menyediakan teknologi anti-kecurangan mutakhir demi menjaga kejujuran proses akademik.
+                            </li>
+                            <li className="flex gap-2">
+                                <span className="text-blue-400 font-bold">•</span>
+                                Menyederhanakan administrasi ujian guna menekan beban biaya operasional kertas dan cetak.
+                            </li>
+                            <li className="flex gap-2">
+                                <span className="text-blue-400 font-bold">•</span>
+                                Menyajikan analisis hasil instan dan detail untuk mempermudah evaluasi performa belajar.
+                            </li>
+                        </ul>
+                    </div>
+                </motion.div>
+
                 {/* Dipercaya oleh institusi terkemuka (Moving/sliding loop from left to right) */}
                 <div className="mt-24 border-t pt-10" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
                     <p className="mb-8 text-center text-xs font-semibold tracking-widest text-white/20 uppercase">
