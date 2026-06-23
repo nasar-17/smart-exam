@@ -54,7 +54,7 @@ class LandingContentSeeder extends Seeder
             // ── ABOUT ───────────────────────────────────────
             ['section' => 'about', 'key' => 'title', 'value' => 'Kami Percaya Teknologi Bisa Membuat', 'type' => 'text', 'label' => 'Judul (baris 1)', 'order' => 1],
             ['section' => 'about', 'key' => 'title_highlight', 'value' => 'Pendidikan Lebih Adil', 'type' => 'text', 'label' => 'Judul (highlight gradient)', 'order' => 2],
-            ['section' => 'about', 'key' => 'paragraph_1', 'value' => 'Smart Exam dikembangkan oleh tim Pallaka Techno — startup teknologi pendidikan dari Makassar, Indonesia. Kami memahami tantangan nyata yang dihadapi institusi pendidikan dalam menyelenggarakan ujian: kecurangan, biaya cetak soal, dan keterbatasan waktu koreksi.', 'type' => 'textarea', 'label' => 'Paragraf 1', 'order' => 3],
+            ['section' => 'about', 'key' => 'paragraph_1', 'value' => 'Smart Exam dikembangkan oleh tim Smart Inovasi — startup teknologi pendidikan dari Makassar, Indonesia. Kami memahami tantangan nyata yang dihadapi institusi pendidikan dalam menyelenggarakan ujian: kecurangan, biaya cetak soal, dan keterbatasan waktu koreksi.', 'type' => 'textarea', 'label' => 'Paragraf 1', 'order' => 3],
             ['section' => 'about', 'key' => 'paragraph_2', 'value' => 'Dengan Smart Exam, kami menghadirkan platform ujian digital yang tidak hanya mudah digunakan, tapi juga aman, terjangkau, dan bisa diakses dari mana saja.', 'type' => 'textarea', 'label' => 'Paragraf 2', 'order' => 4],
             ['section' => 'about', 'key' => 'image_url', 'value' => 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80', 'type' => 'image', 'label' => 'URL Gambar', 'order' => 5],
             ['section' => 'about', 'key' => 'link_text', 'value' => 'Pelajari lebih lanjut tentang kami', 'type' => 'text', 'label' => 'Teks Link', 'order' => 6],
@@ -101,7 +101,7 @@ class LandingContentSeeder extends Seeder
             ['section' => 'testimonials', 'key' => 'items', 'type' => 'json', 'label' => 'Daftar Testimoni (JSON)', 'order' => 3, 'value' => json_encode([
                 ['initial' => 'N', 'name' => 'Dra. Hj. Nuraini, M.Pd.', 'role' => 'Kepala Sekolah, SMA Negeri 5 Makassar', 'quote' => 'Smart Exam benar-benar mengubah cara kami menyelenggarakan ujian semester. Tidak ada lagi drama fotokopi soal tengah malam!', 'rating' => 5],
                 ['initial' => 'A', 'name' => 'Bpk. Ahmad Fauzi, S.Pd.', 'role' => 'Guru Matematika, MTs Al-Ikhlas Bone', 'quote' => 'Fitur anti-cheating-nya sangat membantu. Siswa tidak bisa buka tab lain, dan saya bisa pantau mereka secara real-time dari ruang guru.', 'rating' => 5],
-                ['initial' => 'R', 'name' => 'Ir. Rahmat Hidayat', 'role' => 'Kepala IT, Universitas Bosowa', 'quote' => 'Setup awal hanya butuh 15 menit. Tim Pallaka Techno juga sangat responsif membantu kami saat onboarding.', 'rating' => 5],
+                ['initial' => 'R', 'name' => 'Ir. Rahmat Hidayat', 'role' => 'Kepala IT, Universitas Bosowa', 'quote' => 'Setup awal hanya butuh 15 menit. Tim Smart Inovasi juga sangat responsif membantu kami saat onboarding.', 'rating' => 5],
                 ['initial' => 'S', 'name' => 'Siti Aisyah, S.Pd., M.Si.', 'role' => 'Dosen, Politeknik Negeri Ujung Pandang', 'quote' => 'Laporan hasilnya detail banget — bisa lihat per soal mana yang banyak salah. Sangat membantu evaluasi pengajaran saya.', 'rating' => 5],
                 ['initial' => 'H', 'name' => 'H. Syamsul Bahri, M.M.', 'role' => 'Wakasek Kurikulum, SMK Kesehatan Amanah', 'quote' => 'Kami punya 1.200 siswa dan Smart Exam menanganinya tanpa masalah. Tidak ada server down, bahkan di hari ujian nasional simulasi.', 'rating' => 5],
                 ['initial' => 'M', 'name' => 'Andi Maulana, S.Kom.', 'role' => 'Operator IT, Dinas Pendidikan Kab. Gowa', 'quote' => 'Harganya sangat terjangkau dibanding solusi lain yang pernah kami coba. Worth it sekali untuk fitur yang ditawarkan.', 'rating' => 5],
@@ -128,7 +128,7 @@ class LandingContentSeeder extends Seeder
 
             // ── FOOTER ──────────────────────────────────────
             ['section' => 'footer', 'key' => 'tagline', 'value' => 'Platform ujian digital terpercaya untuk institusi pendidikan modern Indonesia.', 'type' => 'textarea', 'label' => 'Tagline', 'order' => 1],
-            ['section' => 'footer', 'key' => 'copyright', 'value' => '© 2026 Smart Exam oleh Pallaka Techno. Hak cipta dilindungi.', 'type' => 'text', 'label' => 'Copyright', 'order' => 2],
+            ['section' => 'footer', 'key' => 'copyright', 'value' => '© 2026 Smart Exam oleh Smart Inovasi. Hak cipta dilindungi.', 'type' => 'text', 'label' => 'Copyright', 'order' => 2],
             ['section' => 'footer', 'key' => 'social_instagram', 'value' => '#', 'type' => 'text', 'label' => 'Link Instagram', 'order' => 3],
             ['section' => 'footer', 'key' => 'social_twitter', 'value' => '#', 'type' => 'text', 'label' => 'Link Twitter/X', 'order' => 4],
             ['section' => 'footer', 'key' => 'social_linkedin', 'value' => '#', 'type' => 'text', 'label' => 'Link LinkedIn', 'order' => 5],

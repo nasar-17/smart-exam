@@ -64,7 +64,7 @@ export default function About({ data }: { data?: any }) {
                             </span>
                         </h2>
                         <p className="mb-4 text-base leading-relaxed text-gray-400">
-                            Smart Exam dikembangkan oleh tim Pallaka Techno —
+                            Smart Exam dikembangkan oleh tim Smart Inovasi —
                             startup teknologi pendidikan dari Makassar,
                             Indonesia. Kami memahami tantangan nyata yang
                             dihadapi institusi pendidikan dalam menyelenggarakan

@@ -20,7 +20,7 @@ const testimonials = [
         initials: 'RH',
         name: 'Ir. Rahmat Hidayat',
         role: 'Kepala IT · Universitas Bosowa',
-        text: 'Setup awal hanya butuh <strong>15 menit</strong>. Tim Pallaka Techno juga sangat responsif membantu kami saat onboarding.',
+        text: 'Setup awal hanya butuh <strong>15 menit</strong>. Tim Smart Inovasi juga sangat responsif membantu kami saat onboarding.',
         gradient: '135deg,#2563EB,#0EA5E9',
     },
     {
