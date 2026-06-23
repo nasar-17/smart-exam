@@ -83,7 +83,6 @@ export default function HowItWorks({ data }: { data?: any }) {
                                     key={step.num}
                                     className={`relative flex flex-col items-start md:flex-row md:items-center ${isEven ? 'md:flex-row-reverse' : ''}`}
                                 >
-                                    {/* Content Card */}
                                     <motion.div
                                         initial={{
                                             opacity: 0,
@@ -92,7 +91,9 @@ export default function HowItWorks({ data }: { data?: any }) {
                                         whileInView={{ opacity: 1, x: 0 }}
                                         viewport={{ once: false }}
                                         transition={{ duration: 0.6 }}
-                                        className="flex w-full justify-start pl-12 md:w-1/2 md:justify-end md:px-12 md:pl-0"
+                                        className={`flex w-full justify-start pl-12 md:w-1/2 md:px-12 md:pl-0 ${
+                                            isEven ? 'md:justify-start' : 'md:justify-end'
+                                        }`}
                                     >
                                         <div
                                             className="group relative w-full max-w-[420px] rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl md:p-8"
