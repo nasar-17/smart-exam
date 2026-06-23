@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { ArrowRight, Users, Star, CheckCircle, Award } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -28,6 +29,42 @@ export default function Hero({ data }: { data?: any }) {
     const cardSub = data?.card_sub ?? 'Ujian Digital';
     const cardPrice = data?.card_price ?? 'Gratis Trial';
     const cardRating = data?.card_rating ?? '4.9';
+
+    // Looping Typing Animation for the last 2 words (accent text)
+    const words = ['Digital Modern', 'Aman & Adil', 'Praktis & Akurat'];
+    const [currentWordIndex, setCurrentWordIndex] = useState(0);
+    const [currentText, setCurrentText] = useState('');
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    useEffect(() => {
+        let timer: NodeJS.Timeout;
+        const currentFullWord = words[currentWordIndex];
+
+        const type = () => {
+            if (!isDeleting) {
+                // Typing text
+                setCurrentText(currentFullWord.substring(0, currentText.length + 1));
+                if (currentText === currentFullWord) {
+                    timer = setTimeout(() => setIsDeleting(true), 2000);
+                    return;
+                }
+            } else {
+                // Deleting text
+                setCurrentText(currentFullWord.substring(0, currentText.length - 1));
+                if (currentText === '') {
+                    setIsDeleting(false);
+                    setCurrentWordIndex((prev) => (prev + 1) % words.length);
+                    return;
+                }
+            }
+
+            const speed = isDeleting ? 40 : 100;
+            timer = setTimeout(type, speed);
+        };
+
+        timer = setTimeout(type, isDeleting ? 30 : 100);
+        return () => clearTimeout(timer);
+    }, [currentText, isDeleting, currentWordIndex]);
 
     return (
         <section
@@ -74,11 +111,13 @@ export default function Hero({ data }: { data?: any }) {
                                 fontWeight: 800,
                                 letterSpacing: '-0.03em',
                                 lineHeight: 1.05,
+                                minHeight: '2.2em',
                             }}
                         >
                             {title}
                             <span className="block text-[#60a5fa]">
-                                {titleAccent}
+                                {currentText}
+                                <span className="animate-pulse ml-1 text-white">|</span>
                             </span>
                         </h1>
 
