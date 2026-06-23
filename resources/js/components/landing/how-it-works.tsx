@@ -1,6 +1,7 @@
+import { useRef } from 'react';
 import { UserPlus, Library, Rocket, BarChart3 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 const steps: { num: string; icon: LucideIcon; title: string; desc: string }[] =
     [
@@ -31,6 +32,14 @@ const steps: { num: string; icon: LucideIcon; title: string; desc: string }[] =
     ];
 
 export default function HowItWorks({ data }: { data?: any }) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ['start center', 'end center'],
+    });
+
+    const scaleY = useTransform(scrollYProgress, [0, 0.9], [0, 1]);
+    const opacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
     return (
         <section
             id="howitworks"
@@ -69,9 +78,18 @@ export default function HowItWorks({ data }: { data?: any }) {
                 </motion.div>
 
                 {/* Timeline Container */}
-                <div className="relative">
-                    {/* Vertical Center Line */}
-                    <div className="absolute top-0 bottom-0 left-[20px] w-[2px] -translate-x-1/2 bg-gradient-to-b from-blue-500/50 via-blue-500/20 to-transparent md:left-1/2" />
+                <div ref={containerRef} className="relative">
+                    {/* Vertical Center Line Guide */}
+                    <div
+                        className="absolute top-0 bottom-0 left-[20px] w-[2px] -translate-x-1/2 md:left-1/2"
+                        style={{ background: 'rgba(255, 255, 255, 0.05)' }}
+                    />
+
+                    {/* Animated Growing Center Line */}
+                    <motion.div
+                        style={{ scaleY, opacity, originY: 0 }}
+                        className="absolute top-0 bottom-0 left-[20px] w-[2px] -translate-x-1/2 bg-gradient-to-b from-blue-500 via-blue-400 to-transparent md:left-1/2"
+                    />
 
                     <div className="space-y-16 md:space-y-24">
                         {steps.map((step, i) => {
