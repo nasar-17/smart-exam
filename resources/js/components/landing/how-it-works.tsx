@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { UserPlus, Library, Rocket, BarChart3 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -33,6 +33,17 @@ const steps: { num: string; icon: LucideIcon; title: string; desc: string }[] =
 
 export default function HowItWorks({ data }: { data?: any }) {
     const containerRef = useRef<HTMLDivElement>(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ['start center', 'end center'],
@@ -104,7 +115,7 @@ export default function HowItWorks({ data }: { data?: any }) {
                                     <motion.div
                                         initial={{
                                             opacity: 0,
-                                            x: isEven ? 40 : -40,
+                                            x: isMobile ? 40 : (isEven ? 40 : -40),
                                         }}
                                         whileInView={{ opacity: 1, x: 0 }}
                                         viewport={{ once: false, margin: '-20% 0px -40% 0px' }}
