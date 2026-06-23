@@ -107,11 +107,11 @@ export default function Hero({ data }: { data?: any }) {
                             className="mb-6 text-white"
                             style={{
                                 fontFamily: "'Sora', sans-serif",
-                                fontSize: 'clamp(3rem, 6.5vw, 5.5rem)',
+                                fontSize: 'clamp(2.2rem, 4.8vw, 3.6rem)',
                                 fontWeight: 800,
                                 letterSpacing: '-0.03em',
                                 lineHeight: 1.05,
-                                minHeight: '2.2em',
+                                minHeight: '3.3em',
                             }}
                         >
                             {title}
