@@ -91,8 +91,10 @@ export default function HowItWorks({ data }: { data?: any }) {
                                         whileInView={{ opacity: 1, x: 0 }}
                                         viewport={{ once: false }}
                                         transition={{ duration: 0.6 }}
-                                        className={`flex w-full justify-start pl-12 md:w-1/2 md:px-12 md:pl-0 ${
-                                            isEven ? 'md:justify-start' : 'md:justify-end'
+                                        className={`flex w-full justify-start pl-12 md:w-1/2 ${
+                                            isEven
+                                                ? 'md:pl-12 md:pr-0 md:justify-start'
+                                                : 'md:pr-12 md:pl-0 md:justify-end'
                                         }`}
                                     >
                                         <div
