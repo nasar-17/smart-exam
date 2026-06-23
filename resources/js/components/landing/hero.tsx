@@ -205,7 +205,14 @@ export default function Hero({ data }: { data?: any }) {
                         {/* Wrapper container allowing elements to overflow */}
                         <div className="relative w-full max-w-[380px] hero-right-wrapper">
                             {/* Main visual card */}
-                            <div
+                            <motion.div
+                                animate={{ y: [0, -12, 0] }}
+                                transition={{
+                                    duration: 4,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                    times: [0, 0.5, 1]
+                                }}
                                 className="relative h-[420px] w-full overflow-hidden rounded-[2rem]"
                                 style={{
                                     background: '#E8580A',
@@ -216,7 +223,7 @@ export default function Hero({ data }: { data?: any }) {
                                     alt="Hero visual"
                                     className="h-full w-full object-cover object-center"
                                 />
-                            </div>
+                            </motion.div>
 
                             {/* Floating question bubbles (positioned outside visual card so they overflow) */}
                             <motion.div
