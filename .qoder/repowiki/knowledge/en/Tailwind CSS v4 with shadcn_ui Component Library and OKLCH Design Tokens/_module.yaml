@@ -1,0 +1,16 @@
+schema_version: 1
+module_path: frontend_style
+title: Tailwind CSS v4 with shadcn/ui Component Library and OKLCH Design Tokens
+scope: []
+source_files:
+    - resources/css/app.css
+    - components.json
+    - package.json
+    - resources/js/lib/utils.ts
+    - resources/js/components/ui/button.tsx
+    - resources/js/components/ui/card.tsx
+    - resources/js/components/ui/input.tsx
+    - resources/js/hooks/use-appearance.tsx
+    - resources/js/components/appearance-tabs.tsx
+depends_on: []
+related_to: []

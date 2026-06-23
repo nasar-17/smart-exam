@@ -1,0 +1,5 @@
+- Laravel 13 with Inertia.js v3 for server-driven SPA.
+- React 19 + TypeScript + Vite 8 for frontend.
+- Laravel Fortify for backend authentication implementation.
+- Tailwind CSS v4 + Radix UI for component styling.
+- SQLite database (default for local/dev as per `database/database.sqlite`).

@@ -1,0 +1,3 @@
+- `composer run setup`: Installs dependencies, generates app key, runs migrations, installs npm packages, and builds assets.
+- `composer run dev`: Concurrently starts Laravel server, queue listener, log tailed, and Vite dev server.
+- `composer run test`: Runs PHPStan, Pint linting, and PHPUnit tests.

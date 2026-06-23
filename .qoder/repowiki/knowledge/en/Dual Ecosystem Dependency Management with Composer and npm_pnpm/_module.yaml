@@ -1,0 +1,15 @@
+schema_version: 1
+module_path: dependency_management
+title: Dual Ecosystem Dependency Management with Composer and npm/pnpm
+scope: []
+source_files:
+    - composer.json
+    - composer.lock
+    - package.json
+    - package-lock.json
+    - .npmrc
+    - pnpm-workspace.yaml
+    - components.json
+    - .github/dependabot.yml
+depends_on: []
+related_to: []

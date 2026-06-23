@@ -1,0 +1,16 @@
+schema_version: 1
+module_path: configuration_system
+title: Laravel Configuration System with Environment Variables and Feature Toggling
+scope: []
+source_files:
+    - config/app.php
+    - config/database.php
+    - config/fortify.php
+    - config/inertia.php
+    - config/services.php
+    - .env.example
+    - bootstrap/app.php
+    - bootstrap/providers.php
+    - chisel.php
+depends_on: []
+related_to: []

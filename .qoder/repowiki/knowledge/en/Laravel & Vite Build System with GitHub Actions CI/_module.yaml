@@ -1,0 +1,14 @@
+schema_version: 1
+module_path: build_system
+title: Laravel & Vite Build System with GitHub Actions CI
+scope: []
+source_files:
+    - composer.json
+    - package.json
+    - vite.config.ts
+    - .github/workflows/tests.yml
+    - .github/workflows/lint.yml
+    - phpunit.xml
+    - artisan
+depends_on: []
+related_to: []

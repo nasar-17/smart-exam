@@ -1,0 +1,21 @@
+schema_version: 1
+module_path: error_handling
+title: Laravel/Inertia Error Handling with Validation-Driven Approach
+scope: []
+source_files:
+    - bootstrap/app.php
+    - app/Http/Controllers/Controller.php
+    - app/Http/Controllers/Settings/ProfileController.php
+    - app/Http/Requests/Settings/ProfileUpdateRequest.php
+    - app/Concerns/ProfileValidationRules.php
+    - app/Concerns/PasswordValidationRules.php
+    - app/Actions/Fortify/CreateNewUser.php
+    - app/Actions/Fortify/ResetUserPassword.php
+    - app/Http/Middleware/HandleInertiaRequests.php
+    - resources/js/components/input-error.tsx
+    - resources/js/components/alert-error.tsx
+    - resources/js/hooks/use-flash-toast.ts
+    - resources/js/components/ui/sonner.tsx
+    - resources/js/types/ui.ts
+depends_on: []
+related_to: []

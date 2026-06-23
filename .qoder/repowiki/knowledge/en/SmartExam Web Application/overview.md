@@ -1,0 +1,1 @@
+A Laravel-based web application providing user authentication, profile management, and a landing page for the SmartExam platform.

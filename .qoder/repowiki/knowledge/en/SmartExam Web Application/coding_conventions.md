@@ -1,0 +1,4 @@
+- Form requests are used for validation in settings controllers (e.g., `ProfileUpdateRequest`, `PasswordUpdateRequest`).
+- Inertia layouts are composed via a switch statement in `app.tsx` based on page name prefixes (e.g., `auth/`, `settings/`).
+- Fortify views are overridden in `FortifyServiceProvider` to render Inertia pages instead of traditional Blade views.
+- Feature toggles are implemented using `@chisel-*` comments in configuration and route files, processed by `laravel/chisel`.

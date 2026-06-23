@@ -1,0 +1,5 @@
+- Backend: Laravel 13 with Inertia.js adapter, using Fortify for authentication logic (login, registration, 2FA, passkeys) and custom controllers for settings.
+- Frontend: React 19 with TypeScript, built using Vite. Uses Radix UI primitives and Tailwind CSS v4 for styling.
+- Routing: Hybrid approach. Landing page uses traditional Blade views (`resources/views`), while authenticated areas (Dashboard, Settings) use Inertia.js pages (`resources/js/pages`).
+- Structure: Follows standard Laravel directory layout. `app/Http/Controllers` handles requests, `app/Actions/Fortify` customizes auth flows, and `resources/js` contains the SPA frontend.
+- Configuration: Feature flags managed via `chisel` comments in config/routes, allowing modular enablement of features like 2FA, passkeys, and email verification.
