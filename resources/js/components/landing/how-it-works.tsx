@@ -107,7 +107,7 @@ export default function HowItWorks({ data }: { data?: any }) {
                                             x: isEven ? 40 : -40,
                                         }}
                                         whileInView={{ opacity: 1, x: 0 }}
-                                        viewport={{ once: false }}
+                                        viewport={{ once: false, margin: '-20% 0px -40% 0px' }}
                                         transition={{ duration: 0.6 }}
                                         className={`flex w-full justify-start pl-12 md:w-1/2 ${
                                             isEven
@@ -172,7 +172,7 @@ export default function HowItWorks({ data }: { data?: any }) {
                                     <motion.div
                                         initial={{ opacity: 0, scale: 0 }}
                                         whileInView={{ opacity: 1, scale: 1 }}
-                                        viewport={{ once: false }}
+                                        viewport={{ once: false, margin: '-20% 0px -40% 0px' }}
                                         transition={{
                                             duration: 0.4,
                                             delay: 0.2,
