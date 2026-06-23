@@ -111,7 +111,7 @@ export default function Hero({ data }: { data?: any }) {
                                 fontWeight: 800,
                                 letterSpacing: '-0.03em',
                                 lineHeight: 1.05,
-                                minHeight: '3.3em',
+                                minHeight: '2.15em',
                             }}
                         >
                             {title}
