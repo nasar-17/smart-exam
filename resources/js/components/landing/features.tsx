@@ -36,7 +36,6 @@ const features: FeatureCard[] = [
         title: 'Keamanan Anti-Cheat',
         description:
             'Sistem proteksi canggih untuk meminimalisir kecurangan dengan mendeteksi tab switching dan aktivitas mencurigakan.',
-        highlight: true,
     },
     {
         icon: BarChart3,
