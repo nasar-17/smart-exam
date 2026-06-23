@@ -1,10 +1,7 @@
-import { useState } from 'react';
 import { Check, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Pricing({ data }: { data?: any }) {
-    const [isYearly, setIsYearly] = useState(false);
-
     return (
         <section
             id="pricing"
@@ -27,57 +24,24 @@ export default function Pricing({ data }: { data?: any }) {
                             border: '1px solid rgba(96, 165, 250, 0.2)',
                         }}
                     >
-                        Harga
+                        Harga Paket
                     </div>
                     <h2
                         className="mb-4 text-[40px] font-bold tracking-tight text-white"
                         style={{ fontFamily: "'Sora', sans-serif" }}
                     >
-                        Transparan,{' '}
+                        Pilihan Investasi{' '}
                         <span className="gradient-text">
-                            Tanpa Biaya Tersembunyi
+                            Sesuai Skala Ujian
                         </span>
                     </h2>
-                    <p className="mx-auto mb-8 max-w-2xl text-base text-gray-400">
-                        Pilih paket terbaik yang sesuai dengan skala institusi
-                        Anda. Mulai secara gratis dan tingkatkan kapan saja.
+                    <p className="mx-auto max-w-2xl text-base text-gray-400">
+                        Investasi transparan per sesi ujian untuk institusi Anda. Tanpa biaya langganan bulanan tersembunyi.
                     </p>
-                    <div className="mt-6 flex items-center justify-center gap-4">
-                        <span className="text-sm font-medium text-gray-400">
-                            Bulanan
-                        </span>
-                        <button
-                            onClick={() => setIsYearly(!isYearly)}
-                            className="relative h-6 w-12 rounded-full transition-all duration-300"
-                            style={{ background: '#2563EB' }}
-                        >
-                            <div
-                                className="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-250"
-                                style={{
-                                    transform: isYearly
-                                        ? 'translateX(24px)'
-                                        : 'translateX(0)',
-                                }}
-                            />
-                        </button>
-                        <span className="text-sm font-medium text-gray-400">
-                            Tahunan
-                            <span
-                                className="ml-1.5 rounded-full px-2 py-0.5 text-xs font-bold"
-                                style={{
-                                    background: 'rgba(16, 185, 129, 0.15)',
-                                    color: '#34d399',
-                                    border: '1px solid rgba(16, 185, 129, 0.2)',
-                                }}
-                            >
-                                Hemat 20%
-                            </span>
-                        </span>
-                    </div>
                 </motion.div>
 
                 <div
-                    className={`grid grid-cols-1 items-stretch gap-8 md:grid-cols-3 ${isYearly ? 'show-yearly' : ''}`}
+                    className="grid grid-cols-1 items-stretch gap-8 md:grid-cols-3"
                     id="pricing-cards"
                 >
                     {/* Starter */}
@@ -102,34 +66,39 @@ export default function Pricing({ data }: { data?: any }) {
                                     className="mb-1 text-4xl font-bold text-white"
                                     style={{ fontFamily: "'Sora', sans-serif" }}
                                 >
-                                    <span className="monthly-price">Rp 0</span>
-                                    <span className="yearly-price">Rp 0</span>
+                                    Rp 400.000
                                 </div>
                                 <div className="text-sm text-gray-500">
-                                    per bulan, gratis selamanya
+                                    per sesi ujian
                                 </div>
                             </div>
+
+                            {/* Target User */}
+                            <div className="mb-6 rounded-xl bg-white/5 p-3.5 border border-white/10">
+                                <div className="text-[10px] font-bold text-[#60a5fa] uppercase tracking-wider">Target Pengguna</div>
+                                <div className="text-sm font-bold text-white/90 mt-0.5">Lembaga kursus, Organisasi</div>
+                            </div>
+
                             <FeatureList
                                 items={[
                                     {
-                                        text: 'Hingga 50 peserta',
+                                        text: 'Maks. 100 peserta',
                                         included: true,
                                     },
                                     {
-                                        text: 'Maks. 5 ujian/bulan',
+                                        text: 'Hingga 5.000 soal',
                                         included: true,
                                     },
                                     {
-                                        text: 'Bank soal 100 soal',
+                                        text: 'Ujian dasar',
                                         included: true,
                                     },
-                                    { text: 'Laporan dasar', included: true },
                                     {
-                                        text: 'Priority support',
+                                        text: 'Fitur anti-cheat',
                                         included: false,
                                     },
                                     {
-                                        text: 'Custom branding',
+                                        text: 'Integrasi LMS',
                                         included: false,
                                     },
                                 ]}
@@ -140,11 +109,11 @@ export default function Pricing({ data }: { data?: any }) {
                             className="btn-outline-landing block w-full rounded-xl border py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-white/10"
                             style={{ borderColor: 'rgba(255,255,255,0.1)' }}
                         >
-                            Mulai Gratis
+                            Pilih Starter
                         </a>
                     </motion.div>
 
-                    {/* Professional */}
+                    {/* Standard */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -171,58 +140,48 @@ export default function Pricing({ data }: { data?: any }) {
                         <div>
                             <div className="mb-6">
                                 <div className="mb-2 text-sm font-semibold text-blue-400">
-                                    Profesional
+                                    Standard
                                 </div>
                                 <div
                                     className="mb-1 text-4xl font-bold text-white"
                                     style={{ fontFamily: "'Sora', sans-serif" }}
                                 >
-                                    {isYearly ? (
-                                        <span className="yearly-price">
-                                            Rp 239K
-                                        </span>
-                                    ) : (
-                                        <span className="monthly-price">
-                                            Rp 299K
-                                        </span>
-                                    )}
+                                    Rp 750.000
                                 </div>
                                 <div className="text-sm text-gray-400">
-                                    {isYearly ? (
-                                        <span className="yearly-price">
-                                            per bulan, tagih tahunan
-                                        </span>
-                                    ) : (
-                                        <span className="monthly-price">
-                                            per bulan
-                                        </span>
-                                    )}
+                                    per sesi ujian
                                 </div>
                             </div>
+
+                            {/* Target User */}
+                            <div className="mb-6 rounded-xl bg-blue-500/10 p-3.5 border border-blue-500/20">
+                                <div className="text-[10px] font-bold text-[#60a5fa] uppercase tracking-wider">Target Pengguna</div>
+                                <div className="text-sm font-bold text-blue-300 mt-0.5">Universitas / Lembaga Sertifikasi</div>
+                            </div>
+
                             <FeatureList
                                 dark
                                 items={[
                                     {
-                                        text: 'Peserta tak terbatas',
+                                        text: 'Maks. 500 peserta',
                                         included: true,
                                     },
                                     {
-                                        text: 'Ujian tak terbatas',
+                                        text: 'Unlimited soal',
                                         included: true,
                                     },
                                     {
-                                        text: 'Bank soal unlimited',
+                                        text: 'Fitur anti-cheat',
                                         included: true,
                                     },
                                     {
-                                        text: 'Laporan lanjutan + export',
+                                        text: 'Laporan detail',
                                         included: true,
                                     },
                                     {
-                                        text: 'Priority support 24/7',
-                                        included: true,
+                                        text: 'Integrasi LMS',
+                                        included: false,
                                     },
-                                    { text: 'Custom branding', included: true },
                                 ]}
                             />
                         </div>
@@ -236,15 +195,15 @@ export default function Pricing({ data }: { data?: any }) {
                                         '0 4px 14px 0 rgba(37,99,235,0.4)',
                                 }}
                             >
-                                Pilih Profesional
+                                Pilih Standard
                             </a>
                             <p className="mt-3 text-center text-xs text-gray-500">
-                                Free trial 14 hari &middot; Tanpa kartu kredit
+                                Free trial &middot; Layanan onboarding dibantu
                             </p>
                         </div>
                     </motion.div>
 
-                    {/* Enterprise */}
+                    {/* Premium */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -260,39 +219,45 @@ export default function Pricing({ data }: { data?: any }) {
                         <div>
                             <div className="mb-6">
                                 <div className="mb-2 text-sm font-semibold text-gray-400">
-                                    Enterprise
+                                    Premium
                                 </div>
                                 <div
                                     className="mb-1 text-4xl font-bold text-white"
                                     style={{ fontFamily: "'Sora', sans-serif" }}
                                 >
-                                    Custom
+                                    Rp 1.000.000
                                 </div>
                                 <div className="text-sm text-gray-500">
-                                    harga sesuai kebutuhan
+                                    per sesi ujian
                                 </div>
                             </div>
+
+                            {/* Target User */}
+                            <div className="mb-6 rounded-xl bg-white/5 p-3.5 border border-white/10">
+                                <div className="text-[10px] font-bold text-[#60a5fa] uppercase tracking-wider">Target Pengguna</div>
+                                <div className="text-sm font-bold text-white/90 mt-0.5">Lembaga Pemerintah / Korporat</div>
+                            </div>
+
                             <FeatureList
                                 items={[
-                                    { text: 'Semua fitur Pro', included: true },
                                     {
-                                        text: 'Dedicated server',
+                                        text: 'Unlimited peserta',
                                         included: true,
                                     },
                                     {
-                                        text: 'SLA 99.9% uptime',
+                                        text: 'Integrasi LMS',
                                         included: true,
                                     },
                                     {
-                                        text: 'Integrasi SSO/LDAP',
+                                        text: 'Question Bank',
                                         included: true,
                                     },
                                     {
-                                        text: 'Onboarding & training',
+                                        text: 'Analytics dashboard',
                                         included: true,
                                     },
                                     {
-                                        text: 'Account manager khusus',
+                                        text: 'Dedicated support',
                                         included: true,
                                     },
                                 ]}
@@ -310,8 +275,7 @@ export default function Pricing({ data }: { data?: any }) {
                 </div>
 
                 <p className="reveal mt-12 text-center text-xs text-gray-500">
-                    Semua paket termasuk enkripsi data SSL, backup otomatis
-                    harian, dan bebas iklan. Harga belum termasuk PPN 11%.
+                    Semua sesi sudah termasuk enkripsi data SSL, backup otomatis, dan bebas iklan.
                 </p>
             </div>
         </section>

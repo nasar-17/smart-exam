@@ -1,12 +1,12 @@
 import {
-    Library,
+    BookOpen,
+    Users,
+    Database,
     ShieldCheck,
-    Clock,
     BarChart3,
-    Users2,
-    MonitorSmartphone,
-    Upload,
-    BellRing,
+    Infinity,
+    Link,
+    Headphones,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -20,53 +20,53 @@ interface FeatureCard {
 
 const features: FeatureCard[] = [
     {
-        icon: Library,
-        title: 'Bank Soal Cerdas',
+        icon: BookOpen,
+        title: 'Ujian Dasar',
         description:
-            'Kelola ribuan soal dengan kategori, tag, dan tingkat kesulitan secara terstruktur.',
+            'Pelaksanaan ujian dengan format standar dasar yang praktis dan efisien untuk kebutuhan evaluasi harian.',
+    },
+    {
+        icon: Users,
+        title: 'Kapasitas Peserta Fleksibel',
+        description:
+            'Mendukung batas maksimal pengerjaan mulai dari 100 peserta hingga 500 peserta per sesi ujian.',
+    },
+    {
+        icon: Database,
+        title: 'Penyimpanan 5.000 Soal',
+        description:
+            'Kelola bank soal secara terstruktur dengan batas kapasitas penyimpanan hingga 5.000 butir soal.',
     },
     {
         icon: ShieldCheck,
-        title: 'Anti-Kecurangan',
+        title: 'Keamanan Anti-Cheat',
         description:
-            'Deteksi tab switching, fullscreen lock, dan randomisasi soal otomatis setiap peserta.',
-    },
-    {
-        icon: Clock,
-        title: 'Timer Otomatis',
-        description:
-            'Atur durasi ujian per sesi dengan countdown real-time dan auto-submit saat waktu habis.',
-    },
-    {
-        icon: BarChart3,
-        title: 'Laporan Instan',
-        description:
-            'Hasil ujian tersedia segera setelah selesai — lengkap dengan analisis per soal dan per siswa.',
+            'Sistem proteksi canggih untuk meminimalisir kecurangan dengan mendeteksi tab switching dan aktivitas mencurigakan.',
         highlight: true,
     },
     {
-        icon: Users2,
-        title: 'Manajemen Peserta',
+        icon: BarChart3,
+        title: 'Laporan Detail',
         description:
-            'Import peserta via Excel, bagi ke dalam grup kelas, dan pantau status ujian secara live.',
+            'Analisis instan pasca ujian dengan rekapitulasi nilai dan laporan performa detail per peserta.',
     },
     {
-        icon: MonitorSmartphone,
-        title: 'Akses Multi-Device',
+        icon: Infinity,
+        title: 'Unlimited Peserta & Soal',
         description:
-            'Ujian bisa diikuti dari laptop, tablet, atau smartphone tanpa install aplikasi tambahan.',
+            'Tingkatkan skala ujian Anda tanpa batas kuota peserta maupun kuota soal pada paket Premium.',
     },
     {
-        icon: Upload,
-        title: 'Import Soal Mudah',
+        icon: Link,
+        title: 'Integrasi LMS',
         description:
-            'Upload soal dari file Word atau Excel — konversi otomatis ke format ujian digital.',
+            'Konektivitas praktis untuk menghubungkan platform ujian dengan Learning Management System (LMS) pilihan Anda.',
     },
     {
-        icon: BellRing,
-        title: 'Notifikasi Real-Time',
+        icon: Headphones,
+        title: 'Dedicated Support & Analytics',
         description:
-            'Pengajar mendapat notifikasi live saat peserta mulai, selesai, atau terdeteksi mencurigakan.',
+            'Dashboard analisis tingkat lanjut disertai bantuan prioritas langsung dari tim teknis pendukung kami.',
     },
 ];
 
