@@ -32,12 +32,6 @@ const features: FeatureCard[] = [
             'Mendukung batas maksimal pengerjaan mulai dari 100 peserta hingga 500 peserta per sesi ujian.',
     },
     {
-        icon: Database,
-        title: 'Penyimpanan 5.000 Soal',
-        description:
-            'Kelola bank soal secara terstruktur dengan batas kapasitas penyimpanan hingga 5.000 butir soal.',
-    },
-    {
         icon: ShieldCheck,
         title: 'Keamanan Anti-Cheat',
         description:
@@ -51,10 +45,16 @@ const features: FeatureCard[] = [
             'Analisis instan pasca ujian dengan rekapitulasi nilai dan laporan performa detail per peserta.',
     },
     {
-        icon: Infinity,
-        title: 'Unlimited Peserta & Soal',
+        icon: Users,
+        title: 'Unlimited Peserta',
         description:
-            'Tingkatkan skala ujian Anda tanpa batas kuota peserta maupun kuota soal pada paket Premium.',
+            'Selenggarakan ujian massal tanpa batasan jumlah peserta pada tier Premium.',
+    },
+    {
+        icon: Database,
+        title: 'Question Bank & Unlimited Soal',
+        description:
+            'Buat dan simpan soal tanpa batasan kuota serta kelola bank soal terstruktur dengan mudah.',
     },
     {
         icon: Link,
