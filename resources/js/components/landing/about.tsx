@@ -94,57 +94,43 @@ export default function About({ data }: { data?: any }) {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: false }}
                         transition={{ duration: 0.6 }}
-                        className="w-full flex-1 flex flex-col gap-6"
+                        className="w-full flex-1 flex flex-col gap-8"
                     >
-                        {/* Visi Card */}
-                        <div
-                            className="rounded-2xl p-6 md:p-8"
-                            style={{
-                                background: 'rgba(255, 255, 255, 0.02)',
-                                border: '1px solid rgba(255,255,255,0.06)',
-                                backdropFilter: 'blur(10px)',
-                            }}
-                        >
+                        {/* Visi */}
+                        <div>
                             <h3
-                                className="mb-3 text-lg font-bold text-white flex items-center gap-2.5"
+                                className="mb-4 text-xl font-bold text-white flex items-center gap-3"
                                 style={{ fontFamily: "'Sora', sans-serif" }}
                             >
-                                <span className="h-2 w-2 rounded-full bg-blue-500" />
+                                <span className="h-2.5 w-2.5 rounded-full bg-blue-500" />
                                 Visi Kami
                             </h3>
-                            <p className="text-sm leading-relaxed text-gray-400">
+                            <p className="text-base leading-relaxed text-gray-400">
                                 Menjadi platform ujian digital terdepan di Indonesia yang berdedikasi menciptakan akses evaluasi pendidikan yang adil, aman, dan inklusif bagi seluruh lapisan masyarakat.
                             </p>
                         </div>
 
-                        {/* Misi Card */}
-                        <div
-                            className="rounded-2xl p-6 md:p-8"
-                            style={{
-                                background: 'rgba(255, 255, 255, 0.02)',
-                                border: '1px solid rgba(255,255,255,0.06)',
-                                backdropFilter: 'blur(10px)',
-                            }}
-                        >
+                        {/* Misi */}
+                        <div>
                             <h3
-                                className="mb-3 text-lg font-bold text-white flex items-center gap-2.5"
+                                className="mb-4 text-xl font-bold text-white flex items-center gap-3"
                                 style={{ fontFamily: "'Sora', sans-serif" }}
                             >
-                                <span className="h-2 w-2 rounded-full bg-blue-500" />
+                                <span className="h-2.5 w-2.5 rounded-full bg-blue-500" />
                                 Misi Kami
                             </h3>
-                            <ul className="space-y-3 text-sm text-gray-400">
-                                <li className="flex gap-2">
-                                    <span className="text-blue-400 font-bold">•</span>
-                                    Menyediakan teknologi anti-kecurangan mutakhir demi menjaga kejujuran proses akademik.
+                            <ul className="space-y-4 text-base text-gray-400">
+                                <li className="flex items-start gap-3">
+                                    <span className="text-blue-400 font-bold mt-0.5">•</span>
+                                    <span>Menyediakan teknologi anti-kecurangan mutakhir demi menjaga kejujuran proses akademik.</span>
                                 </li>
-                                <li className="flex gap-2">
-                                    <span className="text-blue-400 font-bold">•</span>
-                                    Menyederhanakan administrasi ujian guna menekan beban biaya operasional kertas dan cetak.
+                                <li className="flex items-start gap-3">
+                                    <span className="text-blue-400 font-bold mt-0.5">•</span>
+                                    <span>Menyederhanakan administrasi ujian guna menekan beban biaya operasional kertas dan cetak.</span>
                                 </li>
-                                <li className="flex gap-2">
-                                    <span className="text-blue-400 font-bold">•</span>
-                                    Menyajikan analisis hasil instan dan detail untuk mempermudah evaluasi performa belajar.
+                                <li className="flex items-start gap-3">
+                                    <span className="text-blue-400 font-bold mt-0.5">•</span>
+                                    <span>Menyajikan analisis hasil instan dan detail untuk mempermudah evaluasi performa belajar.</span>
                                 </li>
                             </ul>
                         </div>
