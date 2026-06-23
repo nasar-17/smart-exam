@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { usePage, Link } from '@inertiajs/react';
+import { Sun, Moon } from 'lucide-react';
+import { useAppearance } from '@/hooks/use-appearance';
 
 const navLinks = [
     { href: '#hero', label: 'Beranda' },
@@ -16,6 +18,8 @@ export default function Navbar({ data }: { data?: any }) {
     const [mobileOpen, setMobileOpen] = useState(false);
     const { auth } = usePage().props as any;
     const isAdmin = auth?.user?.is_admin;
+
+    const { appearance, resolvedAppearance, updateAppearance } = useAppearance();
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 60);
@@ -80,6 +84,19 @@ export default function Navbar({ data }: { data?: any }) {
                         >
                             {data?.cta_text || 'Coba Gratis'}
                         </a>
+
+                        {/* Theme Toggle Button */}
+                        <button
+                            onClick={() => updateAppearance(resolvedAppearance === 'dark' ? 'light' : 'dark')}
+                            className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
+                            aria-label="Toggle theme"
+                        >
+                            {resolvedAppearance === 'dark' ? (
+                                <Sun className="h-[18px] w-[18px]" />
+                            ) : (
+                                <Moon className="h-[18px] w-[18px]" />
+                            )}
+                        </button>
                     </div>
 
                     {/* Hamburger */}
@@ -134,6 +151,22 @@ export default function Navbar({ data }: { data?: any }) {
                     >
                         {data?.cta_text || 'Coba Gratis'}
                     </a>
+
+                    {/* Mobile Theme Toggle Button */}
+                    <button
+                        onClick={() => {
+                            updateAppearance(resolvedAppearance === 'dark' ? 'light' : 'dark');
+                            setMobileOpen(false);
+                        }}
+                        className="mt-2 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
+                        aria-label="Toggle theme"
+                    >
+                        {resolvedAppearance === 'dark' ? (
+                            <Sun className="h-6 w-6" />
+                        ) : (
+                            <Moon className="h-6 w-6" />
+                        )}
+                    </button>
                 </div>
             </div>
         </>
