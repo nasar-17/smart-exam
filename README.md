@@ -74,6 +74,8 @@ Perintah di atas akan menjalankan beberapa proses secara bersamaan (*concurrentl
 - **Pail Logs** (`php artisan pail`)
 - **Vite Dev Server** (`npm run dev`)
 
+> Catatan: Pada Windows, `php artisan pail` tidak dapat dijalankan karena ekstensi PHP `pcntl` tidak tersedia. Perintah `composer run dev` akan melewati pail secara otomatis pada sistem Windows.
+
 Buka browser Anda dan akses aplikasi melalui [http://localhost:8000](http://localhost:8000).
 
 ---
