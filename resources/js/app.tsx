@@ -7,6 +7,7 @@ import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import AdminLayout from '@/components/admin/AdminLayout';
+import CursorGlow from '@/components/cursor-glow';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -24,7 +25,7 @@ createInertiaApp({
                 return [AppLayout, SettingsLayout];
             default:
                 return AppLayout;
-        }
+            }
     },
     strictMode: true,
     withApp(app) {
@@ -32,6 +33,7 @@ createInertiaApp({
             <TooltipProvider delayDuration={0}>
                 {app}
                 <Toaster />
+                <CursorGlow />
             </TooltipProvider>
         );
     },
