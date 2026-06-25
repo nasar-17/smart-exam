@@ -21,11 +21,14 @@ export default function Contact({ data }: { data?: any }) {
         post('/contact');
     };
 
+    const title = data?.title ?? 'Ada Pertanyaan? Kami Siap Membantu';
+    const subtitle = data?.subtitle ?? 'Isi form di bawah dan kami akan menghubungi Anda dalam 1x24 jam.';
+
     return (
         <section
             id="contact"
             className="py-24"
-            style={{ background: '#0d1117' }}
+            style={{ background: 'var(--lp-bg-primary)' }}
         >
             <div className="mx-auto max-w-[1200px] px-6">
                 <motion.div
@@ -38,25 +41,21 @@ export default function Contact({ data }: { data?: any }) {
                     <div
                         className="mb-4 inline-block rounded-full px-3 py-1 text-xs font-bold tracking-wider uppercase"
                         style={{
-                            background: 'rgba(96, 165, 250, 0.1)',
-                            color: '#60a5fa',
-                            border: '1px solid rgba(96, 165, 250, 0.2)',
+                            background: 'var(--lp-blue-light)',
+                            color: 'var(--lp-blue-text)',
+                            border: '1px solid var(--lp-border)',
                         }}
                     >
                         Hubungi Kami
                     </div>
                     <h2
-                        className="mb-4 text-[40px] font-bold tracking-tight text-white"
-                        style={{ fontFamily: "'Sora', sans-serif" }}
+                        className="mb-4 text-[40px] font-bold tracking-tight"
+                        style={{ fontFamily: "'Sora', sans-serif", color: 'var(--lp-text-primary)' }}
                     >
-                        Ada Pertanyaan?{' '}
-                        <span className="gradient-text">
-                            Kami Siap Membantu
-                        </span>
+                        {title}
                     </h2>
-                    <p className="mx-auto max-w-2xl text-base text-gray-400">
-                        Punya pertanyaan mengenai fitur, integrasi, atau
-                        kustomisasi? Hubungi tim kami untuk solusi terbaik.
+                    <p className="mx-auto max-w-2xl text-base" style={{ color: 'var(--lp-text-secondary)' }}>
+                        {subtitle}
                     </p>
                 </motion.div>
 
@@ -69,15 +68,15 @@ export default function Contact({ data }: { data?: any }) {
                         transition={{ duration: 0.6 }}
                         className="rounded-2xl p-8 transition-all duration-300 md:col-span-3"
                         style={{
-                            background: 'rgba(255, 255, 255, 0.02)',
-                            border: '1px solid rgba(255, 255, 255, 0.08)',
+                            background: 'var(--lp-step-card-bg)',
+                            border: '1px solid var(--lp-step-card-border)',
                             backdropFilter: 'blur(10px)',
                         }}
                     >
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                 <div>
-                                    <label className="mb-2 block text-sm font-semibold text-gray-300">
+                                    <label className="mb-2 block text-sm font-semibold" style={{ color: 'var(--lp-text-secondary)' }}>
                                         Nama Lengkap
                                     </label>
                                     <input
@@ -88,17 +87,16 @@ export default function Contact({ data }: { data?: any }) {
                                             setData('name', e.target.value)
                                         }
                                         placeholder="Masukkan nama Anda"
-                                        className="w-full rounded-xl border px-4 py-3 text-sm text-white transition-all outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                        className="w-full rounded-xl border px-4 py-3 text-sm transition-all outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                                         style={{
-                                            background:
-                                                'rgba(255, 255, 255, 0.03)',
-                                            borderColor:
-                                                'rgba(255, 255, 255, 0.1)',
+                                            background: 'var(--lp-step-card-bg)',
+                                            borderColor: 'var(--lp-border)',
+                                            color: 'var(--lp-text-primary)',
                                         }}
                                     />
                                 </div>
                                 <div>
-                                    <label className="mb-2 block text-sm font-semibold text-gray-300">
+                                    <label className="mb-2 block text-sm font-semibold" style={{ color: 'var(--lp-text-secondary)' }}>
                                         Email
                                     </label>
                                     <input
@@ -109,19 +107,18 @@ export default function Contact({ data }: { data?: any }) {
                                             setData('email', e.target.value)
                                         }
                                         placeholder="nama@institusi.ac.id"
-                                        className="w-full rounded-xl border px-4 py-3 text-sm text-white transition-all outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                        className="w-full rounded-xl border px-4 py-3 text-sm transition-all outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                                         style={{
-                                            background:
-                                                'rgba(255, 255, 255, 0.03)',
-                                            borderColor:
-                                                'rgba(255, 255, 255, 0.1)',
+                                            background: 'var(--lp-step-card-bg)',
+                                            borderColor: 'var(--lp-border)',
+                                            color: 'var(--lp-text-primary)',
                                         }}
                                     />
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                 <div>
-                                    <label className="mb-2 block text-sm font-semibold text-gray-300">
+                                    <label className="mb-2 block text-sm font-semibold" style={{ color: 'var(--lp-text-secondary)' }}>
                                         Nama Institusi
                                     </label>
                                     <input
@@ -135,17 +132,16 @@ export default function Contact({ data }: { data?: any }) {
                                             )
                                         }
                                         placeholder="SMA / Universitas / Lembaga"
-                                        className="w-full rounded-xl border px-4 py-3 text-sm text-white transition-all outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                        className="w-full rounded-xl border px-4 py-3 text-sm transition-all outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                                         style={{
-                                            background:
-                                                'rgba(255, 255, 255, 0.03)',
-                                            borderColor:
-                                                'rgba(255, 255, 255, 0.1)',
+                                            background: 'var(--lp-step-card-bg)',
+                                            borderColor: 'var(--lp-border)',
+                                            color: 'var(--lp-text-primary)',
                                         }}
                                     />
                                 </div>
                                 <div>
-                                    <label className="mb-2 block text-sm font-semibold text-gray-300">
+                                    <label className="mb-2 block text-sm font-semibold" style={{ color: 'var(--lp-text-secondary)' }}>
                                         Nomor WhatsApp
                                     </label>
                                     <input
@@ -156,18 +152,17 @@ export default function Contact({ data }: { data?: any }) {
                                             setData('whatsapp', e.target.value)
                                         }
                                         placeholder="0812-xxxx-xxxx"
-                                        className="w-full rounded-xl border px-4 py-3 text-sm text-white transition-all outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                        className="w-full rounded-xl border px-4 py-3 text-sm transition-all outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                                         style={{
-                                            background:
-                                                'rgba(255, 255, 255, 0.03)',
-                                            borderColor:
-                                                'rgba(255, 255, 255, 0.1)',
+                                            background: 'var(--lp-step-card-bg)',
+                                            borderColor: 'var(--lp-border)',
+                                            color: 'var(--lp-text-primary)',
                                         }}
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label className="mb-2 block text-sm font-semibold text-gray-300">
+                                <label className="mb-2 block text-sm font-semibold" style={{ color: 'var(--lp-text-secondary)' }}>
                                     Pesan / Pertanyaan
                                 </label>
                                 <textarea
@@ -177,10 +172,11 @@ export default function Contact({ data }: { data?: any }) {
                                         setData('message', e.target.value)
                                     }
                                     placeholder="Ceritakan kebutuhan Anda..."
-                                    className="w-full resize-none rounded-xl border px-4 py-3 text-sm text-white transition-all outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                                    className="w-full resize-none rounded-xl border px-4 py-3 text-sm transition-all outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                                     style={{
-                                        background: 'rgba(255, 255, 255, 0.03)',
-                                        borderColor: 'rgba(255, 255, 255, 0.1)',
+                                        background: 'var(--lp-step-card-bg)',
+                                        borderColor: 'var(--lp-border)',
+                                        color: 'var(--lp-text-primary)',
                                     }}
                                 />
                             </div>
@@ -205,24 +201,24 @@ export default function Contact({ data }: { data?: any }) {
                             {
                                 icon: Mail,
                                 label: 'Email',
-                                value: 'hello@smartexam.id',
-                                href: 'mailto:hello@smartexam.id',
+                                value: data?.email ?? 'hello@smartexam.id',
+                                href: data?.email ? `mailto:${data.email}` : 'mailto:hello@smartexam.id',
                             },
                             {
                                 icon: MessageCircle,
                                 label: 'WhatsApp',
-                                value: '+62 812-xxxx-xxxx',
-                                href: '#',
+                                value: data?.whatsapp ?? '+62 812-xxxx-xxxx',
+                                href: data?.whatsapp ? `https://wa.me/${data.whatsapp.replace(/[^0-9]/g, '')}` : '#',
                             },
                             {
                                 icon: MapPin,
                                 label: 'Alamat',
-                                value: 'Jl. A.P. Pettarani, Makassar,\nSulawesi Selatan',
+                                value: data?.address ?? 'Jl. A.P. Pettarani, Makassar,\nSulawesi Selatan',
                             },
                             {
                                 icon: Clock,
                                 label: 'Jam Operasional',
-                                value: 'Senin\u2013Jumat, 08.00\u201317.00 WITA',
+                                value: data?.hours ?? 'Senin\u2013Jumat, 08.00\u201317.00 WITA',
                             },
                         ].map((item, i) => (
                             <motion.div
@@ -233,35 +229,35 @@ export default function Contact({ data }: { data?: any }) {
                                 transition={{ duration: 0.5, delay: i * 0.1 }}
                                 className="flex items-start gap-4 rounded-xl p-4 transition-all duration-300"
                                 style={{
-                                    background: 'rgba(255, 255, 255, 0.02)',
-                                    border: '1px solid rgba(255, 255, 255, 0.05)',
+                                    background: 'var(--lp-step-card-bg)',
+                                    border: '1px solid var(--lp-border-subtle)',
                                 }}
                             >
                                 <div
                                     className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
                                     style={{
-                                        background: 'rgba(37, 99, 235, 0.15)',
+                                        background: 'var(--lp-blue-light)',
                                     }}
                                 >
                                     <item.icon
                                         className="h-[18px] w-[18px]"
-                                        style={{ color: '#60a5fa' }}
+                                        style={{ color: 'var(--lp-blue-icon)' }}
                                     />
                                 </div>
                                 <div>
-                                    <div className="mb-1 text-sm font-semibold text-white">
+                                    <div className="mb-1 text-sm font-semibold" style={{ color: 'var(--lp-text-primary)' }}>
                                         {item.label}
                                     </div>
                                     {item.href ? (
                                         <a
                                             href={item.href}
                                             className="text-sm font-medium hover:underline"
-                                            style={{ color: '#60a5fa' }}
+                                            style={{ color: 'var(--lp-blue-text)' }}
                                         >
                                             {item.value}
                                         </a>
                                     ) : (
-                                        <p className="text-sm whitespace-pre-line text-gray-400">
+                                        <p className="text-sm whitespace-pre-line" style={{ color: 'var(--lp-text-secondary)' }}>
                                             {item.value}
                                         </p>
                                     )}

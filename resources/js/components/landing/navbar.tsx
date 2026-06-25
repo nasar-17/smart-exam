@@ -3,7 +3,7 @@ import { usePage, Link } from '@inertiajs/react';
 import { Sun, Moon } from 'lucide-react';
 import { useAppearance } from '@/hooks/use-appearance';
 
-const navLinks = [
+const defaultNavLinks = [
     { href: '#hero', label: 'Beranda' },
     { href: '#about', label: 'Tentang' },
     { href: '#features', label: 'Fitur' },
@@ -16,8 +16,10 @@ const navLinks = [
 export default function Navbar({ data }: { data?: any }) {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [activeSection, setActiveSection] = useState('#hero');
     const { auth } = usePage().props as any;
     const isAdmin = auth?.user?.is_admin;
+    const links = data?.nav_links ?? defaultNavLinks;
 
     const { appearance, resolvedAppearance, updateAppearance } = useAppearance();
 
@@ -25,8 +27,37 @@ export default function Navbar({ data }: { data?: any }) {
         const handleScroll = () => setScrolled(window.scrollY > 60);
         window.addEventListener('scroll', handleScroll);
 
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+        // ScrollSpy logic using IntersectionObserver
+        const sections = links.map((link: any) => {
+            const id = link.href.replace('#', '');
+            return document.getElementById(id);
+        });
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '-30% 0px -40% 0px',
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    setActiveSection(`#${entry.target.id}`);
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach((section: any) => {
+            if (section) observer.observe(section);
+        });
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            sections.forEach((section: any) => {
+                if (section) observer.unobserve(section);
+            });
+        };
+    }, [links]);
 
     return (
         <>
@@ -53,11 +84,11 @@ export default function Navbar({ data }: { data?: any }) {
 
                     {/* Desktop Links */}
                     <div className="hidden items-center gap-6 md:flex">
-                        {navLinks.map((link) => (
+                        {links.map((link: any) => (
                             <a
                                 key={link.href}
                                 href={link.href}
-                                className="nav-link-hero text-sm"
+                                className={`nav-link-hero text-sm ${activeSection === link.href ? 'active-nav-link' : ''}`}
                             >
                                 {link.label}
                             </a>
@@ -88,7 +119,7 @@ export default function Navbar({ data }: { data?: any }) {
                         {/* Theme Toggle Button */}
                         <button
                             onClick={() => updateAppearance(resolvedAppearance === 'dark' ? 'light' : 'dark')}
-                            className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
+                            className="theme-toggle-btn flex h-9 w-9 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
                             aria-label="Toggle theme"
                         >
                             {resolvedAppearance === 'dark' ? (
@@ -123,7 +154,7 @@ export default function Navbar({ data }: { data?: any }) {
                     >
                         &times;
                     </button>
-                    {navLinks.map((link) => (
+                    {links.map((link: any) => (
                         <a
                             key={link.href}
                             href={link.href}
@@ -158,7 +189,7 @@ export default function Navbar({ data }: { data?: any }) {
                             updateAppearance(resolvedAppearance === 'dark' ? 'light' : 'dark');
                             setMobileOpen(false);
                         }}
-                        className="mt-2 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
+                        className="theme-toggle-btn mt-2 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
                         aria-label="Toggle theme"
                     >
                         {resolvedAppearance === 'dark' ? (

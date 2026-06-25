@@ -16,7 +16,7 @@ export default function Stats({ data }: { data?: any }) {
         : defaults;
 
     return (
-        <section id="stats" className="relative py-12 overflow-hidden" style={{ background: '#0a0e1a' }}>
+        <section id="stats" className="relative py-12 overflow-hidden" style={{ background: 'var(--lp-bg-secondary)' }}>
             {/* Subtle blue glow */}
             <div
                 className="pointer-events-none absolute inset-0"
@@ -33,17 +33,18 @@ export default function Stats({ data }: { data?: any }) {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: false }}
                             transition={{ duration: 0.5, delay: i * 0.1 }}
-                            className={`flex flex-col items-center py-4 text-center border-white/5 md:border-r md:last:border-r-0`}
+                            className={`flex flex-col items-center py-4 text-center md:border-r md:last:border-r-0`}
+                            style={{ borderColor: 'var(--lp-border-subtle)' }}
                         >
                             <div
-                                className="stat-num mb-1 text-4xl font-bold tracking-tight text-white"
+                                className="stat-num mb-1 text-4xl font-bold tracking-tight"
                                 data-target={stat.target}
                                 data-suffix={stat.suffix}
-                                style={{ fontFamily: "'Sora', sans-serif" }}
+                                style={{ fontFamily: "'Sora', sans-serif", color: 'var(--lp-blue-text)' }}
                             >
                                 0{stat.suffix}
                             </div>
-                            <div className="text-sm text-white/40 px-4">{stat.label}</div>
+                            <div className="text-sm px-4" style={{ color: 'var(--lp-text-muted)' }}>{stat.label}</div>
                         </motion.div>
                     ))}
                 </div>

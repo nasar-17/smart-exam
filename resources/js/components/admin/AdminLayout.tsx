@@ -45,15 +45,15 @@ export default function AdminLayout({ children, title = 'Admin Panel' }: PropsWi
     const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
 
     return (
-        <div className="flex min-h-screen" style={{ background: '#F1F5F9' }}>
+        <div className="flex h-screen overflow-hidden bg-[#F1F5F9] dark:bg-[#0f172a] transition-colors duration-300">
 
             {/* ── Sidebar ─────────────────────────────── */}
             <aside
-                className="flex min-h-screen w-64 flex-col"
+                className="flex h-screen w-64 shrink-0 flex-col overflow-y-auto"
                 style={{ background: '#2563EB' }}
             >
                 {/* Logo */}
-                <div className="border-b px-6 py-5" style={{ borderColor: 'rgba(255,255,255,0.15)' }}>
+                <div className="border-b px-6 py-5 sticky top-0 z-10" style={{ background: '#2563EB', borderColor: 'rgba(255,255,255,0.15)' }}>
                     <Link href="/admin" className="flex items-center gap-2.5">
                         <img src="/Logo smart exam.png" alt="Smart Exam" className="h-8 w-auto" />
                         <span className="text-base font-bold text-white" style={{ fontFamily: "'Sora', sans-serif" }}>
@@ -108,7 +108,7 @@ export default function AdminLayout({ children, title = 'Admin Panel' }: PropsWi
                 </nav>
 
                 {/* User + Logout */}
-                <div className="border-t px-4 py-4" style={{ borderColor: 'rgba(255,255,255,0.15)' }}>
+                <div className="border-t px-4 py-4 sticky bottom-0 z-10" style={{ background: '#2563EB', borderColor: 'rgba(255,255,255,0.15)' }}>
                     <div className="mb-1 flex items-center gap-2">
                         <div
                             className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold"
@@ -134,7 +134,7 @@ export default function AdminLayout({ children, title = 'Admin Panel' }: PropsWi
             </aside>
 
             {/* ── Main Content ────────────────────────── */}
-            <div className="flex flex-1 flex-col min-w-0">
+            <div className="flex h-screen flex-1 flex-col min-w-0 overflow-hidden">
 
                 {/* Top Bar */}
                 <header className="flex h-14 items-center justify-between border-b border-gray-200 bg-white px-6 shadow-sm">

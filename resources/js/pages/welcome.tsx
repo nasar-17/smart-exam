@@ -23,8 +23,8 @@ export default function Welcome({ content = {} }: { content?: ContentMap }) {
         <>
             <Head title="Smart Exam — Platform Ujian Digital untuk Institusi Modern" />
             <div
-                className="min-h-screen bg-[#0d1117] text-white"
-                style={{ fontFamily: "'Satoshi', sans-serif" }}
+                className="min-h-screen"
+                style={{ background: 'var(--lp-bg-primary)', color: 'var(--lp-text-primary)', fontFamily: "'Satoshi', sans-serif" }}
             >
                 <Navbar data={content.navbar} />
                 <Hero data={content.hero} />

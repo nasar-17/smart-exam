@@ -2,11 +2,21 @@ import { ArrowRight, Lock, Zap, CreditCard } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function CTA({ data }: { data?: any }) {
+    const title = data?.title ?? 'Siap Membawa Ujian di Institusimu ke Level Berikutnya?';
+    const subtitle = data?.subtitle ?? 'Bergabunglah bersama 500+ institusi pendidikan yang sudah mempercayakan ujian digital mereka ke Smart Exam.';
+    const primaryCtaText = data?.primary_cta_text ?? 'Mulai Gratis';
+    const primaryCtaLink = data?.primary_cta_link ?? '#pricing';
+    const secondaryCtaText = data?.secondary_cta_text ?? 'Jadwalkan Demo';
+    const secondaryCtaLink = data?.secondary_cta_link ?? '#contact';
+    const badge1 = data?.badge_1 ?? 'Data Aman & Terenkripsi';
+    const badge2 = data?.badge_2 ?? 'Setup 3 Menit';
+    const badge3 = data?.badge_3 ?? 'Gratis 14 Hari Tanpa Syarat';
+
     return (
         <section
             id="cta"
             className="relative overflow-hidden py-28"
-            style={{ background: '#0d1117' }}
+            style={{ background: 'var(--lp-bg-primary)' }}
         >
             {/* Ambient background glows */}
             <div
@@ -26,9 +36,8 @@ export default function CTA({ data }: { data?: any }) {
                     transition={{ duration: 0.6 }}
                     className="relative overflow-hidden rounded-3xl p-10 text-center md:p-16"
                     style={{
-                        background:
-                            'linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.01) 100%)',
-                        border: '1px solid rgba(255,255,255,0.08)',
+                        background: 'var(--lp-step-card-bg)',
+                        border: '1px solid var(--lp-border-card)',
                         backdropFilter: 'blur(12px)',
                     }}
                 >
@@ -49,53 +58,53 @@ export default function CTA({ data }: { data?: any }) {
                     />
 
                     <h2
-                        className="mb-5 text-[38px] leading-tight font-bold tracking-tight text-white md:text-[50px]"
-                        style={{ fontFamily: "'Sora', sans-serif" }}
-                    >
-                        Siap Membawa Ujian di Institusimu
-                        <br className="hidden md:inline" /> ke Level Berikutnya?
-                    </h2>
-                    <p className="mx-auto mb-10 max-w-2xl text-lg text-gray-400">
-                        Bergabunglah bersama 500+ institusi pendidikan yang
-                        sudah mempercayakan ujian digital mereka ke Smart Exam.
+                        className="mb-5 text-[38px] leading-tight font-bold tracking-tight md:text-[50px]"
+                        style={{ color: 'var(--lp-text-primary)', fontFamily: "'Sora', sans-serif" }}
+                        dangerouslySetInnerHTML={{ __html: title }}
+                    />
+                    <p className="mx-auto mb-10 max-w-2xl text-lg" style={{ color: 'var(--lp-text-secondary)' }}>
+                        {subtitle}
                     </p>
                     <div className="mb-8 flex flex-wrap items-center justify-center gap-4">
                         <a
-                            href="#contact"
+                            href={primaryCtaLink}
                             className="inline-flex items-center gap-2 rounded-xl px-8 py-4 text-base font-bold text-white transition-all duration-300 hover:brightness-110"
                             style={{
                                 background: '#2563EB',
                                 boxShadow: '0 4px 14px 0 rgba(37,99,235,0.4)',
                             }}
                         >
-                            Mulai Gratis
+                            {primaryCtaText}
                             <ArrowRight className="h-[18px] w-[18px]" />
                         </a>
                         <a
-                            href="#contact"
-                            className="inline-flex items-center gap-2 rounded-xl border px-8 py-4 text-base font-semibold text-white transition-all duration-300 hover:bg-white/5"
-                            style={{ borderColor: 'rgba(255,255,255,0.15)' }}
+                            href={secondaryCtaLink}
+                            className="inline-flex items-center gap-2 rounded-xl border px-8 py-4 text-base font-semibold transition-all duration-300 hover:bg-black/5 dark:hover:bg-white/5"
+                            style={{
+                                color: 'var(--lp-text-primary)',
+                                borderColor: 'var(--lp-border)',
+                            }}
                         >
-                            Jadwalkan Demo Langsung
+                            {secondaryCtaText}
                         </a>
                     </div>
                     <div
                         className="mt-8 flex flex-wrap items-center justify-center gap-6 border-t pt-8"
-                        style={{ borderColor: 'rgba(255,255,255,0.05)' }}
+                        style={{ borderColor: 'var(--lp-border-subtle)' }}
                     >
                         {[
-                            { icon: Lock, text: 'Data Aman & Terenkripsi' },
-                            { icon: Zap, text: 'Setup 3 Menit' },
+                            { icon: Lock, text: badge1 },
+                            { icon: Zap, text: badge2 },
                             {
                                 icon: CreditCard,
-                                text: 'Gratis 14 Hari Tanpa Syarat',
+                                text: badge3,
                             },
                         ].map((badge, i) => (
                             <div
                                 key={i}
-                                className="flex items-center gap-2 text-xs text-gray-400"
+                                className="flex items-center gap-2 text-xs" style={{ color: 'var(--lp-text-muted)' }}
                             >
-                                <badge.icon className="h-3.5 w-3.5 text-blue-400" />
+                                <badge.icon className="h-3.5 w-3.5" style={{ color: 'var(--lp-blue-icon)' }} />
                                 {badge.text}
                             </div>
                         ))}

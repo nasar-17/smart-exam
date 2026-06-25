@@ -32,42 +32,64 @@ const socials = [
 ];
 
 export default function Footer({ data }: { data?: any }) {
+    const tagline = data?.tagline ?? 'Platform ujian digital terpercaya untuk institusi pendidikan modern Indonesia.';
+    const copyright = data?.copyright ?? '© 2026 Smart Exam oleh Smart Inovasi. Hak cipta dilindungi.';
+    const socialInstagram = data?.social_instagram ?? '#';
+    const socialTwitter = data?.social_twitter ?? '#';
+    const socialLinkedin = data?.social_linkedin ?? '#';
+    const socialYoutube = data?.social_youtube ?? '#';
+
+    const socials = [
+        { icon: Twitter, href: socialTwitter },
+        { icon: Linkedin, href: socialLinkedin },
+        { icon: Instagram, href: socialInstagram },
+        { icon: Youtube, href: socialYoutube },
+    ];
+
     return (
-        <footer className="py-16" style={{ background: '#090d13' }}>
+        <footer
+            className="py-16 border-t"
+            style={{
+                background: 'var(--lp-bg-secondary)',
+                borderColor: 'var(--lp-border-subtle)',
+            }}
+        >
             <div className="mx-auto max-w-[1200px] px-6">
                 <div className="mb-12 grid grid-cols-1 gap-10 md:grid-cols-4">
                     {/* Brand */}
                     <div>
                         <div className="mb-4 flex items-center gap-2.5">
-                            <img
-                                src="/Logo smart exam.png"
-                                alt="Smart Exam"
-                                className="h-8 w-auto"
-                            />
+                             <img
+                                 src="/Logo smart exam.png"
+                                 alt="Smart Exam"
+                                 className="h-8 w-auto"
+                             />
                             <span
-                                className="text-lg font-bold text-white"
-                                style={{ fontFamily: "'Sora', sans-serif" }}
+                                className="text-lg font-bold"
+                                style={{
+                                    color: 'var(--lp-text-primary)',
+                                    fontFamily: "'Sora', sans-serif",
+                                }}
                             >
                                 Smart
                                 <span style={{ color: '#60A5FA' }}>Exam</span>
                             </span>
                         </div>
-                        <p className="mb-6 text-sm leading-relaxed text-gray-400">
-                            Platform ujian digital terpercaya untuk institusi
-                            pendidikan modern Indonesia.
+                        <p className="mb-6 text-sm leading-relaxed" style={{ color: 'var(--lp-text-secondary)' }}>
+                            {tagline}
                         </p>
                         <div className="flex gap-3">
                             {socials.map((s, i) => (
                                 <a
                                     key={i}
                                     href={s.href}
-                                    className="flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-300 hover:scale-105 hover:bg-[#2563EB]"
+                                    className="flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-300 hover:scale-105 hover:bg-[#2563EB] group"
                                     style={{
-                                        background: 'rgba(255, 255, 255, 0.03)',
-                                        border: '1px solid rgba(255,255,255,0.08)',
+                                        background: 'var(--lp-card-highlight)',
+                                        border: '1px solid var(--lp-border-card)',
                                     }}
                                 >
-                                    <s.icon className="h-4 w-4 text-gray-400 hover:text-white" />
+                                    <s.icon className="h-4 w-4 transition-colors group-hover:text-white" style={{ color: 'var(--lp-text-secondary)' }} />
                                 </a>
                             ))}
                         </div>
@@ -76,7 +98,7 @@ export default function Footer({ data }: { data?: any }) {
                     {/* Link columns */}
                     {Object.entries(footerLinks).map(([title, links]) => (
                         <div key={title}>
-                            <h4 className="mb-5 text-sm font-semibold text-white">
+                            <h4 className="mb-5 text-sm font-semibold" style={{ color: 'var(--lp-text-primary)' }}>
                                 {title}
                             </h4>
                             <div className="space-y-3">
@@ -84,7 +106,8 @@ export default function Footer({ data }: { data?: any }) {
                                     <a
                                         key={link.label}
                                         href={link.href}
-                                        className="block text-sm text-gray-400 transition-colors hover:text-white"
+                                        className="block text-sm transition-colors hover:text-blue-600 dark:hover:text-blue-400"
+                                        style={{ color: 'var(--lp-text-secondary)' }}
                                     >
                                         {link.label}
                                     </a>
@@ -96,11 +119,10 @@ export default function Footer({ data }: { data?: any }) {
 
                 <div
                     className="flex flex-wrap items-center justify-between gap-4 border-t pt-8"
-                    style={{ borderColor: 'rgba(255,255,255,0.05)' }}
+                    style={{ borderColor: 'var(--lp-border-subtle)' }}
                 >
-                    <p className="text-xs text-gray-500">
-                        &copy; 2026 Smart Exam oleh Smart Inovasi. Hak cipta
-                        dilindungi.
+                    <p className="text-xs" style={{ color: 'var(--lp-text-muted)' }}>
+                        {copyright}
                     </p>
                 </div>
             </div>

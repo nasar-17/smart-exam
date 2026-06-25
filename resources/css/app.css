@@ -148,14 +148,89 @@
 }
 
 /* ═══════════════════════════════════════
-   BRAND COLOR — Bright Blue (no gradient)
-   Primary: #2563EB  |  Light: #EEF2FF
+   LANDING PAGE COLOR TOKENS
+   Light values in :root, dark in .dark
 ═══════════════════════════════════════ */
 :root {
+    /* Brand */
     --brand: #2563EB;
     --brand-dark: #1d4ed8;
     --brand-light: #EEF2FF;
     --brand-text: #2563EB;
+
+    /* Landing backgrounds */
+    --lp-bg-primary:   #ffffff;
+    --lp-bg-secondary: #f8fafc;
+    --lp-bg-alt:       #f1f5f9;
+    --lp-bg-card:      #ffffff;
+    --lp-bg-glass:     rgba(255,255,255,0.80);
+
+    /* Landing text */
+    --lp-text-primary:   #0f172a;
+    --lp-text-secondary: #475569;
+    --lp-text-muted:     #94a3b8;
+
+    /* Landing borders */
+    --lp-border:         #e2e8f0;
+    --lp-border-card:    #e2e8f0;
+    --lp-border-subtle:  rgba(0,0,0,0.06);
+
+    /* Blue tints */
+    --lp-blue-light:  #EEF2FF;
+    --lp-blue-text:   #2563EB;
+    --lp-blue-accent: rgba(37,99,235,0.10);
+    --lp-blue-icon:   #2563EB;
+
+    /* Card inner highlight (for glass cards in dark) */
+    --lp-card-highlight: rgba(0,0,0,0.04);
+
+    /* Divider fade mask */
+    --lp-mask-from: #ffffff;
+
+    /* How it works timeline */
+    --lp-timeline-track: rgba(0,0,0,0.07);
+    --lp-timeline-dot-bg: #ffffff;
+    --lp-card-watermark: rgba(0,0,0,0.04);
+    --lp-step-card-bg: rgba(0,0,0,0.02);
+    --lp-step-card-border: rgba(0,0,0,0.07);
+}
+
+.dark {
+    /* Landing backgrounds */
+    --lp-bg-primary:   #0d1117;
+    --lp-bg-secondary: #0a0e1a;
+    --lp-bg-alt:       #111827;
+    --lp-bg-card:      rgba(255,255,255,0.04);
+    --lp-bg-glass:     rgba(255,255,255,0.04);
+
+    /* Landing text */
+    --lp-text-primary:   #f1f5f9;
+    --lp-text-secondary: #94a3b8;
+    --lp-text-muted:     #64748b;
+
+    /* Landing borders */
+    --lp-border:         rgba(255,255,255,0.08);
+    --lp-border-card:    rgba(255,255,255,0.08);
+    --lp-border-subtle:  rgba(255,255,255,0.05);
+
+    /* Blue tints */
+    --lp-blue-light:  rgba(37,99,235,0.15);
+    --lp-blue-text:   #60a5fa;
+    --lp-blue-accent: rgba(37,99,235,0.15);
+    --lp-blue-icon:   #60a5fa;
+
+    /* Card inner */
+    --lp-card-highlight: rgba(255,255,255,0.03);
+
+    /* Divider fade mask */
+    --lp-mask-from: #0d1117;
+
+    /* How it works timeline */
+    --lp-timeline-track: rgba(255,255,255,0.05);
+    --lp-timeline-dot-bg: #0d1117;
+    --lp-card-watermark: rgba(255,255,255,0.03);
+    --lp-step-card-bg: rgba(255,255,255,0.02);
+    --lp-step-card-border: rgba(255,255,255,0.08);
 }
 
 /* ═══════════════════════════════════════
@@ -165,15 +240,16 @@
 /* Section divider */
 .section-divider {
     height: 1px;
-    background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+    background: linear-gradient(90deg, transparent, var(--lp-border), transparent);
 }
 
 /* Navbar scroll effect */
 .navbar-landing {
     transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
 }
+/* Dark mode (default): glass dark */
 .navbar-landing.scrolled {
-    background: rgba(13, 17, 23, 0.75) !important;
+    background: rgba(13, 17, 23, 0.85) !important;
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
@@ -190,6 +266,31 @@
     border-color: transparent !important;
 }
 .navbar-landing.scrolled .hamburger-line { background: #fff !important; }
+
+/* Light mode: scrolled navbar becomes solid white with dark text */
+html:not(.dark) .navbar-landing.scrolled {
+    background: rgba(255, 255, 255, 0.97) !important;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08) !important;
+    border-bottom-color: rgba(0, 0, 0, 0.06) !important;
+}
+html:not(.dark) .navbar-landing.scrolled .nav-link-hero { color: #374151 !important; }
+html:not(.dark) .navbar-landing.scrolled .nav-link-hero:hover { color: #2563EB !important; }
+html:not(.dark) .navbar-landing.scrolled .nav-link-hero::after { background: #2563EB !important; }
+html:not(.dark) .navbar-landing.scrolled .nav-logo-text { color: #111827 !important; }
+html:not(.dark) .navbar-landing.scrolled .nav-logo-text span { color: #2563EB !important; }
+html:not(.dark) .navbar-landing.scrolled .nav-cta-btn {
+    background: #2563EB !important;
+    color: #fff !important;
+}
+html:not(.dark) .navbar-landing.scrolled .hamburger-line { background: #1f2937 !important; }
+html:not(.dark) .navbar-landing.scrolled .theme-toggle-btn {
+    color: #374151 !important;
+    background: rgba(0, 0, 0, 0.05) !important;
+}
+.theme-toggle-btn:hover {
+    background: #2563EB !important;
+    color: #ffffff !important;
+}
 
 /* Nav link for hero (white text) */
 .nav-link-hero {
@@ -210,6 +311,19 @@
 }
 .nav-link-hero:hover { color: #fff; }
 .nav-link-hero:hover::after { width: 100%; }
+
+/* Active link highlight color */
+.navbar-landing .nav-link-hero.active-nav-link,
+.navbar-landing.scrolled .nav-link-hero.active-nav-link,
+html:not(.dark) .navbar-landing.scrolled .nav-link-hero.active-nav-link {
+    color: var(--lp-blue-text) !important;
+}
+.navbar-landing .nav-link-hero.active-nav-link::after,
+.navbar-landing.scrolled .nav-link-hero.active-nav-link::after,
+html:not(.dark) .navbar-landing.scrolled .nav-link-hero.active-nav-link::after {
+    width: 100% !important;
+    background: var(--lp-blue-text) !important;
+}
 
 /* Mobile nav overlay */
 .mobile-nav-overlay {
@@ -263,13 +377,13 @@
 
 /* Feature card */
 .feature-card {
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    border: 1px solid var(--lp-border-card);
 }
 .feature-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 32px rgba(37, 99, 235, 0.15);
-    border-color: rgba(96, 165, 250, 0.25);
+    border-color: rgba(37, 99, 235, 0.30);
 }
 
 /* Pricing card */
@@ -290,12 +404,12 @@
     box-shadow: 0 6px 24px rgba(37, 99, 235, 0.35);
 }
 .btn-outline-landing {
-    border: 1.5px solid #2563EB;
-    color: #2563EB;
+    border: 1.5px solid var(--lp-blue-text);
+    color: var(--lp-blue-text);
     transition: background 0.18s ease, color 0.18s ease, transform 0.15s ease;
 }
 .btn-outline-landing:hover {
-    background: #EEF2FF;
+    background: var(--lp-blue-light);
     transform: translateY(-1px);
 }
 .btn-white-landing {
@@ -319,7 +433,7 @@
 
 /* Dot background pattern */
 .dot-pattern {
-    background-image: radial-gradient(circle, rgba(96, 165, 250, 0.08) 1px, transparent 1px);
+    background-image: radial-gradient(circle, var(--lp-border) 1px, transparent 1px);
     background-size: 28px 28px;
 }
 
@@ -339,9 +453,9 @@
 .show-yearly .yearly-price { display: inline; }
 .show-yearly .monthly-price { display: none; }
 
-/* Bright blue text highlight */
+/* Blue text highlight — adapts to light/dark */
 .gradient-text {
-    color: #60a5fa;
+    color: var(--lp-blue-text);
 }
 
 /* Hero CTA buttons */
@@ -421,4 +535,21 @@
         margin-top: 0;
         margin-bottom: 0;
     }
+}
+
+/* Custom hover effect for client/institution logos */
+.inst-logo-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.inst-logo-card:hover {
+    background: #2563EB !important;
+    border-color: #2563EB !important;
+    box-shadow: 0 4px 14px 0 rgba(37,99,235,0.25);
+}
+.inst-logo-card:hover .inst-logo-badge {
+    background: #ffffff !important;
+    color: #2563EB !important;
+}
+.inst-logo-card:hover .inst-logo-text {
+    color: #ffffff !important;
 }

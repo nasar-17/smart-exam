@@ -42,10 +42,10 @@ export default function Dashboard() {
         <div className="p-6">
             <Head title="Admin Dashboard" />
             <div className="mb-6">
-                <h2 className="text-lg font-semibold text-gray-800">
+                <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-100">
                     Kelola Konten Landing Page
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-slate-400">
                     Pilih section di bawah untuk mengedit konten yang ditampilkan di halaman landing page.
                 </p>
             </div>
@@ -58,7 +58,7 @@ export default function Dashboard() {
                         <Link
                             key={section.key}
                             href={`/admin/sections/${section.key}`}
-                            className="group flex flex-col rounded-xl border border-gray-200 bg-white p-5 transition-all hover:border-indigo-200 hover:shadow-md"
+                            className="group flex flex-col rounded-xl border border-gray-200 bg-white p-5 transition-all hover:border-blue-300 hover:shadow-md dark:border-slate-700 dark:bg-[#1e2736] dark:hover:border-blue-500 dark:hover:shadow-slate-900"
                         >
                             <div className="mb-3 flex items-center justify-between">
                                 <div
@@ -71,7 +71,7 @@ export default function Dashboard() {
                                     />
                                 </div>
                                 <svg
-                                    className="h-4 w-4 text-gray-400 transition-transform group-hover:translate-x-1 group-hover:text-indigo-600"
+                                    className="h-4 w-4 text-gray-400 transition-transform group-hover:translate-x-1 group-hover:text-blue-500 dark:text-slate-500 dark:group-hover:text-blue-400"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -79,8 +79,8 @@ export default function Dashboard() {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                 </svg>
                             </div>
-                            <h3 className="font-semibold text-gray-800">{section.label}</h3>
-                            <p className="mt-1 text-sm text-gray-500">{section.desc}</p>
+                            <h3 className="font-semibold text-gray-800 dark:text-slate-100">{section.label}</h3>
+                            <p className="mt-1 text-sm text-gray-500 dark:text-slate-400">{section.desc}</p>
                         </Link>
                     );
                 })}

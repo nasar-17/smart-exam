@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const institutions = [
+const defaultInstitutions = [
     'UH|Universitas Hasanuddin',
     'SM|STMIK Makassar',
     'S5|SMA Negeri 5',
@@ -10,9 +10,45 @@ const institutions = [
     'AT|Akademi Teknologi',
 ];
 
+const defaultMisi = [
+    'Menyediakan teknologi anti-kecurangan mutakhir demi menjaga kejujuran proses akademik.',
+    'Menyederhanakan administrasi ujian guna menekan beban biaya operasional kertas dan cetak.',
+    'Menyajikan analisis hasil instan dan detail untuk mempermudah evaluasi performa belajar.',
+];
+
 export default function About({ data }: { data?: any }) {
+    const title = data?.title ?? 'Kami Percaya Teknologi Bisa Membuat';
+    const titleHighlight = data?.title_highlight ?? 'Pendidikan Lebih Adil';
+    const paragraph1 =
+        data?.paragraph_1 ??
+        'Smart Exam dikembangkan oleh tim Smart Inovasi — startup teknologi pendidikan dari Makassar, Indonesia. Kami memahami tantangan nyata yang dihadapi institusi pendidikan dalam menyelenggarakan ujian: kecurangan, biaya cetak soal, dan keterbatasan waktu koreksi.';
+    const paragraph2 =
+        data?.paragraph_2 ??
+        'Dengan Smart Exam, kami menghadirkan platform ujian digital yang tidak hanya mudah digunakan, tapi juga aman, terjangkau, dan bisa diakses dari mana saja.';
+    const imageUrl =
+        data?.image_url && data.image_url !== ''
+            ? data.image_url
+            : 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80';
+
+    const visiTitle = data?.visi_title ?? 'Visi Kami';
+    const visiText =
+        data?.visi_text ??
+        'Menjadi platform ujian digital terdepan di Indonesia yang berdedikasi menciptakan akses evaluasi pendidikan yang adil, aman, dan inklusif bagi seluruh lapisan masyarakat.';
+    const misiTitle = data?.misi_title ?? 'Misi Kami';
+    const misiItems = data?.misi_items ?? defaultMisi;
+    const image2Url =
+        data?.image_2_url && data.image_2_url !== ''
+            ? data.image_2_url
+            : 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80';
+
+    const itemsInstitutions = data?.institutions ?? defaultInstitutions;
+
     return (
-        <section id="about" className="py-24" style={{ background: '#0d1117' }}>
+        <section
+            id="about"
+            className="py-24"
+            style={{ background: 'var(--lp-bg-primary)' }}
+        >
             <div className="mx-auto max-w-[1200px] px-6">
                 <div className="flex flex-col items-center gap-16 md:flex-row lg:gap-20">
                     {/* Left: Image (returned to original place with loop slide-left animation) */}
@@ -24,7 +60,7 @@ export default function About({ data }: { data?: any }) {
                         className="w-full flex-1"
                     >
                         <img
-                            src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80&auto=format&fit=crop"
+                            src={imageUrl}
                             alt="Students collaborating"
                             className="w-full rounded-2xl object-cover shadow-lg"
                             style={{
@@ -44,45 +80,41 @@ export default function About({ data }: { data?: any }) {
                         className="w-full flex-1"
                     >
                         <div
-                            className="mb-6 inline-block rounded-full bg-blue-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-400"
+                            className="mb-6 inline-block rounded-full px-4 py-1.5 text-xs font-bold tracking-wider uppercase"
                             style={{
                                 fontFamily: "'Sora', sans-serif",
-                                color: '#60a5fa',
+                                background: 'var(--lp-blue-light)',
+                                color: 'var(--lp-blue-text)',
                             }}
                         >
                             Tentang Kami
                         </div>
 
                         <h2
-                            className="mb-6 text-[38px] leading-tight font-bold tracking-tight text-white"
-                            style={{ fontFamily: "'Sora', sans-serif" }}
+                            className="mb-6 text-[38px] leading-tight font-bold tracking-tight"
+                            style={{
+                                fontFamily: "'Sora', sans-serif",
+                                color: 'var(--lp-text-primary)',
+                            }}
                         >
-                            Kami Percaya Teknologi Bisa Membuat
+                            {title}
                             <br />
                             <span className="gradient-text">
-                                Pendidikan Lebih Adil
+                                {titleHighlight}
                             </span>
                         </h2>
-                        <p className="mb-4 text-base leading-relaxed text-gray-400">
-                            Smart Exam dikembangkan oleh tim Smart Inovasi —
-                            startup teknologi pendidikan dari Makassar,
-                            Indonesia. Kami memahami tantangan nyata yang
-                            dihadapi institusi pendidikan dalam menyelenggarakan
-                            ujian: kecurangan, biaya cetak soal, dan
-                            keterbatasan waktu koreksi.
-                        </p>
-                        <p className="mb-8 text-base leading-relaxed text-gray-400">
-                            Dengan Smart Exam, kami menghadirkan platform ujian
-                            digital yang tidak hanya mudah digunakan, tapi juga
-                            aman, terjangkau, dan bisa diakses dari mana saja.
-                        </p>
-                        <div
-                            className="inline-flex cursor-pointer items-center gap-2 text-sm font-semibold transition hover:opacity-80"
-                            style={{ color: '#60a5fa' }}
+                        <p
+                            className="mb-4 text-base leading-relaxed"
+                            style={{ color: 'var(--lp-text-secondary)' }}
                         >
-                            Pelajari lebih lanjut tentang kami
-                            <ArrowRight className="h-4 w-4" />
-                        </div>
+                            {paragraph1}
+                        </p>
+                        <p
+                            className="mb-8 text-base leading-relaxed"
+                            style={{ color: 'var(--lp-text-secondary)' }}
+                        >
+                            {paragraph2}
+                        </p>
                     </motion.div>
                 </div>
 
@@ -94,44 +126,54 @@ export default function About({ data }: { data?: any }) {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: false }}
                         transition={{ duration: 0.6 }}
-                        className="w-full flex-1 flex flex-col gap-8"
+                        className="flex w-full flex-1 flex-col gap-8"
                     >
                         {/* Visi */}
                         <div>
                             <h3
-                                className="mb-4 text-xl font-bold text-white flex items-center gap-3"
-                                style={{ fontFamily: "'Sora', sans-serif" }}
+                                className="mb-4 flex items-center gap-3 text-xl font-bold"
+                                style={{
+                                    fontFamily: "'Sora', sans-serif",
+                                    color: 'var(--lp-text-primary)',
+                                }}
                             >
                                 <span className="h-2.5 w-2.5 rounded-full bg-blue-500" />
-                                Visi Kami
+                                {visiTitle}
                             </h3>
-                            <p className="text-base leading-relaxed text-gray-400">
-                                Menjadi platform ujian digital terdepan di Indonesia yang berdedikasi menciptakan akses evaluasi pendidikan yang adil, aman, dan inklusif bagi seluruh lapisan masyarakat.
+                            <p
+                                className="text-base leading-relaxed"
+                                style={{ color: 'var(--lp-text-secondary)' }}
+                            >
+                                {visiText}
                             </p>
                         </div>
 
                         {/* Misi */}
                         <div>
                             <h3
-                                className="mb-4 text-xl font-bold text-white flex items-center gap-3"
-                                style={{ fontFamily: "'Sora', sans-serif" }}
+                                className="mb-4 flex items-center gap-3 text-xl font-bold"
+                                style={{
+                                    fontFamily: "'Sora', sans-serif",
+                                    color: 'var(--lp-text-primary)',
+                                }}
                             >
                                 <span className="h-2.5 w-2.5 rounded-full bg-blue-500" />
-                                Misi Kami
+                                {misiTitle}
                             </h3>
-                            <ul className="space-y-4 text-base text-gray-400">
-                                <li className="flex items-start gap-3">
-                                    <span className="text-blue-400 font-bold mt-0.5">•</span>
-                                    <span>Menyediakan teknologi anti-kecurangan mutakhir demi menjaga kejujuran proses akademik.</span>
-                                </li>
-                                <li className="flex items-start gap-3">
-                                    <span className="text-blue-400 font-bold mt-0.5">•</span>
-                                    <span>Menyederhanakan administrasi ujian guna menekan beban biaya operasional kertas dan cetak.</span>
-                                </li>
-                                <li className="flex items-start gap-3">
-                                    <span className="text-blue-400 font-bold mt-0.5">•</span>
-                                    <span>Menyajikan analisis hasil instan dan detail untuk mempermudah evaluasi performa belajar.</span>
-                                </li>
+                            <ul
+                                className="space-y-4 text-base"
+                                style={{ color: 'var(--lp-text-secondary)' }}
+                            >
+                                {misiItems.map((item: string, i: number) => (
+                                    <li key={i} className="flex items-start gap-3">
+                                        <span className="mt-0.5 font-bold text-blue-400">
+                                            •
+                                        </span>
+                                        <span>
+                                            {item}
+                                        </span>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                     </motion.div>
@@ -145,7 +187,7 @@ export default function About({ data }: { data?: any }) {
                         className="w-full flex-1"
                     >
                         <img
-                            src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80&auto=format&fit=crop"
+                            src={image2Url}
                             alt="Digital learning collaboration"
                             className="w-full rounded-2xl object-cover shadow-lg"
                             style={{
@@ -158,42 +200,70 @@ export default function About({ data }: { data?: any }) {
                 </div>
 
                 {/* Dipercaya oleh institusi terkemuka (Moving/sliding loop from left to right) */}
-                <div className="mt-24 border-t pt-10" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
-                    <p className="mb-8 text-center text-xs font-semibold tracking-widest text-white/20 uppercase">
+                <div
+                    className="mt-24 border-t pt-10"
+                    style={{ borderColor: 'var(--lp-border-subtle)' }}
+                >
+                    <p
+                        className="mb-8 text-center text-xs font-semibold tracking-widest uppercase"
+                        style={{ color: 'var(--lp-text-muted)' }}
+                    >
                         Dipercaya oleh institusi terkemuka
                     </p>
                     <div className="relative w-full overflow-hidden">
                         {/* Gradient mask for fade edges */}
-                        <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[#0d1117] to-transparent z-10 pointer-events-none" />
-                        <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-[#0d1117] to-transparent z-10 pointer-events-none" />
-                        
-                        <motion.div 
-                            className="flex gap-16 whitespace-nowrap w-max"
+                        <div
+                            className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20"
+                            style={{
+                                background:
+                                    'linear-gradient(to right, var(--lp-bg-primary), transparent)',
+                            }}
+                        />
+                        <div
+                            className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20"
+                            style={{
+                                background:
+                                    'linear-gradient(to left, var(--lp-bg-primary), transparent)',
+                            }}
+                        />
+
+                        <motion.div
+                            className="flex w-max gap-0 whitespace-nowrap"
                             animate={{ x: [-1000, 0] }} // Loop from left to right
                             transition={{
                                 repeat: Infinity,
-                                ease: "linear",
-                                duration: 25
+                                ease: 'linear',
+                                duration: 25,
                             }}
                         >
                             {/* Render duplicated list for seamless looping */}
-                            {[...institutions, ...institutions, ...institutions].map((inst, index) => {
+                            {[
+                                ...itemsInstitutions,
+                                ...itemsInstitutions,
+                                ...itemsInstitutions,
+                            ].map((inst, index) => {
                                 const [abbr, name] = inst.split('|');
                                 return (
                                     <div
                                         key={index}
-                                        className="flex items-center gap-3 opacity-30 transition-opacity hover:opacity-60 shrink-0"
+                                        className="inst-logo-card group flex shrink-0 cursor-pointer items-center gap-3 rounded-2xl border px-4.5 py-2.5 opacity-60 transition-all hover:opacity-100"
+                                        style={{ borderColor: 'transparent' }}
                                     >
                                         <div
-                                            className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold"
+                                            className="inst-logo-badge flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all duration-300"
                                             style={{
-                                                background: 'rgba(37, 99, 235, 0.15)',
-                                                color: '#60a5fa',
+                                                background: '#2563EB',
+                                                color: '#ffffff',
                                             }}
                                         >
                                             {abbr}
                                         </div>
-                                        <span className="text-sm font-semibold text-white/50">
+                                        <span
+                                            className="inst-logo-text text-sm font-semibold transition-all duration-300"
+                                            style={{
+                                                color: 'var(--lp-text-secondary)',
+                                            }}
+                                        >
                                             {name}
                                         </span>
                                     </div>

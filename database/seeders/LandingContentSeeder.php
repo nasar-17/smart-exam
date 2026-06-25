@@ -14,12 +14,21 @@ class LandingContentSeeder extends Seeder
             ['section' => 'navbar', 'key' => 'brand_name', 'value' => 'Smart Exam', 'type' => 'text', 'label' => 'Nama Brand', 'order' => 1],
             ['section' => 'navbar', 'key' => 'cta_text', 'value' => 'Coba Gratis', 'type' => 'text', 'label' => 'Teks Tombol CTA', 'order' => 2],
             ['section' => 'navbar', 'key' => 'cta_link', 'value' => '#pricing', 'type' => 'text', 'label' => 'Link Tombol CTA', 'order' => 3],
+            ['section' => 'navbar', 'key' => 'nav_links', 'type' => 'json', 'label' => 'Daftar Menu Navigasi (JSON)', 'order' => 4, 'value' => json_encode([
+                ['href' => '#hero', 'label' => 'Beranda'],
+                ['href' => '#about', 'label' => 'Tentang'],
+                ['href' => '#features', 'label' => 'Fitur'],
+                ['href' => '#howitworks', 'label' => 'Cara Kerja'],
+                ['href' => '#pricing', 'label' => 'Harga'],
+                ['href' => '#testimonials', 'label' => 'Testimoni'],
+                ['href' => '#contact', 'label' => 'Kontak'],
+            ])],
 
             // ── HERO ────────────────────────────────────────
             ['section' => 'hero', 'key' => 'badge_text',      'value' => '500+ Institusi Aktif',                                                                   'type' => 'text',     'label' => 'Badge Text (kiri atas)',          'order' => 1],
             ['section' => 'hero', 'key' => 'badge_link',      'value' => '#testimonials',                                                                          'type' => 'text',     'label' => 'Badge Link',                      'order' => 2],
             ['section' => 'hero', 'key' => 'title',           'value' => 'Platform Ujian',                                                                         'type' => 'text',     'label' => 'Judul Baris 1',                   'order' => 3],
-            ['section' => 'hero', 'key' => 'title_accent',    'value' => 'Digital Modern',                                                                         'type' => 'text',     'label' => 'Judul Baris 2 (biru)',            'order' => 4],
+            ['section' => 'hero', 'key' => 'title_accent',    'value' => 'Digital Modern, Aman & Adil, Praktis & Akurat',                                          'type' => 'text',     'label' => 'Judul Baris 2 (Looping teks animasi, pisahkan dengan koma)', 'order' => 4],
             ['section' => 'hero', 'key' => 'subtitle',        'value' => 'Kelola soal, pantau peserta, dan analisis hasil — semua dalam satu platform yang cerdas, aman, dan efisien.', 'type' => 'textarea', 'label' => 'Subjudul',                        'order' => 5],
             ['section' => 'hero', 'key' => 'social_proof_text', 'value' => 'Digunakan oleh 10.000+ guru',                                                          'type' => 'text',     'label' => 'Social Proof Teks',               'order' => 6],
             ['section' => 'hero', 'key' => 'social_proof_sub',  'value' => '/ ★ 4.9 Rating',                                                                       'type' => 'text',     'label' => 'Social Proof Sub (rating)',        'order' => 7],
@@ -57,7 +66,23 @@ class LandingContentSeeder extends Seeder
             ['section' => 'about', 'key' => 'paragraph_1', 'value' => 'Smart Exam dikembangkan oleh tim Smart Inovasi — startup teknologi pendidikan dari Makassar, Indonesia. Kami memahami tantangan nyata yang dihadapi institusi pendidikan dalam menyelenggarakan ujian: kecurangan, biaya cetak soal, dan keterbatasan waktu koreksi.', 'type' => 'textarea', 'label' => 'Paragraf 1', 'order' => 3],
             ['section' => 'about', 'key' => 'paragraph_2', 'value' => 'Dengan Smart Exam, kami menghadirkan platform ujian digital yang tidak hanya mudah digunakan, tapi juga aman, terjangkau, dan bisa diakses dari mana saja.', 'type' => 'textarea', 'label' => 'Paragraf 2', 'order' => 4],
             ['section' => 'about', 'key' => 'image_url', 'value' => 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80', 'type' => 'image', 'label' => 'URL Gambar', 'order' => 5],
-            ['section' => 'about', 'key' => 'link_text', 'value' => 'Pelajari lebih lanjut tentang kami', 'type' => 'text', 'label' => 'Teks Link', 'order' => 6],
+            ['section' => 'about', 'key' => 'visi_title', 'value' => 'Visi Kami', 'type' => 'text', 'label' => 'Visi - Judul', 'order' => 6],
+            ['section' => 'about', 'key' => 'visi_text', 'value' => 'Menjadi platform ujian digital terdepan di Indonesia yang berdedikasi menciptakan akses evaluasi pendidikan yang adil, aman, dan inklusif bagi seluruh lapisan masyarakat.', 'type' => 'textarea', 'label' => 'Visi - Deskripsi', 'order' => 7],
+            ['section' => 'about', 'key' => 'misi_title', 'value' => 'Misi Kami', 'type' => 'text', 'label' => 'Misi - Judul', 'order' => 8],
+            ['section' => 'about', 'key' => 'misi_items', 'type' => 'json', 'label' => 'Misi - Daftar Poin (JSON)', 'order' => 9, 'value' => json_encode([
+                'Menyediakan teknologi anti-kecurangan mutakhir demi menjaga kejujuran proses akademik.',
+                'Menyederhanakan administrasi ujian guna menekan beban biaya operasional kertas dan cetak.',
+                'Menyajikan analisis hasil instan dan detail untuk mempermudah evaluasi performa belajar.'
+            ])],
+            ['section' => 'about', 'key' => 'image_2_url', 'value' => 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80', 'type' => 'image', 'label' => 'URL Gambar Kedua', 'order' => 10],
+            ['section' => 'about', 'key' => 'institutions', 'type' => 'json', 'label' => 'Daftar Institusi (JSON)', 'order' => 11, 'value' => json_encode([
+                'UH|Universitas Hasanuddin',
+                'SM|STMIK Makassar',
+                'S5|SMA Negeri 5',
+                'LP|LSP Nasional',
+                'PU|Politeknik Ujung',
+                'AT|Akademi Teknologi'
+            ])],
 
             // ── FEATURES ────────────────────────────────────
             ['section' => 'features', 'key' => 'header_badge', 'value' => 'Fitur Unggulan', 'type' => 'text', 'label' => 'Badge Header', 'order' => 1],
@@ -78,7 +103,8 @@ class LandingContentSeeder extends Seeder
             // ── HOW IT WORKS ────────────────────────────────
             ['section' => 'howitworks', 'key' => 'title', 'value' => 'Mulai Ujian Digital dalam', 'type' => 'text', 'label' => 'Judul (baris 1)', 'order' => 1],
             ['section' => 'howitworks', 'key' => 'title_highlight', 'value' => '4 Langkah Mudah', 'type' => 'text', 'label' => 'Judul (highlight)', 'order' => 2],
-            ['section' => 'howitworks', 'key' => 'items', 'type' => 'json', 'label' => 'Daftar Langkah (JSON)', 'order' => 3, 'value' => json_encode([
+            ['section' => 'howitworks', 'key' => 'header_subtitle', 'value' => 'Proses integrasi yang cepat dan sederhana untuk mentransformasi sistem ujian di institusi Anda.', 'type' => 'textarea', 'label' => 'Subjudul', 'order' => 3],
+            ['section' => 'howitworks', 'key' => 'items', 'type' => 'json', 'label' => 'Daftar Langkah (JSON)', 'order' => 4, 'value' => json_encode([
                 ['number' => '01', 'icon' => 'lucide:user-plus', 'title' => 'Daftarkan Institusi', 'description' => 'Buat akun institusi Anda dalam 2 menit. Tidak perlu kartu kredit untuk memulai.'],
                 ['number' => '02', 'icon' => 'lucide:library', 'title' => 'Buat Bank Soal', 'description' => 'Tambahkan soal secara manual, import dari Word/Excel, atau gunakan template kami.'],
                 ['number' => '03', 'icon' => 'lucide:rocket', 'title' => 'Jadwalkan Ujian', 'description' => 'Atur sesi ujian: pilih peserta, tentukan waktu, aktifkan fitur pengamanan.'],

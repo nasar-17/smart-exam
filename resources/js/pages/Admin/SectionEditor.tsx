@@ -14,7 +14,7 @@ import {
 
 type Field = {
     key: string;
-    value: string | number | boolean | Record<string, unknown>[] | null;
+    value: any;
     type: 'text' | 'textarea' | 'image' | 'json';
     label: string;
     order: number;
@@ -90,7 +90,14 @@ export default function SectionEditor({ section, fields }: Props) {
 
     // ── JSON field helpers ──────────────────────────────
     const getJsonItems = (field: Field): Record<string, unknown>[] => {
-        if (Array.isArray(field.value)) return field.value;
+        if (Array.isArray(field.value)) {
+            return field.value.map((item) => {
+                if (typeof item === 'string') {
+                    return { _is_primitive_string: true, value: item };
+                }
+                return item as Record<string, unknown>;
+            });
+        }
         return [];
     };
 
@@ -104,10 +111,17 @@ export default function SectionEditor({ section, fields }: Props) {
             prev.map((f) => {
                 if (f.key !== key) return f;
                 const items = getJsonItems(f);
-                const updated = items.map((item, i) =>
+                const updatedItems = items.map((item, i) =>
                     i === index ? { ...item, [itemKey]: itemValue } : item,
                 );
-                return { ...f, value: updated };
+                // Convert back to simple array of strings if they were primitive strings
+                const finalValue = updatedItems.map((item) => {
+                    if (item._is_primitive_string) {
+                        return item.value;
+                    }
+                    return item;
+                });
+                return { ...f, value: finalValue };
             }),
         );
     };
@@ -116,7 +130,17 @@ export default function SectionEditor({ section, fields }: Props) {
         setLocalFields((prev) =>
             prev.map((f) => {
                 if (f.key !== key) return f;
-                return { ...f, value: [...getJsonItems(f), { ...template }] };
+                const items = getJsonItems(f);
+                const isPrimitive = items.some((item) => item._is_primitive_string);
+                const newItem = isPrimitive ? { _is_primitive_string: true, value: '' } : { ...template };
+                const updatedItems = [...items, newItem];
+                const finalValue = updatedItems.map((item) => {
+                    if (item._is_primitive_string) {
+                        return item.value;
+                    }
+                    return item;
+                });
+                return { ...f, value: finalValue };
             }),
         );
     };
@@ -126,9 +150,16 @@ export default function SectionEditor({ section, fields }: Props) {
             prev.map((f) => {
                 if (f.key !== key) return f;
                 const items = getJsonItems(f);
+                const filtered = items.filter((_, i) => i !== index);
+                const finalValue = filtered.map((item) => {
+                    if (item._is_primitive_string) {
+                        return item.value;
+                    }
+                    return item;
+                });
                 return {
                     ...f,
-                    value: items.filter((_, i) => i !== index),
+                    value: finalValue,
                 };
             }),
         );
@@ -167,24 +198,21 @@ export default function SectionEditor({ section, fields }: Props) {
             <div className="mb-6">
                 <Link
                     href="/admin"
-                    className="inline-flex items-center gap-1.5 text-sm text-gray-500 transition hover:text-blue-600"
+                    className="inline-flex items-center gap-1.5 text-sm text-gray-500 transition hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
                 >
                     <ArrowLeft className="h-4 w-4" />
                     Kembali ke Dashboard
                 </Link>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-4 max-w-4xl">
                 {localFields.map((field) => (
                     <div
                         key={field.key}
-                        className="rounded-xl border border-gray-200 bg-white p-5"
+                        className="py-2 border-b border-gray-100 dark:border-slate-800"
                     >
-                        <label className="mb-2 block text-sm font-semibold text-gray-700">
+                        <label className="mb-1 block text-xs font-semibold text-gray-500 dark:text-slate-400">
                             {field.label}
-                            <span className="ml-2 text-xs font-normal text-gray-400">
-                                ({field.type})
-                            </span>
                         </label>
 
                         {/* ── TEXT ─────────────────────────── */}
@@ -206,7 +234,7 @@ export default function SectionEditor({ section, fields }: Props) {
                                     handleChange(field.key, e.target.value)
                                 }
                                 rows={4}
-                                className="w-full max-w-2xl rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-400 focus:outline-none"
+                                className="w-full max-w-2xl rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-400 focus:outline-none dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-blue-400"
                             />
                         )}
 
@@ -255,18 +283,18 @@ export default function SectionEditor({ section, fields }: Props) {
                             </div>
                         )}
 
-                        {/* ── JSON (array of objects) ──────── */}
-                        {field.type === 'json' && (
-                            <div className="space-y-4">
-                                {getJsonItems(field).map((item, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="relative rounded-lg border border-gray-200 bg-gray-50 p-4"
-                                    >
-                                        <div className="mb-3 flex items-center justify-between">
+                         {/* ── JSON (array of objects) ──────── */}
+                         {field.type === 'json' && (
+                             <div className="space-y-2">
+                                 {getJsonItems(field).map((item, idx) => (
+                                     <div
+                                         key={idx}
+                                         className="relative border-b border-gray-100 pb-3 dark:border-slate-800"
+                                     >
+                                         <div className="mb-2 flex items-center justify-between">
                                             <div className="flex items-center gap-2">
-                                                <GripVertical className="h-4 w-4 text-gray-400" />
-                                                <span className="text-xs font-semibold text-gray-500">
+                                                <GripVertical className="h-4 w-4 text-gray-400 dark:text-slate-500" />
+                                                <span className="text-xs font-semibold text-gray-500 dark:text-slate-400">
                                                     Item {idx + 1}
                                                 </span>
                                             </div>
@@ -284,146 +312,165 @@ export default function SectionEditor({ section, fields }: Props) {
                                             </button>
                                         </div>
                                         <div className="grid gap-3 sm:grid-cols-2">
-                                            {Object.entries(item).map(
-                                                ([itemKey, itemVal]) => {
-                                                    if (
-                                                        Array.isArray(itemVal)
-                                                    ) {
+                                            {item._is_primitive_string ? (
+                                                <div className="sm:col-span-2">
+                                                    <label className="mb-1 block text-xs font-medium text-gray-500">
+                                                        Poin
+                                                    </label>
+                                                    <Input
+                                                        value={String(item.value ?? '')}
+                                                        onChange={(e) =>
+                                                            updateJsonItem(
+                                                                field.key,
+                                                                idx,
+                                                                'value',
+                                                                e.target.value,
+                                                            )
+                                                        }
+                                                    />
+                                                </div>
+                                            ) : (
+                                                Object.entries(item).map(
+                                                    ([itemKey, itemVal]) => {
+                                                        if (
+                                                            Array.isArray(itemVal)
+                                                        ) {
+                                                            return (
+                                                                <div
+                                                                    key={itemKey}
+                                                                    className="sm:col-span-2"
+                                                                >
+                                                                    <label className="mb-1 block text-xs font-medium text-gray-500 dark:text-slate-400">
+                                                                        {itemKey}
+                                                                    </label>
+                                                                    <textarea
+                                                                        value={itemVal.join(
+                                                                            '\n',
+                                                                        )}
+                                                                        onChange={(
+                                                                            e,
+                                                                        ) => {
+                                                                            const lines =
+                                                                                e.target.value.split(
+                                                                                    '\n',
+                                                                                );
+                                                                            setLocalFields(
+                                                                                (
+                                                                                    prev,
+                                                                                ) =>
+                                                                                    prev.map(
+                                                                                        (
+                                                                                            f,
+                                                                                        ) => {
+                                                                                            if (
+                                                                                                f.key !==
+                                                                                                field.key
+                                                                                            )
+                                                                                                return f;
+                                                                                            const items =
+                                                                                                getJsonItems(
+                                                                                                    f,
+                                                                                                );
+                                                                                            const updated =
+                                                                                                items.map(
+                                                                                                    (
+                                                                                                        it,
+                                                                                                        i,
+                                                                                                    ) =>
+                                                                                                        i ===
+                                                                                                        idx
+                                                                                                            ? {
+                                                                                                                  ...it,
+                                                                                                                  [itemKey]:
+                                                                                                                      lines,
+                                                                                                              }
+                                                                                                            : it,
+                                                                                                );
+                                                                                            return {
+                                                                                                ...f,
+                                                                                                value: updated,
+                                                                                            };
+                                                                                        },
+                                                                                    ),
+                                                                            );
+                                                                        }}
+                                                                        rows={Math.max(
+                                                                            3,
+                                                                            itemVal.length,
+                                                                        )}
+                                                                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-400 focus:outline-none dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100"
+                                                                        placeholder="Satu item per baris"
+                                                                    />
+                                                                    <p className="mt-0.5 text-xs text-gray-400">
+                                                                        Satu item
+                                                                        per baris
+                                                                    </p>
+                                                                </div>
+                                                            );
+                                                        }
+
+                                                        const isLong =
+                                                            typeof itemVal ===
+                                                                'string' &&
+                                                            itemVal.length > 80;
+
                                                         return (
                                                             <div
                                                                 key={itemKey}
-                                                                className="sm:col-span-2"
+                                                                className={
+                                                                    isLong
+                                                                        ? 'sm:col-span-2'
+                                                                        : ''
+                                                                }
                                                             >
                                                                 <label className="mb-1 block text-xs font-medium text-gray-500">
                                                                     {itemKey}
                                                                 </label>
-                                                                <textarea
-                                                                    value={itemVal.join(
-                                                                        '\n',
-                                                                    )}
-                                                                    onChange={(
-                                                                        e,
-                                                                    ) => {
-                                                                        const lines =
-                                                                            e.target.value.split(
-                                                                                '\n',
-                                                                            );
-                                                                        setLocalFields(
-                                                                            (
-                                                                                prev,
-                                                                            ) =>
-                                                                                prev.map(
-                                                                                    (
-                                                                                        f,
-                                                                                    ) => {
-                                                                                        if (
-                                                                                            f.key !==
-                                                                                            field.key
-                                                                                        )
-                                                                                            return f;
-                                                                                        const items =
-                                                                                            getJsonItems(
-                                                                                                f,
-                                                                                            );
-                                                                                        const updated =
-                                                                                            items.map(
-                                                                                                (
-                                                                                                    it,
-                                                                                                    i,
-                                                                                                ) =>
-                                                                                                    i ===
-                                                                                                    idx
-                                                                                                        ? {
-                                                                                                              ...it,
-                                                                                                              [itemKey]:
-                                                                                                                  lines,
-                                                                                                          }
-                                                                                                        : it,
-                                                                                            );
-                                                                                        return {
-                                                                                            ...f,
-                                                                                            value: updated,
-                                                                                        };
-                                                                                    },
-                                                                                ),
-                                                                        );
-                                                                    }}
-                                                                    rows={Math.max(
-                                                                        3,
-                                                                        itemVal.length,
-                                                                    )}
-                                                                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-400 focus:outline-none"
-                                                                    placeholder="Satu item per baris"
-                                                                />
-                                                                <p className="mt-0.5 text-xs text-gray-400">
-                                                                    Satu item
-                                                                    per baris
-                                                                </p>
+                                                                {isLong ? (
+                                                                    <textarea
+                                                                        value={String(
+                                                                            itemVal ??
+                                                                                '',
+                                                                        )}
+                                                                        onChange={(
+                                                                            e,
+                                                                        ) =>
+                                                                            updateJsonItem(
+                                                                                field.key,
+                                                                                idx,
+                                                                                itemKey,
+                                                                                e
+                                                                                    .target
+                                                                                    .value,
+                                                                            )
+                                                                        }
+                                                                        rows={3}
+                                                                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-400 focus:outline-none"
+                                                                    />
+                                                                ) : (
+                                                                    <Input
+                                                                        value={String(
+                                                                            itemVal ??
+                                                                                '',
+                                                                        )}
+                                                                        onChange={(
+                                                                            e,
+                                                                        ) =>
+                                                                            updateJsonItem(
+                                                                                field.key,
+                                                                                idx,
+                                                                                itemKey,
+                                                                                e
+                                                                                    .target
+                                                                                    .value,
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                )}
                                                             </div>
                                                         );
-                                                    }
-
-                                                    const isLong =
-                                                        typeof itemVal ===
-                                                            'string' &&
-                                                        itemVal.length > 80;
-
-                                                    return (
-                                                        <div
-                                                            key={itemKey}
-                                                            className={
-                                                                isLong
-                                                                    ? 'sm:col-span-2'
-                                                                    : ''
-                                                            }
-                                                        >
-                                                            <label className="mb-1 block text-xs font-medium text-gray-500">
-                                                                {itemKey}
-                                                            </label>
-                                                            {isLong ? (
-                                                                <textarea
-                                                                    value={String(
-                                                                        itemVal ??
-                                                                            '',
-                                                                    )}
-                                                                    onChange={(
-                                                                        e,
-                                                                    ) =>
-                                                                        updateJsonItem(
-                                                                            field.key,
-                                                                            idx,
-                                                                            itemKey,
-                                                                            e
-                                                                                .target
-                                                                                .value,
-                                                                        )
-                                                                    }
-                                                                    rows={3}
-                                                                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-400 focus:outline-none"
-                                                                />
-                                                            ) : (
-                                                                <Input
-                                                                    value={String(
-                                                                        itemVal ??
-                                                                            '',
-                                                                    )}
-                                                                    onChange={(
-                                                                        e,
-                                                                    ) =>
-                                                                        updateJsonItem(
-                                                                            field.key,
-                                                                            idx,
-                                                                            itemKey,
-                                                                            e
-                                                                                .target
-                                                                                .value,
-                                                                        )
-                                                                    }
-                                                                />
-                                                            )}
-                                                        </div>
-                                                    );
-                                                },
+                                                    },
+                                                )
                                             )}
                                         </div>
                                     </div>

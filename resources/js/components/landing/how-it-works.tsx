@@ -3,33 +3,39 @@ import { UserPlus, Library, Rocket, BarChart3 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-const steps: { num: string; icon: LucideIcon; title: string; desc: string }[] =
-    [
-        {
-            num: '01',
-            icon: UserPlus,
-            title: 'Daftarkan Institusi',
-            desc: 'Buat akun institusi Anda dalam 2 menit. Tidak perlu kartu kredit untuk memulai.',
-        },
-        {
-            num: '02',
-            icon: Library,
-            title: 'Buat Bank Soal',
-            desc: 'Tambahkan soal secara manual, import dari Word/Excel, atau gunakan template kami.',
-        },
-        {
-            num: '03',
-            icon: Rocket,
-            title: 'Jadwalkan Ujian',
-            desc: 'Atur sesi ujian: pilih peserta, tentukan waktu, aktifkan fitur pengamanan.',
-        },
-        {
-            num: '04',
-            icon: BarChart3,
-            title: 'Analisis Hasil',
-            desc: 'Laporan lengkap otomatis tersedia — bisa diunduh sebagai PDF atau Excel.',
-        },
-    ];
+const iconMap: Record<string, LucideIcon> = {
+    'lucide:user-plus': UserPlus,
+    'lucide:library': Library,
+    'lucide:rocket': Rocket,
+    'lucide:bar-chart-3': BarChart3,
+};
+
+const defaultSteps = [
+    {
+        number: '01',
+        icon: 'lucide:user-plus',
+        title: 'Daftarkan Institusi',
+        description: 'Buat akun institusi Anda dalam 2 menit. Tidak perlu kartu kredit untuk memulai.',
+    },
+    {
+        number: '02',
+        icon: 'lucide:library',
+        title: 'Buat Bank Soal',
+        description: 'Tambahkan soal secara manual, import dari Word/Excel, atau gunakan template kami.',
+    },
+    {
+        number: '03',
+        icon: 'lucide:rocket',
+        title: 'Jadwalkan Ujian',
+        description: 'Atur sesi ujian: pilih peserta, tentukan waktu, aktifkan fitur pengamanan.',
+    },
+    {
+        number: '04',
+        icon: 'lucide:bar-chart-3',
+        title: 'Analisis Hasil',
+        description: 'Laporan lengkap otomatis tersedia — bisa diunduh sebagai PDF atau Excel.',
+    },
+];
 
 export default function HowItWorks({ data }: { data?: any }) {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -51,11 +57,17 @@ export default function HowItWorks({ data }: { data?: any }) {
 
     const scaleY = useTransform(scrollYProgress, [0, 0.9], [0, 1]);
     const opacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
+
+    const title = data?.title ?? 'Mulai Ujian Digital dalam';
+    const titleHighlight = data?.title_highlight ?? '4 Langkah Mudah';
+    const subtitle = data?.header_subtitle ?? 'Proses integrasi yang cepat dan sederhana untuk mentransformasi sistem ujian di institusi Anda.';
+    const items = data?.items ?? defaultSteps;
+
     return (
         <section
             id="howitworks"
             className="py-24"
-            style={{ background: '#0d1117' }}
+            style={{ background: 'var(--lp-bg-primary)' }}
         >
             <div className="mx-auto max-w-[1000px] px-6">
                 <motion.div
@@ -68,23 +80,21 @@ export default function HowItWorks({ data }: { data?: any }) {
                     <div
                         className="mb-4 inline-block rounded-full px-3 py-1 text-xs font-bold tracking-wider uppercase"
                         style={{
-                            background: 'rgba(96, 165, 250, 0.1)',
-                            color: '#60a5fa',
-                            border: '1px solid rgba(96, 165, 250, 0.2)',
+                            background: 'var(--lp-blue-light)',
+                            color: 'var(--lp-blue-text)',
+                            border: '1px solid var(--lp-border)',
                         }}
                     >
                         Cara Kerja
                     </div>
                     <h2
                         className="mb-4 text-[40px] font-bold tracking-tight text-white"
-                        style={{ fontFamily: "'Sora', sans-serif" }}
+                        style={{ fontFamily: "'Sora', sans-serif", color: 'var(--lp-text-primary)' }}
                     >
-                        Mulai Ujian Digital dalam{' '}
-                        <span className="gradient-text">4 Langkah Mudah</span>
+                        {title} <span className="gradient-text">{titleHighlight}</span>
                     </h2>
-                    <p className="mx-auto max-w-2xl text-base text-gray-400">
-                        Proses integrasi yang cepat dan sederhana untuk
-                        mentransformasi sistem ujian di institusi Anda.
+                    <p className="mx-auto max-w-2xl text-base" style={{ color: 'var(--lp-text-secondary)' }}>
+                        {subtitle}
                     </p>
                 </motion.div>
 
@@ -103,13 +113,13 @@ export default function HowItWorks({ data }: { data?: any }) {
                     />
 
                     <div className="space-y-16 md:space-y-24">
-                        {steps.map((step, i) => {
-                            const Icon = step.icon;
+                        {items.map((step: any, i: number) => {
+                            const Icon = iconMap[step.icon] ?? UserPlus;
                             const isEven = i % 2 === 0;
 
                             return (
                                 <div
-                                    key={step.num}
+                                    key={step.number || step.num}
                                     className={`relative flex flex-col items-start md:flex-row md:items-center ${isEven ? 'md:flex-row-reverse' : ''}`}
                                 >
                                     <motion.div
@@ -129,9 +139,8 @@ export default function HowItWorks({ data }: { data?: any }) {
                                         <div
                                             className="group relative w-full max-w-[420px] rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl md:p-8"
                                             style={{
-                                                background:
-                                                    'rgba(255, 255, 255, 0.02)',
-                                                border: '1px solid rgba(255, 255, 255, 0.08)',
+                                                background: 'var(--lp-step-card-bg)',
+                                                border: '1px solid var(--lp-step-card-border)',
                                                 backdropFilter: 'blur(10px)',
                                             }}
                                         >
@@ -139,42 +148,40 @@ export default function HowItWorks({ data }: { data?: any }) {
                                             <div
                                                 className="absolute top-4 right-6 text-4xl font-black transition-colors duration-300 select-none group-hover:text-blue-500/20"
                                                 style={{
-                                                    color: 'rgba(255,255,255,0.03)',
-                                                    fontFamily:
-                                                        "'Sora', sans-serif",
+                                                    color: 'var(--lp-card-watermark)',
+                                                    fontFamily: "'Sora', sans-serif",
                                                 }}
                                             >
-                                                {step.num}
+                                                {step.number || step.num}
                                             </div>
 
                                             <div className="relative mb-5">
                                                 <div
                                                     className="flex h-11 w-11 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-110"
                                                     style={{
-                                                        background:
-                                                            'rgba(37, 99, 235, 0.15)',
-                                                        border: '1px solid rgba(96, 165, 250, 0.2)',
+                                                        background: 'var(--lp-blue-light)',
+                                                        border: '1px solid var(--lp-border)',
                                                     }}
                                                 >
                                                     <Icon
                                                         className="h-5 w-5"
                                                         style={{
-                                                            color: '#60a5fa',
+                                                            color: 'var(--lp-blue-icon)',
                                                         }}
                                                     />
                                                 </div>
                                             </div>
                                             <h3
-                                                className="mb-2 text-xl font-bold text-white transition-colors duration-300 group-hover:text-[#60a5fa]"
+                                                className="mb-2 text-xl font-bold transition-colors duration-300 group-hover:text-[#60a5fa]"
                                                 style={{
-                                                    fontFamily:
-                                                        "'Sora', sans-serif",
+                                                    fontFamily: "'Sora', sans-serif",
+                                                    color: 'var(--lp-text-primary)',
                                                 }}
                                             >
                                                 {step.title}
                                             </h3>
-                                            <p className="text-sm leading-relaxed text-gray-400">
-                                                {step.desc}
+                                            <p className="text-sm leading-relaxed" style={{ color: 'var(--lp-text-secondary)' }}>
+                                                {step.description || step.desc}
                                             </p>
                                         </div>
                                     </motion.div>
@@ -190,10 +197,9 @@ export default function HowItWorks({ data }: { data?: any }) {
                                         }}
                                         className="absolute top-8 left-[20px] flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full transition-all duration-300 md:top-1/2 md:left-1/2"
                                         style={{
-                                            background: '#0d1117',
+                                            background: 'var(--lp-timeline-dot-bg)',
                                             border: '2px solid rgba(96, 165, 250, 0.4)',
-                                            boxShadow:
-                                                '0 0 10px rgba(37,99,235,0.1)',
+                                            boxShadow: '0 0 10px rgba(37,99,235,0.1)',
                                         }}
                                     >
                                         <div className="h-2.5 w-2.5 rounded-full bg-blue-500 shadow-[0_0_8px_#2563eb]" />

@@ -31,7 +31,9 @@ export default function Hero({ data }: { data?: any }) {
     const cardRating = data?.card_rating ?? '4.9';
 
     // Looping Typing Animation for the last 2 words (accent text)
-    const words = ['Digital Modern', 'Aman & Adil', 'Praktis & Akurat'];
+    const words = data?.title_accent
+        ? data.title_accent.split(',').map((w: string) => w.trim())
+        : ['Digital Modern', 'Aman & Adil', 'Praktis & Akurat'];
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const [currentText, setCurrentText] = useState('');
     const [isDeleting, setIsDeleting] = useState(false);
