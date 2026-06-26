@@ -12,8 +12,12 @@ class LandingController extends Controller
     {
         $content = LandingContent::getAllGrouped();
 
+        // Get single source of truth sections order and visibility config
+        $sections = app(\App\Http\Middleware\HandleInertiaRequests::class)->share(request())['adminSections'] ?? [];
+
         return Inertia::render('welcome', [
             'content' => $content,
+            'sections' => $sections,
         ]);
     }
 

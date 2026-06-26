@@ -50,24 +50,55 @@ class HandleInertiaRequests extends Middleware
         ];
     }
 
-    /**
-     * Single source of truth for admin sidebar sections.
-     * Matches the landing page components order.
-     */
     private function getAdminSections(): array
     {
-        return [
-            ['key' => 'navbar',       'label' => 'Navbar',       'icon' => 'layout',        'desc' => 'Brand name, CTA button'],
-            ['key' => 'hero',         'label' => 'Hero',          'icon' => 'image',         'desc' => 'Judul, subtitle, CTA, background'],
-            ['key' => 'stats',        'label' => 'Stats Bar',     'icon' => 'bar-chart-2',   'desc' => '4 angka statistik'],
-            ['key' => 'about',        'label' => 'Tentang',       'icon' => 'info',          'desc' => 'Narasi perusahaan, gambar'],
-            ['key' => 'features',     'label' => 'Fitur',         'icon' => 'star',          'desc' => '8 feature card'],
-            ['key' => 'howitworks',   'label' => 'Cara Kerja',    'icon' => 'list-ordered',  'desc' => '4 langkah'],
-            ['key' => 'pricing',      'label' => 'Harga',         'icon' => 'credit-card',   'desc' => '3 paket harga'],
-            ['key' => 'testimonials', 'label' => 'Testimoni',     'icon' => 'message-square','desc' => '6 testimoni'],
-            ['key' => 'cta',          'label' => 'CTA Section',   'icon' => 'zap',           'desc' => 'Judul, CTA, trust badge'],
-            ['key' => 'contact',      'label' => 'Kontak',        'icon' => 'phone',         'desc' => 'Email, WA, alamat, jam'],
-            ['key' => 'footer',       'label' => 'Footer',        'icon' => 'align-justify', 'desc' => 'Tagline, copyright, sosial media'],
+        // Default sections and details
+        $defaultSections = [
+            'navbar'       => ['label' => 'Navbar',       'icon' => 'layout',        'desc' => 'Brand name, CTA button', 'default_order' => 1],
+            'hero'         => ['label' => 'Hero',          'icon' => 'image',         'desc' => 'Judul, subtitle, CTA, background', 'default_order' => 2],
+            'stats'        => ['label' => 'Stats Bar',     'icon' => 'bar-chart-2',   'desc' => '4 angka statistik', 'default_order' => 3],
+            'about'        => ['label' => 'Tentang',       'icon' => 'info',          'desc' => 'Narasi perusahaan, gambar', 'default_order' => 4],
+            'features'     => ['label' => 'Fitur',         'icon' => 'star',          'desc' => '8 feature card', 'default_order' => 5],
+            'howitworks'   => ['label' => 'Cara Kerja',    'icon' => 'list-ordered',  'desc' => '4 langkah', 'default_order' => 6],
+            'pricing'      => ['label' => 'Harga',         'icon' => 'credit-card',   'desc' => '3 paket harga', 'default_order' => 7],
+            'testimonials' => ['label' => 'Testimoni',     'icon' => 'message-square','desc' => '6 testimoni', 'default_order' => 8],
+            'cta'          => ['label' => 'CTA Section',   'icon' => 'zap',           'desc' => 'Judul, CTA, trust badge', 'default_order' => 9],
+            'contact'      => ['label' => 'Kontak',        'icon' => 'phone',         'desc' => 'Email, WA, alamat, jam', 'default_order' => 10],
+            'footer'       => ['label' => 'Footer',        'icon' => 'align-justify', 'desc' => 'Tagline, copyright, sosial media', 'default_order' => 11],
         ];
+
+        // Fetch custom order and visibility from DB
+        $dbMeta = \App\Models\LandingContent::select('section', 'section_order', 'is_visible')
+            ->get()
+            ->groupBy('section')
+            ->map(function ($items) {
+                $first = $items->first();
+                return [
+                    'section_order' => (int) ($first->section_order ?? 0),
+                    'is_visible' => (bool) ($first->is_visible ?? true)
+                ];
+            })
+            ->toArray();
+
+        $sections = [];
+        foreach ($defaultSections as $key => $info) {
+            $meta = $dbMeta[$key] ?? [];
+            $order = isset($meta['section_order']) && $meta['section_order'] > 0 ? $meta['section_order'] : $info['default_order'];
+            $visible = isset($meta['is_visible']) ? $meta['is_visible'] : true;
+
+            $sections[] = [
+                'key'        => $key,
+                'label'      => $info['label'],
+                'icon'       => $info['icon'],
+                'desc'       => $info['desc'],
+                'order'      => $order,
+                'is_visible' => $visible
+            ];
+        }
+
+        // Sort by order ascending
+        usort($sections, fn ($a, $b) => $a['order'] <=> $b['order']);
+
+        return $sections;
     }
 }

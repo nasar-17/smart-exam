@@ -1,52 +1,6 @@
 import { Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const testimonials = [
-    {
-        initials: 'NH',
-        name: 'Dra. Hj. Nuraini, M.Pd.',
-        role: 'Kepala Sekolah · SMA Negeri 5 Makassar',
-        text: 'Smart Exam benar-benar mengubah cara kami menyelenggarakan ujian semester. Tidak ada lagi drama <strong>fotokopi soal tengah malam</strong>!',
-        gradient: '135deg,#2563EB,#1d4ed8',
-    },
-    {
-        initials: 'AF',
-        name: 'Bpk. Ahmad Fauzi, S.Pd.',
-        role: 'Guru Matematika · MTs Al-Ikhlas Bone',
-        text: 'Fitur <strong>anti-cheating</strong>-nya sangat membantu. Siswa tidak bisa buka tab lain, dan saya bisa pantau mereka secara real-time.',
-        gradient: '135deg,#1d4ed8,#2563EB',
-    },
-    {
-        initials: 'RH',
-        name: 'Ir. Rahmat Hidayat',
-        role: 'Kepala IT · Universitas Bosowa',
-        text: 'Setup awal hanya butuh <strong>15 menit</strong>. Tim Smart Inovasi juga sangat responsif membantu kami saat onboarding.',
-        gradient: '135deg,#2563EB,#0EA5E9',
-    },
-    {
-        initials: 'SA',
-        name: 'Siti Aisyah, S.Pd., M.Si.',
-        role: 'Dosen · Politeknik Negeri Ujung Pandang',
-        text: 'Laporan hasilnya <strong>detail banget</strong> — bisa lihat per soal mana yang banyak salah. Sangat membantu evaluasi pengajaran saya.',
-        gradient: '135deg,#0EA5E9,#2563EB',
-    },
-    {
-        initials: 'HS',
-        name: 'H. Syamsul Bahri, M.M.',
-        role: 'Wakasek Kurikulum · SMK Kesehatan Amanah',
-        text: 'Kami punya <strong>1.200 siswa</strong> dan Smart Exam menanganinya tanpa masalah. Tidak ada server down, bahkan di hari ujian simulasi.',
-        gradient: '135deg,#2563EB,#1d4ed8',
-    },
-    {
-        initials: 'AM',
-        name: 'Andi Maulana, S.Kom.',
-        role: 'Operator IT · Dinas Pendidikan Kab. Gowa',
-        text: 'Harganya sangat <strong>terjangkau</strong> dibanding solusi lain yang pernah kami coba. Worth it sekali untuk fitur yang ditawarkan.',
-        gradient: '135deg,#1d4ed8,#0EA5E9',
-    },
-];
-
-
 export default function Testimonials({ data }: { data?: any }) {
     const badge = data?.header_badge ?? 'Testimoni';
     const title = data?.header_title ?? 'Apa Kata Mereka yang Sudah Menggunakan Smart Exam?';
@@ -61,19 +15,22 @@ export default function Testimonials({ data }: { data?: any }) {
         '135deg,#1d4ed8,#0EA5E9',
     ];
 
+    // Double the items array for infinite loop effect
+    const loopItems = [...items, ...items];
+
     return (
         <section
             id="testimonials"
-            className="py-24"
+            className="py-24 overflow-hidden"
             style={{ background: 'var(--lp-bg-secondary)' }}
         >
-            <div className="mx-auto max-w-[1200px] px-6">
+            <div className="mx-auto max-w-[1200px] px-6 mb-12">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: false }}
                     transition={{ duration: 0.6 }}
-                    className="mb-12 text-center"
+                    className="text-center"
                 >
                     <div
                         className="mb-4 inline-block rounded-full px-3 py-1 text-xs font-bold tracking-wider uppercase"
@@ -91,7 +48,7 @@ export default function Testimonials({ data }: { data?: any }) {
                     >
                         {title}
                     </h2>
-                    <div className="mb-8 flex items-center justify-center gap-1">
+                    <div className="flex items-center justify-center gap-1">
                         {Array.from({ length: 5 }).map((_, i) => (
                             <Star
                                 key={i}
@@ -103,27 +60,37 @@ export default function Testimonials({ data }: { data?: any }) {
                         </span>
                     </div>
                 </motion.div>
+            </div>
 
-                <div className="mb-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-                    {items.map((t: any, i: number) => {
+            {/* Scrolling track wrapper */}
+            <div className="relative flex w-full overflow-x-hidden py-4">
+                <motion.div
+                    className="flex gap-6 shrink-0 whitespace-nowrap"
+                    animate={{
+                        x: ['0%', '-50%'],
+                    }}
+                    transition={{
+                        ease: 'linear',
+                        duration: 30,
+                        repeat: Infinity,
+                    }}
+                >
+                    {loopItems.map((t: any, i: number) => {
                         const gradient = gradients[i % gradients.length];
                         const initials = t.initial || t.initials || (t.name ? t.name.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() : 'SE');
                         return (
-                            <motion.div
+                            <div
                                 key={i}
-                                initial={{ opacity: 0, y: 25 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: false }}
-                                transition={{ duration: 0.5, delay: (i % 3) * 0.1 }}
-                                className="testimonial-card rounded-2xl p-7"
+                                className="testimonial-card rounded-2xl p-7 w-[380px] shrink-0 whitespace-normal flex flex-col justify-between"
                                 style={{
                                     background: 'var(--lp-bg-card)',
                                     border: '1px solid var(--lp-border-card)',
                                     backdropFilter: 'blur(12px)',
+                                    boxShadow: '0 4px 20px -2px rgba(0,0,0,0.05)',
                                 }}
                             >
                                 <p
-                                    className="mb-6 text-base leading-relaxed"
+                                    className="mb-6 text-sm leading-relaxed"
                                     style={{ color: 'var(--lp-text-secondary)' }}
                                     dangerouslySetInnerHTML={{
                                         __html: `&ldquo;${t.quote || t.text}&rdquo;`,
@@ -131,26 +98,26 @@ export default function Testimonials({ data }: { data?: any }) {
                                 />
                                 <div className="flex items-center gap-4">
                                     <div
-                                        className="flex h-11 w-11 items-center justify-center rounded-full text-sm font-bold text-white"
+                                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
                                         style={{
                                             background: `linear-gradient(${gradient})`,
                                         }}
                                     >
                                         {initials}
                                     </div>
-                                    <div>
-                                        <div className="text-sm font-semibold" style={{ color: 'var(--lp-text-primary)' }}>
+                                    <div className="min-w-0">
+                                        <div className="text-sm font-semibold truncate" style={{ color: 'var(--lp-text-primary)' }}>
                                             {t.name}
                                         </div>
-                                        <div className="text-xs" style={{ color: 'var(--lp-text-muted)' }}>
+                                        <div className="text-xs truncate" style={{ color: 'var(--lp-text-muted)' }}>
                                             {t.role}
                                         </div>
                                     </div>
                                 </div>
-                            </motion.div>
+                            </div>
                         );
                     })}
-                </div>
+                </motion.div>
             </div>
         </section>
     );

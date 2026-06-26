@@ -15,9 +15,28 @@ import Footer from '@/components/landing/footer';
 
 type ContentMap = Record<string, any>;
 
-export default function Welcome({ content = {} }: { content?: ContentMap }) {
+type SectionItem = {
+    key: string;
+    label: string;
+    is_visible: boolean;
+};
+
+export default function Welcome({ content = {}, sections = [] }: { content?: ContentMap; sections?: SectionItem[] }) {
     useScrollReveal();
     useStatsCounter();
+
+    // Map keys to their React components
+    const componentMap: Record<string, React.ComponentType<{ data: any }>> = {
+        hero: Hero,
+        stats: Stats,
+        about: About,
+        features: Features,
+        howitworks: HowItWorks,
+        pricing: Pricing,
+        testimonials: Testimonials,
+        cta: CTA,
+        contact: Contact,
+    };
 
     return (
         <>
@@ -26,16 +45,24 @@ export default function Welcome({ content = {} }: { content?: ContentMap }) {
                 className="min-h-screen"
                 style={{ background: 'var(--lp-bg-primary)', color: 'var(--lp-text-primary)', fontFamily: "'Satoshi', sans-serif" }}
             >
+                {/* Navbar is pinned at the top */}
                 <Navbar data={content.navbar} />
-                <Hero data={content.hero} />
-                <Stats data={content.stats} />
-                <About data={content.about} />
-                <Features data={content.features} />
-                <HowItWorks data={content.howitworks} />
-                <Pricing data={content.pricing} />
-                <Testimonials data={content.testimonials} />
-                <CTA data={content.cta} />
-                <Contact data={content.contact} />
+
+                {/* Render sections dynamically according to their database sort order */}
+                {sections.map((sec) => {
+                    // Skip navbar and footer since they are pinned
+                    if (sec.key === 'navbar' || sec.key === 'footer') return null;
+
+                    // Skip if visibility is turned off
+                    if (sec.is_visible === false) return null;
+
+                    const Component = componentMap[sec.key];
+                    if (!Component) return null;
+
+                    return <Component key={sec.key} data={content[sec.key]} />;
+                })}
+
+                {/* Footer is pinned at the bottom */}
                 <Footer data={content.footer} />
             </div>
         </>

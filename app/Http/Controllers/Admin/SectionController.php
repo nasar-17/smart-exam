@@ -78,4 +78,36 @@ class SectionController extends Controller
 
         return response()->json(['url' => $url]);
     }
+
+    public function reorder(Request $request)
+    {
+        $data = $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'required|string',
+        ]);
+
+        foreach ($data['order'] as $idx => $sectionKey) {
+            // Update section_order inside DB
+            LandingContent::where('section', $sectionKey)->update([
+                'section_order' => $idx + 1
+            ]);
+        }
+
+        return back()->with('success', 'Urutan section berhasil diperbarui.');
+    }
+
+    public function toggleVisibility(Request $request)
+    {
+        $data = $request->validate([
+            'section' => 'required|string',
+            'is_visible' => 'required|boolean',
+        ]);
+
+        LandingContent::where('section', $data['section'])->update([
+            'is_visible' => $data['is_visible']
+        ]);
+
+        $status = $data['is_visible'] ? 'ditampilkan' : 'disembunyikan';
+        return back()->with('success', "Section '{$data['section']}' berhasil {$status}.");
+    }
 }

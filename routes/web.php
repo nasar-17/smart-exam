@@ -23,6 +23,12 @@ Route::prefix('admin')
         Route::post('/sections/{section}', [SectionController::class, 'update'])
             ->name('sections.update');
 
+        Route::post('/sections-reorder', [SectionController::class, 'reorder'])
+            ->name('sections.reorder');
+
+        Route::post('/sections-toggle-visibility', [SectionController::class, 'toggleVisibility'])
+            ->name('sections.toggle-visibility');
+
         Route::post('/upload-image', [SectionController::class, 'uploadImage'])
             ->name('upload.image');
     });
