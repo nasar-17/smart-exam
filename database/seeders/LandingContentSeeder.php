@@ -34,8 +34,8 @@ class LandingContentSeeder extends Seeder
             ['section' => 'hero', 'key' => 'social_proof_sub',  'value' => '/ ★ 4.9 Rating',                                                                       'type' => 'text',     'label' => 'Social Proof Sub (rating)',        'order' => 7],
             ['section' => 'hero', 'key' => 'cta_primary_text',  'value' => 'Mulai Gratis Sekarang',                                                                 'type' => 'text',     'label' => 'Teks CTA Primer',                 'order' => 8],
             ['section' => 'hero', 'key' => 'cta_primary_link',  'value' => '#pricing',                                                                              'type' => 'text',     'label' => 'Link CTA Primer',                 'order' => 9],
-            ['section' => 'hero', 'key' => 'cta_secondary_text','value' => 'Lihat Demo',                                                                            'type' => 'text',     'label' => 'Teks CTA Sekunder',               'order' => 10],
-            ['section' => 'hero', 'key' => 'cta_secondary_link','value' => '#howitworks',                                                                           'type' => 'text',     'label' => 'Link CTA Sekunder',               'order' => 11],
+            ['section' => 'hero', 'key' => 'cta_secondary_text', 'value' => 'Lihat Demo',                                                                            'type' => 'text',     'label' => 'Teks CTA Sekunder',               'order' => 10],
+            ['section' => 'hero', 'key' => 'cta_secondary_link', 'value' => '#howitworks',                                                                           'type' => 'text',     'label' => 'Link CTA Sekunder',               'order' => 11],
             ['section' => 'hero', 'key' => 'hero_image',      'value' => '',                                                                                        'type' => 'image',    'label' => 'Gambar Hero (kanan, opsional)',    'order' => 12],
             ['section' => 'hero', 'key' => 'stat_pct',        'value' => '98%',                                                                                     'type' => 'text',     'label' => 'Angka Statistik (badge kanan)',    'order' => 13],
             ['section' => 'hero', 'key' => 'stat_label',      'value' => "Tingkat\nKepuasan",                                                                       'type' => 'text',     'label' => 'Label Statistik Badge',           'order' => 14],
@@ -72,7 +72,7 @@ class LandingContentSeeder extends Seeder
             ['section' => 'about', 'key' => 'misi_items', 'type' => 'json', 'label' => 'Misi - Daftar Poin (JSON)', 'order' => 9, 'value' => json_encode([
                 'Menyediakan teknologi anti-kecurangan mutakhir demi menjaga kejujuran proses akademik.',
                 'Menyederhanakan administrasi ujian guna menekan beban biaya operasional kertas dan cetak.',
-                'Menyajikan analisis hasil instan dan detail untuk mempermudah evaluasi performa belajar.'
+                'Menyajikan analisis hasil instan dan detail untuk mempermudah evaluasi performa belajar.',
             ])],
             ['section' => 'about', 'key' => 'image_2_url', 'value' => 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80', 'type' => 'image', 'label' => 'URL Gambar Kedua', 'order' => 10],
             ['section' => 'about', 'key' => 'institutions', 'type' => 'json', 'label' => 'Daftar Institusi (JSON)', 'order' => 11, 'value' => json_encode([
@@ -81,7 +81,7 @@ class LandingContentSeeder extends Seeder
                 'S5|SMA Negeri 5',
                 'LP|LSP Nasional',
                 'PU|Politeknik Ujung',
-                'AT|Akademi Teknologi'
+                'AT|Akademi Teknologi',
             ])],
 
             // ── FEATURES ────────────────────────────────────

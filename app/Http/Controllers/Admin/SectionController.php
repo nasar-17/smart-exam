@@ -23,18 +23,18 @@ class SectionController extends Controller
             ->orderBy('order')
             ->get()
             ->map(fn ($item) => [
-                'key'   => $item->key,
+                'key' => $item->key,
                 'value' => $item->type === 'json'
                     ? json_decode($item->value, true)
                     : $item->value,
-                'type'  => $item->type,
+                'type' => $item->type,
                 'label' => $item->label,
                 'order' => $item->order,
             ]);
 
         return Inertia::render('Admin/SectionEditor', [
             'section' => $section,
-            'fields'  => $fields,
+            'fields' => $fields,
         ]);
     }
 
@@ -43,8 +43,8 @@ class SectionController extends Controller
         abort_unless(in_array($section, $this->validSections), 404);
 
         $data = $request->validate([
-            'fields'         => 'required|array',
-            'fields.*.key'   => 'required|string',
+            'fields' => 'required|array',
+            'fields.*.key' => 'required|string',
             'fields.*.value' => 'nullable',
         ]);
 
@@ -74,7 +74,7 @@ class SectionController extends Controller
         ]);
 
         $path = $request->file('image')->store('landing', 'public');
-        $url  = Storage::url($path);
+        $url = Storage::url($path);
 
         return response()->json(['url' => $url]);
     }
@@ -89,7 +89,7 @@ class SectionController extends Controller
         foreach ($data['order'] as $idx => $sectionKey) {
             // Update section_order inside DB
             LandingContent::where('section', $sectionKey)->update([
-                'section_order' => $idx + 1
+                'section_order' => $idx + 1,
             ]);
         }
 
@@ -104,10 +104,11 @@ class SectionController extends Controller
         ]);
 
         LandingContent::where('section', $data['section'])->update([
-            'is_visible' => $data['is_visible']
+            'is_visible' => $data['is_visible'],
         ]);
 
         $status = $data['is_visible'] ? 'ditampilkan' : 'disembunyikan';
+
         return back()->with('success', "Section '{$data['section']}' berhasil {$status}.");
     }
 }

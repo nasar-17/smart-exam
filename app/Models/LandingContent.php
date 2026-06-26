@@ -21,6 +21,7 @@ class LandingContent extends Model
                     $value = $item->type === 'json'
                         ? json_decode($item->value, true)
                         : $item->value;
+
                     return [$item->key => $value];
                 });
             })
@@ -39,6 +40,7 @@ class LandingContent extends Model
                 $value = $item->type === 'json'
                     ? json_decode($item->value, true)
                     : $item->value;
+
                 return [$item->key => $value];
             })
             ->toArray();

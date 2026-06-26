@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import { useEffect, useState, type PropsWithChildren } from 'react';
 import { useAppearance } from '@/hooks/use-appearance';
+import { toast } from 'sonner';
 import {
     Layout,
     Image,
@@ -18,6 +19,7 @@ import {
     LogOut,
     Sun,
     Moon,
+    Calendar,
 } from 'lucide-react';
 
 interface AdminLayoutProps {
@@ -41,9 +43,10 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 export default function AdminLayout({ children, title = 'Admin Panel' }: PropsWithChildren<AdminLayoutProps>) {
-    const { auth, adminSections } = usePage().props as unknown as {
+    const { auth, adminSections, appointmentCount } = usePage().props as unknown as {
         auth: { user?: { email?: string } };
         adminSections: Section[];
+        appointmentCount: number;
     };
     const { url } = usePage();
     const { resolvedAppearance, updateAppearance } = useAppearance();
@@ -58,6 +61,34 @@ export default function AdminLayout({ children, title = 'Admin Panel' }: PropsWi
     }, []);
 
     // Strip query parameters or trailing slashes for clean mapping
+    const [localCount, setLocalCount] = useState(appointmentCount);
+
+    useEffect(() => {
+        setLocalCount(appointmentCount);
+    }, [appointmentCount]);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined' && window.Echo) {
+            window.Echo.channel('appointments')
+                .listen('.appointment.created', (e: any) => {
+                    console.log('Realtime Appointment Received:', e);
+                    setLocalCount((prev) => prev + 1);
+                    toast.success('Ada yang mendaftar demo baru!', {
+                        description: `${e.appointment.name} (${e.appointment.institution})`,
+                        position: 'bottom-right',
+                    });
+                });
+
+            return () => {
+                window.Echo.leaveChannel('appointments');
+            };
+        }
+    }, []);
+
+    // Force clear locally when the user clicks the Appointment sidebar link
+    const handleAppointmentClick = () => {
+        setLocalCount(0);
+    };
 
     return (
         <div className="flex h-screen w-screen overflow-hidden bg-gradient-to-tr from-[#edf2f8] to-[#f4f7fa] dark:from-[#090d16] dark:to-[#111622] p-5 gap-5 transition-colors duration-300 font-sans">
@@ -154,6 +185,29 @@ export default function AdminLayout({ children, title = 'Admin Panel' }: PropsWi
                         })}
                     </div>
                 </nav>
+
+                {/* Appointment Link */}
+                <div className="px-3 pb-3">
+                    <Link
+                        href="/admin/appointments"
+                        onClick={handleAppointmentClick}
+                        className={`flex items-center justify-between rounded-2xl px-4 py-2.5 text-sm font-semibold transition-all ${
+                            currentPath === '/admin/appointments'
+                                ? 'bg-white dark:bg-[#1e2736] text-blue-600 dark:text-blue-400 shadow-[0_8px_20px_-4px_rgba(37,99,235,0.22)] dark:shadow-[0_8px_20px_-4px_rgba(0,0,0,0.4)] border border-slate-100 dark:border-slate-800'
+                                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50/80 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/50'
+                        }`}
+                    >
+                        <span className="flex items-center gap-2.5">
+                            <Calendar className="h-4 w-4" />
+                            Appointment
+                        </span>
+                        {localCount > 0 && (
+                            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-blue-600 px-1 text-[10px] font-bold text-white shadow-[0_2px_10px_rgba(37,99,235,0.3)]">
+                                {localCount}
+                            </span>
+                        )}
+                    </Link>
+                </div>
 
                 {/* User + Logout */}
                 <div className="border-t border-slate-100 dark:border-slate-800/80 px-4 py-4 sticky bottom-0 z-10 bg-white/90 dark:bg-[#151d2a]/90 backdrop-blur-lg">

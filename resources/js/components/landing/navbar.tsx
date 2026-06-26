@@ -97,14 +97,6 @@ export default function Navbar({ data }: { data?: any }) {
 
                     {/* CTA */}
                     <div className="hidden items-center gap-3 md:flex">
-                        {isAdmin && (
-                            <Link
-                                href="/admin"
-                                className="rounded-full px-5 py-2.5 text-sm font-semibold border border-white/40 text-white hover:bg-white/10 transition-colors"
-                            >
-                                Admin Panel
-                            </Link>
-                        )}
                         <a
                             href={data?.cta_link || '#pricing'}
                             className="nav-cta-btn items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold inline-flex"
@@ -165,15 +157,6 @@ export default function Navbar({ data }: { data?: any }) {
                             {link.label}
                         </a>
                     ))}
-                    {isAdmin && (
-                        <Link
-                            href="/admin"
-                            className="mt-2 inline-block rounded-full px-6 py-3 text-sm font-semibold border border-white/40 text-white"
-                            onClick={() => setMobileOpen(false)}
-                        >
-                            Admin Panel
-                        </Link>
-                    )}
                     <a
                         href="#pricing"
                         className="mt-2 inline-block rounded-full px-6 py-3 text-sm font-semibold"

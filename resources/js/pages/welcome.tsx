@@ -1,5 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { useScrollReveal, useStatsCounter } from '@/hooks/use-scroll-reveal';
+import { Toaster } from '@/components/ui/sonner';
 
 import Navbar from '@/components/landing/navbar';
 import Hero from '@/components/landing/hero';
@@ -65,6 +66,7 @@ export default function Welcome({ content = {}, sections = [] }: { content?: Con
                 {/* Footer is pinned at the bottom */}
                 <Footer data={content.footer} />
             </div>
+            <Toaster />
         </>
     );
 }

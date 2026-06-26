@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -219,38 +219,54 @@ export default function SectionEditor({ section, fields }: Props) {
         );
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        setProcessing(true);
-        const formFields = localFields.map((f) => ({
+    const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'dirty' | 'error'>('saved');
+
+    // Perform actual save
+    const performSave = useCallback((fieldsToSave: Field[]) => {
+        setSaveStatus('saving');
+        const formFields = fieldsToSave.map((f) => ({
             key: f.key,
             value: f.value,
         }));
+        
         router.post(
             `/admin/sections/${section}`,
             { fields: formFields } as any,
             {
                 preserveScroll: true,
                 onSuccess: () => {
-                    toast.success(`Section '${sectionLabel}' berhasil disimpan`);
-                    setProcessing(false);
+                    setSaveStatus('saved');
                 },
                 onError: () => {
-                    toast.error('Gagal menyimpan perubahan');
-                    setProcessing(false);
+                    setSaveStatus('error');
+                    toast.error('Gagal menyimpan perubahan otomatis');
                 },
-                onFinish: () => {
-                    setProcessing(false);
-                },
-            },
+            }
         );
-    };
+    }, [section]);
+
+    // Track changes and debounce
+    useEffect(() => {
+        const hasChanged = JSON.stringify(localFields) !== JSON.stringify(fields);
+        
+        if (!hasChanged) {
+            return;
+        }
+
+        setSaveStatus('dirty');
+
+        const timer = setTimeout(() => {
+            performSave(localFields);
+        }, 3000); // 3 seconds debounce
+
+        return () => clearTimeout(timer);
+    }, [localFields, fields, performSave]);
 
     return (
         <div className="flex flex-col h-full bg-[#f8fafc] dark:bg-[#0f172a]">
             <Head title={`Edit ${sectionLabel}`} />
 
-            <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+            <form onSubmit={(e) => e.preventDefault()} className="flex flex-col flex-1 min-h-0">
                 {/* Scrollable content area */}
                 <div className="flex-1 overflow-y-auto px-6 py-6 no-scrollbar">
                     <div className="max-w-4xl space-y-6">
@@ -446,23 +462,42 @@ export default function SectionEditor({ section, fields }: Props) {
                     </div>
                 </div>
 
-                {/* ── Sticky Bottom Save Bar ──────────────── */}
+                {/* ── Sticky Bottom Status Bar ──────────────── */}
                 <div className="border-t border-slate-100 dark:border-slate-800/80 bg-white/80 dark:bg-[#151d2a]/80 backdrop-blur-md px-6 py-4 mt-auto">
-                    <div className="flex items-center gap-4 max-w-4xl">
-                        <Button
-                            type="submit"
-                            disabled={processing}
-                            className="gap-2 rounded-xl px-6 py-2.5 font-bold shadow-[0_6px_20px_-4px_rgba(37,99,235,0.35)] hover:shadow-[0_8px_24px_-4px_rgba(37,99,235,0.5)] transition-all bg-blue-600 hover:bg-blue-700 text-white border-0"
-                        >
-                            <Save className="h-4 w-4" />
-                            {processing ? 'Menyimpan...' : 'Simpan Perubahan'}
-                        </Button>
+                    <div className="flex items-center justify-between max-w-4xl">
                         <Link
                             href="/admin"
-                            className="text-sm font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors px-4 py-2"
+                            className="text-sm font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors px-4 py-2 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200/50 dark:border-slate-700/50"
                         >
-                            Batal
+                            Kembali ke Dashboard
                         </Link>
+                        
+                        <div className="flex items-center gap-2 text-xs font-semibold">
+                            {saveStatus === 'saved' && (
+                                <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+                                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                                    Semua perubahan disimpan otomatis
+                                </span>
+                            )}
+                            {saveStatus === 'saving' && (
+                                <span className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400 animate-pulse">
+                                    <span className="h-2 w-2 rounded-full bg-blue-500" />
+                                    Menyimpan...
+                                </span>
+                            )}
+                            {saveStatus === 'dirty' && (
+                                <span className="flex items-center gap-1.5 text-amber-500 animate-pulse">
+                                    <span className="h-2 w-2 rounded-full bg-amber-500" />
+                                    Sedang mengetik (menyimpan dalam 3 detik...)
+                                </span>
+                            )}
+                            {saveStatus === 'error' && (
+                                <span className="flex items-center gap-1.5 text-rose-500">
+                                    <span className="h-2 w-2 rounded-full bg-rose-500" />
+                                    Gagal menyimpan otomatis
+                                </span>
+                            )}
+                        </div>
                     </div>
                 </div>
             </form>
@@ -526,6 +561,14 @@ export default function SectionEditor({ section, fields }: Props) {
                                 // If the field is an icon list, maybe offer a text field
                                 const isIconField = itemKey.toLowerCase() === 'icon';
                                 const isLongText = typeof itemVal === 'string' && itemVal.length > 80;
+                                
+                                // Detect boolean option fields
+                                const isBooleanOption = 
+                                    itemKey.toLowerCase() === 'featured' || 
+                                    itemVal === true || 
+                                    itemVal === false || 
+                                    String(itemVal).toLowerCase() === 'true' || 
+                                    String(itemVal).toLowerCase() === 'false';
 
                                 return (
                                     <div key={itemKey}>
@@ -533,7 +576,23 @@ export default function SectionEditor({ section, fields }: Props) {
                                             {itemKey.charAt(0).toUpperCase() + itemKey.slice(1)}
                                         </label>
                                         
-                                        {isLongText ? (
+                                        {isBooleanOption ? (
+                                            <select
+                                                value={String(itemVal ?? 'false')}
+                                                onChange={(e) => {
+                                                    const val = e.target.value;
+                                                    // Store back as boolean if it was originally boolean
+                                                    const typedVal = typeof itemVal === 'boolean' 
+                                                        ? (val === 'true') 
+                                                        : val;
+                                                    setModalData((prev) => ({ ...prev, [itemKey]: typedVal }));
+                                                }}
+                                                className="w-full rounded-xl border-0 bg-[#f1f5f9] dark:bg-[#1e293b] px-4 py-3 text-sm text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/40 focus:outline-none ring-1 ring-slate-200/60 dark:ring-slate-700/60 transition-all"
+                                            >
+                                                <option value="true">True (Aktif)</option>
+                                                <option value="false">False (Non-aktif)</option>
+                                            </select>
+                                        ) : isLongText ? (
                                             <textarea
                                                 value={String(itemVal ?? '')}
                                                 onChange={(e) => setModalData((prev) => ({ ...prev, [itemKey]: e.target.value }))}
