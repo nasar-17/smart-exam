@@ -1,16 +1,16 @@
-import { Lock, Zap, CreditCard, Calendar } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { useState } from 'react';
 import { useForm } from '@inertiajs/react';
+import { motion } from 'framer-motion';
+import { Calendar, CreditCard, Lock, Zap } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogContent,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogFooter,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 export default function CTA({ data }: { data?: any }) {
@@ -35,7 +35,7 @@ export default function CTA({ data }: { data?: any }) {
         post('/appointments', {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success('Jadwal demo berhasil diajukan! Kami akan segera menghubungi Anda.');
+                toast.success('Jadwal demo berhasil diajukan. Kami akan segera menghubungi Anda.');
                 reset();
                 setModalOpen(false);
             },
@@ -161,33 +161,39 @@ export default function CTA({ data }: { data?: any }) {
                 </motion.div>
             </div>
 
-            {/* Appointment Submission Overlay Dialog */}
-            <Dialog open={modalOpen} onOpenChange={(open) => { if (!open) setModalOpen(false); }}>
-                <DialogContent className="max-w-md rounded-2xl bg-white dark:bg-[#151d2a] border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 p-6 shadow-xl">
-                    <DialogHeader>
-                        <DialogTitle className="text-lg font-bold" style={{ fontFamily: "'Sora', sans-serif" }}>
+            <Dialog open={modalOpen} onOpenChange={(open) => {
+                if (!open) {
+                    setModalOpen(false);
+                }
+            }}>
+                <DialogContent className="max-w-[640px] rounded-[1.65rem] border border-slate-200 bg-white p-7 text-slate-800 shadow-[0_28px_90px_-32px_rgba(15,23,42,0.45)] dark:border-slate-800 dark:bg-[#151d2a] dark:text-slate-100 sm:p-8">
+                    <DialogHeader className="space-y-1.5">
+                        <DialogTitle className="text-[1.65rem] font-extrabold tracking-tight text-slate-800 dark:text-white" style={{ fontFamily: "'Sora', sans-serif" }}>
                             Jadwalkan Demo Aplikasi
                         </DialogTitle>
+                        <p className="max-w-md text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                            Isi data singkat di bawah ini. Tim kami akan menghubungi Anda untuk mengatur sesi demo.
+                        </p>
                     </DialogHeader>
 
-                    <form onSubmit={handleFormSubmit} className="space-y-4 my-2">
+                    <form onSubmit={handleFormSubmit} className="mt-6 space-y-4">
                         <div>
-                            <label className="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">
-                                Nama Lengkap
+                            <label className="mb-2 block text-sm font-bold text-slate-600 dark:text-slate-300">
+                                Nama lengkap
                             </label>
                             <Input
                                 type="text"
                                 required
                                 value={formData.name}
                                 onChange={(e) => setData('name', e.target.value)}
-                                className="w-full rounded-xl border-0 bg-slate-50 dark:bg-[#1e293b] px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500/40 ring-1 ring-slate-200/50 dark:ring-slate-700/50 h-auto"
+                                className="h-12 w-full rounded-2xl border-0 bg-slate-50 px-4 text-base text-slate-800 ring-1 ring-slate-200/70 transition placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-blue-500/40 dark:bg-[#1e293b] dark:text-slate-100 dark:ring-slate-700/60"
                                 placeholder="Contoh: Budi Santoso"
                             />
-                            {errors.name && <p className="text-xs text-rose-500 mt-1">{errors.name}</p>}
+                            {errors.name && <p className="mt-1.5 text-xs font-semibold text-rose-500">{errors.name}</p>}
                         </div>
 
                         <div>
-                            <label className="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <label className="mb-2 block text-sm font-bold text-slate-600 dark:text-slate-300">
                                 Email
                             </label>
                             <Input
@@ -195,14 +201,14 @@ export default function CTA({ data }: { data?: any }) {
                                 required
                                 value={formData.email}
                                 onChange={(e) => setData('email', e.target.value)}
-                                className="w-full rounded-xl border-0 bg-slate-50 dark:bg-[#1e293b] px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500/40 ring-1 ring-slate-200/50 dark:ring-slate-700/50 h-auto"
+                                className="h-12 w-full rounded-2xl border-0 bg-slate-50 px-4 text-base text-slate-800 ring-1 ring-slate-200/70 transition placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-blue-500/40 dark:bg-[#1e293b] dark:text-slate-100 dark:ring-slate-700/60"
                                 placeholder="budi@sekolah.sch.id"
                             />
-                            {errors.email && <p className="text-xs text-rose-500 mt-1">{errors.email}</p>}
+                            {errors.email && <p className="mt-1.5 text-xs font-semibold text-rose-500">{errors.email}</p>}
                         </div>
 
                         <div>
-                            <label className="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <label className="mb-2 block text-sm font-bold text-slate-600 dark:text-slate-300">
                                 WhatsApp
                             </label>
                             <Input
@@ -210,61 +216,61 @@ export default function CTA({ data }: { data?: any }) {
                                 required
                                 value={formData.whatsapp}
                                 onChange={(e) => setData('whatsapp', e.target.value)}
-                                className="w-full rounded-xl border-0 bg-slate-50 dark:bg-[#1e293b] px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500/40 ring-1 ring-slate-200/50 dark:ring-slate-700/50 h-auto"
+                                className="h-12 w-full rounded-2xl border-0 bg-slate-50 px-4 text-base text-slate-800 ring-1 ring-slate-200/70 transition placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-blue-500/40 dark:bg-[#1e293b] dark:text-slate-100 dark:ring-slate-700/60"
                                 placeholder="08123456789"
                             />
-                            {errors.whatsapp && <p className="text-xs text-rose-500 mt-1">{errors.whatsapp}</p>}
+                            {errors.whatsapp && <p className="mt-1.5 text-xs font-semibold text-rose-500">{errors.whatsapp}</p>}
                         </div>
 
                         <div>
-                            <label className="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">
-                                Nama Institusi / Sekolah / Perusahaan
+                            <label className="mb-2 block text-sm font-bold text-slate-600 dark:text-slate-300">
+                                Nama institusi / sekolah / perusahaan
                             </label>
                             <Input
                                 type="text"
                                 required
                                 value={formData.institution}
                                 onChange={(e) => setData('institution', e.target.value)}
-                                className="w-full rounded-xl border-0 bg-slate-50 dark:bg-[#1e293b] px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500/40 ring-1 ring-slate-200/50 dark:ring-slate-700/50 h-auto"
+                                className="h-12 w-full rounded-2xl border-0 bg-slate-50 px-4 text-base text-slate-800 ring-1 ring-slate-200/70 transition placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-blue-500/40 dark:bg-[#1e293b] dark:text-slate-100 dark:ring-slate-700/60"
                                 placeholder="Contoh: SMA Negeri 1 Makassar"
                             />
-                            {errors.institution && <p className="text-xs text-rose-500 mt-1">{errors.institution}</p>}
+                            {errors.institution && <p className="mt-1.5 text-xs font-semibold text-rose-500">{errors.institution}</p>}
                         </div>
 
                         <div>
-                            <label className="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">
-                                Rencana Tanggal & Waktu Uji Coba
+                            <label className="mb-2 block text-sm font-bold text-slate-600 dark:text-slate-300">
+                                Rencana tanggal & waktu uji coba
                             </label>
                             <Input
                                 type="datetime-local"
                                 required
                                 value={formData.scheduled_at}
                                 onChange={(e) => setData('scheduled_at', e.target.value)}
-                                className="w-full rounded-xl border-0 bg-slate-50 dark:bg-[#1e293b] px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500/40 ring-1 ring-slate-200/50 dark:ring-slate-700/50 h-auto text-slate-700 dark:text-slate-200"
+                                className="h-12 w-full rounded-2xl border-0 bg-slate-50 px-4 text-base text-slate-700 ring-1 ring-slate-200/70 transition focus-visible:ring-2 focus-visible:ring-blue-500/40 dark:bg-[#1e293b] dark:text-slate-100 dark:ring-slate-700/60"
                             />
-                            {errors.scheduled_at && <p className="text-xs text-rose-500 mt-1">{errors.scheduled_at}</p>}
+                            {errors.scheduled_at && <p className="mt-1.5 text-xs font-semibold text-rose-500">{errors.scheduled_at}</p>}
                         </div>
 
-                        <DialogFooter className="gap-2 sm:gap-0 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                        <DialogFooter className="mt-6 gap-3 border-t border-slate-100 pt-5 dark:border-slate-800/80 sm:justify-end">
                             <Button
                                 type="button"
                                 onClick={handleAutofill}
-                                className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold px-5"
+                                className="h-11 rounded-2xl bg-emerald-600 px-6 font-bold text-white shadow-[0_12px_24px_-16px_rgba(5,150,105,0.9)] transition hover:bg-emerald-700 active:scale-[0.98]"
                             >
-                                Isi Otomatis
+                                Isi otomatis
                             </Button>
                             <Button
                                 type="submit"
                                 disabled={processing}
-                                className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold px-5"
+                                className="h-11 rounded-2xl bg-blue-600 px-6 font-bold text-white shadow-[0_12px_24px_-16px_rgba(37,99,235,0.9)] transition hover:bg-blue-700 active:scale-[0.98]"
                             >
-                                Kirim Pengajuan
+                                Kirim pengajuan
                             </Button>
                             <Button
                                 type="button"
                                 variant="ghost"
                                 onClick={() => setModalOpen(false)}
-                                className="rounded-xl font-semibold text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800"
+                                className="h-11 rounded-2xl px-5 font-bold text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 active:scale-[0.98] dark:hover:bg-slate-800"
                             >
                                 Batal
                             </Button>

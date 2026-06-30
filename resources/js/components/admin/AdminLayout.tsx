@@ -133,17 +133,6 @@ export default function AdminLayout({ children, title = 'Admin Panel' }: PropsWi
                         <LayoutDashboard className="h-4 w-4" />
                         Dashboard
                     </Link>
-                    <Link
-                        href="/admin/settings"
-                        className={`mt-1 flex items-center gap-2.5 rounded-2xl px-4 py-2.5 text-sm font-semibold transition-all ${
-                            currentPath === '/admin/settings'
-                                ? 'bg-white dark:bg-[#1e2736] text-blue-600 dark:text-blue-400 shadow-[0_8px_20px_-4px_rgba(37,99,235,0.22)] dark:shadow-[0_8px_20px_-4px_rgba(0,0,0,0.4)] border border-slate-100 dark:border-slate-800'
-                                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50/80 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/50'
-                        }`}
-                    >
-                        <Settings className="h-4 w-4" />
-                        Setting
-                    </Link>
                 </div>
 
                 {/* Nav sections — collapsible dropdown */}
@@ -218,6 +207,17 @@ export default function AdminLayout({ children, title = 'Admin Panel' }: PropsWi
                                 {localCount}
                             </span>
                         )}
+                    </Link>
+                    <Link
+                        href="/admin/settings"
+                        className={`mt-1 flex items-center gap-2.5 rounded-2xl px-4 py-2.5 text-sm font-semibold transition-all ${
+                            currentPath === '/admin/settings'
+                                ? 'bg-white dark:bg-[#1e2736] text-blue-600 dark:text-blue-400 shadow-[0_8px_20px_-4px_rgba(37,99,235,0.22)] dark:shadow-[0_8px_20px_-4px_rgba(0,0,0,0.4)] border border-slate-100 dark:border-slate-800'
+                                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50/80 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/50'
+                        }`}
+                    >
+                        <Settings className="h-4 w-4" />
+                        Setting
                     </Link>
                 </div>
 

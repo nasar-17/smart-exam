@@ -3,28 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Appointment;
+use App\Services\AppointmentService;
 use Inertia\Inertia;
 
 class AppointmentController extends Controller
 {
+    public function __construct(
+        private AppointmentService $appointmentService
+    ) {}
+
     public function index()
     {
-        // Mark all unread appointments as read when entering this page
-        Appointment::where('is_read', false)->update(['is_read' => true]);
+        $data = $this->appointmentService->getAllForAdmin();
 
-        $appointments = Appointment::orderBy('scheduled_at', 'desc')->get();
-
-        return Inertia::render('Admin/Appointments', [
-            'appointments' => $appointments,
-        ]);
+        return Inertia::render('Admin/Appointments', $data);
     }
 
     public function destroy($id)
     {
-        $appointment = Appointment::findOrFail($id);
-        $appointment->delete();
+        $result = $this->appointmentService->delete($id);
 
-        return back()->with('success', 'Jadwal demo berhasil dihapus.');
+        return back()->with($result['success'] ? 'success' : 'error', $result['message']);
     }
 }

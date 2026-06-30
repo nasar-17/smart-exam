@@ -2,25 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Appointment;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreAppointmentRequest;
+use App\Services\AppointmentService;
 
 class AppointmentController extends Controller
 {
-    public function store(Request $request)
+    public function __construct(
+        private AppointmentService $appointmentService
+    ) {}
+
+    public function store(StoreAppointmentRequest $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:100',
-            'email' => 'required|email|max:100',
-            'whatsapp' => 'required|string|max:30',
-            'institution' => 'required|string|max:150',
-            'scheduled_at' => 'required|date',
-        ]);
+        $result = $this->appointmentService->create($request->validated());
 
-        $appointment = Appointment::create($data);
-
-        event(new \App\Events\AppointmentCreated($appointment));
-
-        return back()->with('success', 'Demo jadwal aplikasi berhasil disimpan. Kami akan segera menghubungi Anda!');
+        return back()->with('success', $result['message']);
     }
 }

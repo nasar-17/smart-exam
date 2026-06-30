@@ -3,40 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\LandingContent;
+use App\Http\Requests\UpdateLandingSectionRequest;
+use App\Services\LandingContentService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class SectionController extends Controller
 {
-    private array $validSections = [
-        'navbar', 'hero', 'stats', 'about', 'features',
-        'howitworks', 'pricing', 'testimonials', 'cta', 'contact', 'footer',
-    ];
+    public function __construct(
+        private LandingContentService $landingContentService
+    ) {}
 
     public function edit(string $section)
     {
-        abort_unless(in_array($section, $this->validSections), 404);
-
-        $query = LandingContent::where('section', $section);
-
-        if ($section === 'hero') {
-            $query->whereNotIn('key', ['cta_secondary_text', 'cta_secondary_link', 'hero_bg_image']);
-        }
-
-        $fields = $query
-            ->orderBy('order')
-            ->get()
-            ->map(fn ($item) => [
-                'key' => $item->key,
-                'value' => $item->type === 'json'
-                    ? json_decode($item->value, true)
-                    : $item->value,
-                'type' => $item->type,
-                'label' => $item->label,
-                'order' => $item->order,
-            ]);
+        $fields = $this->landingContentService->getFieldsForEdit($section);
 
         return Inertia::render('Admin/SectionEditor', [
             'section' => $section,
@@ -44,33 +24,14 @@ class SectionController extends Controller
         ]);
     }
 
-    public function update(Request $request, string $section)
+    public function update(UpdateLandingSectionRequest $request, string $section)
     {
-        abort_unless(in_array($section, $this->validSections), 404);
+        $result = $this->landingContentService->updateSection(
+            $section,
+            $request->validated()['fields']
+        );
 
-        $data = $request->validate([
-            'fields' => 'required|array',
-            'fields.*.key' => 'required|string',
-            'fields.*.value' => 'nullable',
-        ]);
-
-        foreach ($data['fields'] as $field) {
-            $existing = LandingContent::where('section', $section)
-                ->where('key', $field['key'])
-                ->first();
-
-            if (! $existing) {
-                continue;
-            }
-
-            $value = is_array($field['value'])
-                ? json_encode($field['value'])
-                : $field['value'];
-
-            $existing->update(['value' => $value]);
-        }
-
-        return back()->with('success', "Section '{$section}' berhasil disimpan.");
+        return back()->with($result['success'] ? 'success' : 'error', $result['message']);
     }
 
     public function uploadImage(Request $request)
@@ -79,10 +40,11 @@ class SectionController extends Controller
             'image' => 'required|image|max:2048',
         ]);
 
-        $path = $request->file('image')->store('landing', 'public');
-        $url = Storage::url($path);
+        $result = $this->landingContentService->uploadImage(
+            $request->file('image')
+        );
 
-        return response()->json(['url' => $url]);
+        return response()->json($result);
     }
 
     public function reorder(Request $request)
@@ -92,14 +54,9 @@ class SectionController extends Controller
             'order.*' => 'required|string',
         ]);
 
-        foreach ($data['order'] as $idx => $sectionKey) {
-            // Update section_order inside DB
-            LandingContent::where('section', $sectionKey)->update([
-                'section_order' => $idx + 1,
-            ]);
-        }
+        $result = $this->landingContentService->reorderSections($data['order']);
 
-        return back()->with('success', 'Urutan section berhasil diperbarui.');
+        return back()->with($result['success'] ? 'success' : 'error', $result['message']);
     }
 
     public function toggleVisibility(Request $request)
@@ -109,12 +66,11 @@ class SectionController extends Controller
             'is_visible' => 'required|boolean',
         ]);
 
-        LandingContent::where('section', $data['section'])->update([
-            'is_visible' => $data['is_visible'],
-        ]);
+        $result = $this->landingContentService->toggleVisibility(
+            $data['section'],
+            $data['is_visible']
+        );
 
-        $status = $data['is_visible'] ? 'ditampilkan' : 'disembunyikan';
-
-        return back()->with('success', "Section '{$data['section']}' berhasil {$status}.");
+        return back()->with($result['success'] ? 'success' : 'error', $result['message']);
     }
 }
