@@ -1,14 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
-import { UserPlus, Library, Rocket, BarChart3 } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import DynamicLucideIcon from '@/components/dynamic-lucide-icon';
 import { motion, useScroll, useTransform } from 'framer-motion';
-
-const iconMap: Record<string, LucideIcon> = {
-    'lucide:user-plus': UserPlus,
-    'lucide:library': Library,
-    'lucide:rocket': Rocket,
-    'lucide:bar-chart-3': BarChart3,
-};
 
 const defaultSteps = [
     {
@@ -58,49 +50,51 @@ export default function HowItWorks({ data }: { data?: any }) {
     const scaleY = useTransform(scrollYProgress, [0, 0.9], [0, 1]);
     const opacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
 
-    const title = data?.title ?? 'Mulai Ujian Digital dalam';
-    const titleHighlight = data?.title_highlight ?? '4 Langkah Mudah';
-    const subtitle = data?.header_subtitle ?? 'Proses integrasi yang cepat dan sederhana untuk mentransformasi sistem ujian di institusi Anda.';
+    const title = data?.header_title ?? 'Langkah Mudah';
+    const titleHighlight = data?.header_title_highlight ?? 'Cara Kerja';
+    const subtitle =
+        data?.header_subtitle ??
+        'Smart Exam dirancang untuk memudahkan proses ujian sekolah secara digital. Hanya butuh 4 langkah mudah.';
     const items = data?.items ?? defaultSteps;
 
     return (
         <section
-            id="howitworks"
-            className="py-24"
+            id="how-it-works"
+            ref={containerRef}
+            className="relative py-24 overflow-hidden"
             style={{ background: 'var(--lp-bg-primary)' }}
         >
-            <div className="mx-auto max-w-[1000px] px-6">
+            {/* Background pattern */}
+            <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:24px_24px]" />
+
+            <div className="mx-auto max-w-[1200px] px-6">
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 35 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false }}
+                    viewport={{ once: false, margin: '-10% 0px -20% 0px' }}
                     transition={{ duration: 0.6 }}
-                    className="reveal mb-20 text-center"
+                    className="mb-20 text-center"
                 >
-                    <div
-                        className="mb-4 inline-block rounded-full px-3 py-1 text-xs font-bold tracking-wider uppercase"
+                    <h2
+                        className="mb-4 text-[40px] font-bold tracking-tight"
                         style={{
-                            background: 'var(--lp-blue-light)',
-                            color: 'var(--lp-blue-text)',
-                            border: '1px solid var(--lp-border)',
+                            fontFamily: "'Sora', sans-serif",
+                            color: 'var(--lp-text-primary)',
                         }}
                     >
-                        Cara Kerja
-                    </div>
-                    <h2
-                        className="mb-4 text-[40px] font-bold tracking-tight text-white"
-                        style={{ fontFamily: "'Sora', sans-serif", color: 'var(--lp-text-primary)' }}
-                    >
-                        {title} <span className="gradient-text">{titleHighlight}</span>
+                        {title}{' '}
+                        <span className="gradient-text">{titleHighlight}</span>
                     </h2>
-                    <p className="mx-auto max-w-2xl text-base" style={{ color: 'var(--lp-text-secondary)' }}>
+                    <p
+                        className="mx-auto max-w-xl text-base"
+                        style={{ color: 'var(--lp-text-secondary)' }}
+                    >
                         {subtitle}
                     </p>
                 </motion.div>
 
-                {/* Timeline Container */}
-                <div ref={containerRef} className="relative">
-                    {/* Vertical Center Line Guide */}
+                <div className="relative">
+                    {/* Center Line for desktop timeline */}
                     <div
                         className="absolute top-0 bottom-0 left-[20px] w-[2px] -translate-x-1/2 md:left-1/2"
                         style={{ background: 'rgba(255, 255, 255, 0.05)' }}
@@ -114,7 +108,6 @@ export default function HowItWorks({ data }: { data?: any }) {
 
                     <div className="space-y-16 md:space-y-24">
                         {items.map((step: any, i: number) => {
-                            const Icon = iconMap[step.icon] ?? UserPlus;
                             const isEven = i % 2 === 0;
 
                             return (
@@ -133,20 +126,20 @@ export default function HowItWorks({ data }: { data?: any }) {
                                         className={`flex w-full justify-start pl-12 md:w-1/2 ${
                                             isEven
                                                 ? 'md:pl-12 md:pr-0 md:justify-start'
-                                                : 'md:pr-12 md:pl-0 md:justify-end'
+                                                : 'md:pl-0 md:pr-12 md:justify-end'
                                         }`}
                                     >
                                         <div
-                                            className="group relative w-full max-w-[420px] rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl md:p-8"
+                                            className="group relative flex w-full max-w-[450px] flex-col rounded-2xl p-7 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/5 hover:-translate-y-1"
                                             style={{
-                                                background: 'var(--lp-step-card-bg)',
-                                                border: '1px solid var(--lp-step-card-border)',
-                                                backdropFilter: 'blur(10px)',
+                                                background: 'var(--lp-card-highlight)',
+                                                border: '1px solid var(--lp-border-card)',
+                                                backdropFilter: 'blur(12px)',
                                             }}
                                         >
-                                            {/* Number watermark inside card */}
+                                            {/* Step number watermark */}
                                             <div
-                                                className="absolute top-4 right-6 text-4xl font-black transition-colors duration-300 select-none group-hover:text-blue-500/20"
+                                                className="absolute top-4 right-6 text-6xl font-black select-none opacity-[0.06] transition-opacity duration-300 group-hover:opacity-[0.12]"
                                                 style={{
                                                     color: 'var(--lp-card-watermark)',
                                                     fontFamily: "'Sora', sans-serif",
@@ -163,7 +156,8 @@ export default function HowItWorks({ data }: { data?: any }) {
                                                         border: '1px solid var(--lp-border)',
                                                     }}
                                                 >
-                                                    <Icon
+                                                    <DynamicLucideIcon
+                                                        name={step.icon}
                                                         className="h-5 w-5"
                                                         style={{
                                                             color: 'var(--lp-blue-icon)',

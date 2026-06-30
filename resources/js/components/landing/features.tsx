@@ -1,35 +1,5 @@
-import {
-    Library,
-    ShieldCheck,
-    Clock,
-    BarChart3,
-    Users2,
-    MonitorSmartphone,
-    Upload,
-    BellRing,
-    BookOpen,
-    Users,
-    Database,
-    Link,
-    Headphones,
-} from 'lucide-react';
+import DynamicLucideIcon from '@/components/dynamic-lucide-icon';
 import { motion } from 'framer-motion';
-
-const iconMap: Record<string, React.ComponentType<any>> = {
-    'lucide:library': Library,
-    'lucide:shield-check': ShieldCheck,
-    'lucide:clock': Clock,
-    'lucide:bar-chart-3': BarChart3,
-    'lucide:users-2': Users2,
-    'lucide:monitor-smartphone': MonitorSmartphone,
-    'lucide:upload': Upload,
-    'lucide:bell-ring': BellRing,
-    'lucide:book-open': BookOpen,
-    'lucide:users': Users,
-    'lucide:database': Database,
-    'lucide:link': Link,
-    'lucide:headphones': Headphones,
-};
 
 const defaultFeatures = [
     {
@@ -58,15 +28,39 @@ const defaultFeatures = [
     },
     {
         icon: 'lucide:users',
-        title: 'Unlimited Peserta',
+        title: 'Manajemen Kelas',
         description:
-            'Selenggarakan ujian massal tanpa batasan jumlah peserta pada tier Premium.',
+            'Atur dan kelompokkan peserta ujian ke dalam berbagai kelas atau rombel dengan mudah.',
+    },
+    {
+        icon: 'lucide:monitor-smartphone',
+        title: 'Akses Multi-Device',
+        description:
+            'Peserta dapat mengikuti ujian dengan nyaman menggunakan smartphone, tablet, laptop, maupun PC desktop.',
+    },
+    {
+        icon: 'lucide:upload',
+        title: 'Import Soal Cepat',
+        description:
+            'Upload ratusan soal sekaligus menggunakan file template Microsoft Word atau Excel yang sudah disediakan.',
+    },
+    {
+        icon: 'lucide:bell-ring',
+        title: 'Notifikasi Real-time',
+        description:
+            'Dapatkan pemberitahuan langsung saat ujian dimulai, selesai, atau ketika ada aktivitas mencurigakan.',
+    },
+    {
+        icon: 'lucide:library',
+        title: 'Bank Soal Terpusat',
+        description:
+            'Kelola semua aset soal Anda dalam satu dashboard terintegrasi untuk digunakan kembali kapan saja.',
     },
     {
         icon: 'lucide:database',
-        title: 'Question Bank & Unlimited Soal',
+        title: 'Backup Data Otomatis',
         description:
-            'Buat dan simpan soal tanpa batasan kuota serta kelola bank soal terstruktur dengan mudah.',
+            'Seluruh data jawaban dan hasil ujian tersimpan aman di cloud dengan sistem backup berkala otomatis.',
     },
     {
         icon: 'lucide:link',
@@ -134,7 +128,6 @@ export default function Features({ data }: { data?: any }) {
 
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     {items.map((f: any, i: number) => {
-                        const Icon = iconMap[f.icon] ?? BookOpen;
                         const isHighlight = f.bg === 'gradient' || f.highlight;
 
                         return (
@@ -160,7 +153,8 @@ export default function Features({ data }: { data?: any }) {
                                         background: 'var(--lp-card-highlight)',
                                     }}
                                 >
-                                    <Icon
+                                    <DynamicLucideIcon
+                                        name={f.icon}
                                         className="h-[22px] w-[22px]"
                                         style={{ color: 'var(--lp-blue-icon)' }}
                                     />

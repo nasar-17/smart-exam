@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Appointment;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Collection;
 
 class AppointmentRepository
@@ -63,7 +64,7 @@ class AppointmentRepository
         return $appointment->delete();
     }
 
-    public function getDailyCountsSince(\Carbon\Carbon $startDate): Collection
+    public function getDailyCountsSince(CarbonInterface $startDate): \Illuminate\Support\Collection
     {
         return Appointment::query()
             ->where('created_at', '>=', $startDate)

@@ -1,24 +1,12 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { useState, useCallback, useEffect } from 'react';
+import { GripVertical, Info, Pencil, Plus, Save, Trash2, Upload } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import LucideIconPicker from '@/components/lucide-icon-picker';
+import DynamicLucideIcon from '@/components/dynamic-lucide-icon';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogFooter,
-} from '@/components/ui/dialog';
-import {
-    Save,
-    Upload,
-    Trash2,
-    Plus,
-    GripVertical,
-    Pencil,
-    Info,
-} from 'lucide-react';
 
 type Field = {
     key: string;
@@ -47,6 +35,7 @@ export default function SectionEditor({ section, fields }: Props) {
                     urls[f.key] = f.value;
                 }
             });
+
             return urls;
         },
     );
@@ -86,6 +75,7 @@ export default function SectionEditor({ section, fields }: Props) {
                     },
                 });
                 const data = await res.json();
+
                 if (data.url) {
                     if (isJsonField) {
                         setModalData((prev) => ({ ...prev, [jsonKey]: data.url }));
@@ -93,6 +83,7 @@ export default function SectionEditor({ section, fields }: Props) {
                         handleChange(key, data.url);
                         setPreviewUrls((prev) => ({ ...prev, [key]: data.url }));
                     }
+
                     toast.success('Gambar berhasil diupload');
                 }
             } catch {
@@ -109,9 +100,11 @@ export default function SectionEditor({ section, fields }: Props) {
                 if (typeof item === 'string') {
                     return { _is_primitive_string: true, value: item };
                 }
+
                 return item as Record<string, unknown>;
             });
         }
+
         return [];
     };
 
@@ -131,12 +124,16 @@ export default function SectionEditor({ section, fields }: Props) {
     const handleOpenAddModal = (fieldKey: string, field: Field) => {
         const items = getJsonItems(field);
         let template: Record<string, any> = {};
+
         if (items.length > 0) {
             const last = items[items.length - 1];
             template = Object.fromEntries(
                 Object.entries(last).map(([k, v]) => {
                     // Do not instantiate id in the template
-                    if (k.toLowerCase() === 'id') return [k, ''];
+                    if (k.toLowerCase() === 'id') {
+return [k, ''];
+}
+
                     return [
                         k,
                         Array.isArray(v)
@@ -157,11 +154,16 @@ export default function SectionEditor({ section, fields }: Props) {
     };
 
     const handleSaveModalData = () => {
-        if (!activeModalField || activeModalIndex === null) return;
+        if (!activeModalField || activeModalIndex === null) {
+return;
+}
 
         setLocalFields((prev) =>
             prev.map((f) => {
-                if (f.key !== activeModalField) return f;
+                if (f.key !== activeModalField) {
+return f;
+}
+
                 const items = getJsonItems(f);
                 let updatedItems = [...items];
 
@@ -175,9 +177,11 @@ export default function SectionEditor({ section, fields }: Props) {
                 } else {
                     // Edit Mode: preserve original fields like 'id' if they existed but weren't modified
                     const originalItem = items[activeModalIndex];
+
                     if (originalItem && 'id' in originalItem) {
                         cleanedData.id = originalItem.id;
                     }
+
                     updatedItems = updatedItems.map((item, i) =>
                         i === activeModalIndex ? cleanedData : item
                     );
@@ -187,8 +191,10 @@ export default function SectionEditor({ section, fields }: Props) {
                     if (item._is_primitive_string) {
                         return item.value;
                     }
+
                     return item;
                 });
+
                 return { ...f, value: finalValue };
             })
         );
@@ -202,15 +208,20 @@ export default function SectionEditor({ section, fields }: Props) {
     const removeJsonItem = (key: string, index: number) => {
         setLocalFields((prev) =>
             prev.map((f) => {
-                if (f.key !== key) return f;
+                if (f.key !== key) {
+return f;
+}
+
                 const items = getJsonItems(f);
                 const filtered = items.filter((_, i) => i !== index);
                 const finalValue = filtered.map((item) => {
                     if (item._is_primitive_string) {
                         return item.value;
                     }
+
                     return item;
                 });
+
                 return {
                     ...f,
                     value: finalValue,
@@ -220,6 +231,8 @@ export default function SectionEditor({ section, fields }: Props) {
     };
 
     const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'dirty' | 'error'>('saved');
+    const [iconPickerOpen, setIconPickerOpen] = useState(false);
+    const [activeIconField, setActiveIconField] = useState<string | null>(null);
 
     // Perform actual save
     const performSave = useCallback((fieldsToSave: Field[]) => {
@@ -335,11 +348,13 @@ export default function SectionEditor({ section, fields }: Props) {
                                                         onChange={(e) => {
                                                             const file =
                                                                 e.target.files?.[0];
-                                                            if (file)
-                                                                handleImageUpload(
+
+                                                            if (file) {
+handleImageUpload(
                                                                     field.key,
                                                                     file,
                                                                 );
+}
                                                         }}
                                                     />
                                                 </label>
@@ -399,7 +414,7 @@ export default function SectionEditor({ section, fields }: Props) {
                                                                 onClick={() => handleOpenEditModal(field.key, idx, item)}
                                                                 className="group flex items-start gap-3.5 rounded-xl bg-slate-50/50 dark:bg-[#101725]/40 hover:bg-white dark:hover:bg-[#1e293b] p-4 ring-1 ring-slate-100 dark:ring-slate-800/80 hover:ring-blue-100 dark:hover:ring-blue-900/40 hover:shadow-md cursor-pointer transition-all duration-200 relative"
                                                             >
-                                                                <GripVertical className="h-4 w-4 text-slate-300 dark:text-slate-600 cursor-grab shrink-0 mt-0.5" onClick={(e) => e.stopPropagation()} />
+                                                                <GripVertical className="h-4 w-4 text-slate-300 dark:text-slate-600 cursor-grab shrink-0 mt-0.5" onClick={(e: React.MouseEvent) => e.stopPropagation()} />
                                                                 
                                                                 {iconVal && (
                                                                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 ring-1 ring-blue-100 dark:ring-blue-900/40">
@@ -503,7 +518,11 @@ export default function SectionEditor({ section, fields }: Props) {
             </form>
 
             {/* ── Overlay Modal Form for JSON Editing ── */}
-            <Dialog open={activeModalField !== null} onOpenChange={(open) => { if (!open) { setActiveModalField(null); setActiveModalIndex(null); } }}>
+            <Dialog open={activeModalField !== null} onOpenChange={(open) => {
+ if (!open) {
+ setActiveModalField(null); setActiveModalIndex(null); 
+} 
+}}>
                 <DialogContent className="max-w-2xl bg-white dark:bg-[#151d2a] border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl">
                     <DialogHeader>
                         <DialogTitle className="text-slate-800 dark:text-slate-100">
@@ -600,7 +619,7 @@ export default function SectionEditor({ section, fields }: Props) {
                                                 className="w-full rounded-xl border-0 bg-[#f1f5f9] dark:bg-[#1e293b] px-4 py-3 text-sm text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/40 focus:outline-none ring-1 ring-slate-200/60 dark:ring-slate-700/60 resize-y"
                                             />
                                         ) : (
-                                            <div className="flex gap-2">
+                                            <div className="flex items-end gap-2">
                                                 <Input
                                                     value={String(itemVal ?? '')}
                                                     onChange={(e) => setModalData((prev) => ({ ...prev, [itemKey]: e.target.value }))}
@@ -608,11 +627,24 @@ export default function SectionEditor({ section, fields }: Props) {
                                                     className="w-full rounded-xl border-0 bg-[#f1f5f9] dark:bg-[#1e293b] px-4 py-3 text-sm text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/40 focus:outline-none ring-1 ring-slate-200/60 dark:ring-slate-700/60 h-auto"
                                                 />
                                                 {isIconField && (
-                                                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 ring-1 ring-slate-200/60 dark:ring-slate-700/60 shrink-0">
-                                                        <span className="text-[10px] font-mono font-bold truncate max-w-full px-0.5">
-                                                            {String(itemVal ?? '').replace('lucide:', '').substring(0, 3)}
-                                                        </span>
-                                                    </div>
+                                                    <>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                setActiveIconField(itemKey);
+                                                                setIconPickerOpen(true);
+                                                            }}
+                                                            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white hover:bg-blue-700 active:scale-95 transition-all"
+                                                            title="Pilih Icon"
+                                                        >
+                                                            <span className="text-[10px] font-bold">
+                                                                +
+                                                            </span>
+                                                        </button>
+                                                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 ring-1 ring-slate-200/60 dark:ring-slate-700/60">
+                                                            <DynamicLucideIcon name={String(itemVal ?? '')} className="h-5 w-5" />
+                                                        </div>
+                                                    </>
                                                 )}
                                             </div>
                                         )}
@@ -633,12 +665,46 @@ export default function SectionEditor({ section, fields }: Props) {
                         <Button
                             type="button"
                             variant="ghost"
-                            onClick={() => { setActiveModalField(null); setActiveModalIndex(null); }}
+                            onClick={() => {
+ setActiveModalField(null); setActiveModalIndex(null); 
+}}
                             className="rounded-xl font-semibold text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800"
                         >
                             Batal
                         </Button>
                     </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={iconPickerOpen} onOpenChange={setIconPickerOpen}>
+                <DialogContent className="max-h-[85vh] max-w-3xl overflow-y-auto rounded-2xl p-6">
+                    <DialogHeader className="space-y-1 pb-2">
+                        <DialogTitle className="text-lg font-bold" style={{ fontFamily: "'Sora', sans-serif" }}>
+                            Pilih Icon
+                        </DialogTitle>
+                        <p className="text-sm text-slate-500 dark:text-slate-400">
+                            Pilih icon untuk field ini atau salin nama dari lucide.dev
+                        </p>
+                    </DialogHeader>
+                    {iconPickerOpen && (
+                        <LucideIconPicker
+                            onSelect={(icon) => {
+                                if (activeIconField) {
+                                    setModalData((prev) => ({ ...prev, [activeIconField]: icon }));
+                                    toast.success('Icon berhasil dipilih');
+                                    // Delay closing to prevent parent dialog's click-outside handler from triggering on unmounted element
+                                    setTimeout(() => {
+                                        setIconPickerOpen(false);
+                                        setActiveIconField(null);
+                                    }, 100);
+                                }
+                            }}
+                            onClose={() => {
+                                setIconPickerOpen(false);
+                                setActiveIconField(null);
+                            }}
+                        />
+                    )}
                 </DialogContent>
             </Dialog>
         </div>
