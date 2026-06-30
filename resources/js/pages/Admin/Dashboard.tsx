@@ -1,236 +1,185 @@
-import { Head, Link, usePage, router } from '@inertiajs/react';
-import { useState, useEffect } from 'react';
-import { toast } from 'sonner';
-import {
-    Layout,
-    Image as ImageIcon,
-    BarChart2,
-    Info,
-    Star,
-    ListOrdered,
-    CreditCard,
-    MessageSquare,
-    Zap,
-    Phone,
-    AlignJustify,
-    GripVertical,
-    Eye,
-    EyeOff,
-    Lock,
-} from 'lucide-react';
+import { Head, Link } from '@inertiajs/react';
+import { CalendarClock, CalendarDays, Clock3, Mail, School, TrendingUp, UserCheck, UsersRound } from 'lucide-react';
 
-type Section = {
-    key: string;
+type Stats = {
+    totalAppointments: number;
+    unreadAppointments: number;
+    todayAppointments: number;
+    scheduledAppointments: number;
+};
+
+type ChartItem = {
     label: string;
-    icon: string;
-    desc: string;
-    is_visible: boolean;
+    total: number;
 };
 
-const iconMap: Record<string, React.ElementType> = {
-    'layout': Layout,
-    'image': ImageIcon,
-    'bar-chart-2': BarChart2,
-    'info': Info,
-    'star': Star,
-    'list-ordered': ListOrdered,
-    'credit-card': CreditCard,
-    'message-square': MessageSquare,
-    'zap': Zap,
-    'phone': Phone,
-    'align-justify': AlignJustify,
+type Appointment = {
+    id: number;
+    name: string;
+    email: string;
+    institution: string;
+    scheduled_at: string;
+    created_at: string;
 };
 
-export default function Dashboard() {
-    const { adminSections } = usePage().props as any as { adminSections: Section[] };
-    const [sections, setSections] = useState<Section[]>(adminSections);
-    const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+type Props = {
+    stats: Stats;
+    chartData: ChartItem[];
+    latestAppointments: Appointment[];
+};
 
-    // Sync sections if props change (e.g. after a router refresh/reload)
-    useEffect(() => {
-        setSections(adminSections);
-    }, [adminSections]);
+const formatDate = (date: string) =>
+    new Date(date).toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    });
 
-    // Handle show/hide visibility toggle
-    const handleToggleVisibility = (sectionKey: string, currentVisible: boolean) => {
-        const nextVisible = !currentVisible;
-        
-        // Optimistic UI update
-        setSections((prev) =>
-            prev.map((s) => (s.key === sectionKey ? { ...s, is_visible: nextVisible } : s))
-        );
+export default function Dashboard({ stats, chartData, latestAppointments }: Props) {
+    const maxValue = Math.max(...chartData.map((item) => item.total), 1);
 
-        router.post(
-            '/admin/sections-toggle-visibility',
-            { section: sectionKey, is_visible: nextVisible },
-            {
-                preserveScroll: true,
-                onSuccess: () => {
-                    toast.success(`Section ${sectionKey} ${nextVisible ? 'ditampilkan' : 'disembunyikan'}`);
-                },
-                onError: () => {
-                    toast.error('Gagal memperbarui visibilitas');
-                    // Revert
-                    setSections(adminSections);
-                },
-            }
-        );
-    };
-
-    // Drag-and-Drop Handlers (HTML5 DnD API)
-    const handleDragStart = (e: React.DragEvent, index: number) => {
-        const item = sections[index];
-        // Pinned navbar and footer cannot be dragged
-        if (item.key === 'navbar' || item.key === 'footer') {
-            e.preventDefault();
-            return;
-        }
-        setDraggedIndex(index);
-        e.dataTransfer.effectAllowed = 'move';
-    };
-
-    const handleDragOver = (e: React.DragEvent, hoverIndex: number) => {
-        e.preventDefault();
-        if (draggedIndex === null || draggedIndex === hoverIndex) return;
-
-        const targetItem = sections[hoverIndex];
-        // Cannot swap with pinned navbar or footer
-        if (targetItem.key === 'navbar' || targetItem.key === 'footer') return;
-
-        const updatedSections = [...sections];
-        const draggedItem = updatedSections[draggedIndex];
-
-        // Perform visual swap in local state
-        updatedSections.splice(draggedIndex, 1);
-        updatedSections.splice(hoverIndex, 0, draggedItem);
-
-        setDraggedIndex(hoverIndex);
-        setSections(updatedSections);
-    };
-
-    const handleDragEnd = () => {
-        setDraggedIndex(null);
-
-        // Save order to DB
-        const orderedKeys = sections.map((s) => s.key);
-        router.post(
-            '/admin/sections-reorder',
-            { order: orderedKeys },
-            {
-                preserveScroll: true,
-                onSuccess: () => {
-                    toast.success('Urutan section berhasil disimpan');
-                },
-                onError: () => {
-                    toast.error('Gagal menyimpan urutan');
-                    setSections(adminSections);
-                },
-            }
-        );
-    };
+    const cards = [
+        {
+            label: 'Total Pendaftar',
+            value: stats.totalAppointments,
+            icon: UsersRound,
+            iconClass: 'bg-blue-50 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400',
+            desc: 'Semua data appointment demo',
+        },
+        {
+            label: 'Pendaftar Hari Ini',
+            value: stats.todayAppointments,
+            icon: UserCheck,
+            iconClass: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400',
+            desc: 'Masuk dalam 24 jam terakhir',
+        },
+        {
+            label: 'Belum Dibaca',
+            value: stats.unreadAppointments,
+            icon: Mail,
+            iconClass: 'bg-amber-50 text-amber-600 dark:bg-amber-950/30 dark:text-amber-400',
+            desc: 'Perlu ditindaklanjuti admin',
+        },
+        {
+            label: 'Jadwal Mendatang',
+            value: stats.scheduledAppointments,
+            icon: CalendarClock,
+            iconClass: 'bg-violet-50 text-violet-600 dark:bg-violet-950/30 dark:text-violet-400',
+            desc: 'Appointment yang belum lewat',
+        },
+    ];
 
     return (
         <div className="p-6">
             <Head title="Admin Dashboard" />
-            <div className="mb-6">
-                <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-100">
-                    Susunan Section Landing Page
-                </h2>
-                <p className="text-sm text-gray-500 dark:text-slate-400">
-                    Geser/drag untuk mengubah susunan section di landing page secara vertikal. Gunakan ikon mata untuk menampilkan/menyembunyikan section.
-                </p>
+
+            <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+                <div>
+                    <span className="mb-2 inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-bold tracking-wide text-blue-600 uppercase dark:bg-blue-950/30 dark:text-blue-400">
+                        Analytics Overview
+                    </span>
+                    <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">Dashboard Appointment</h2>
+                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                        Ringkasan pendaftar demo aplikasi dan tren appointment Smart Exam.
+                    </p>
+                </div>
+
+                <Link
+                    href="/admin/appointments"
+                    className="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white shadow-[0_10px_24px_-10px_rgba(37,99,235,0.8)] transition hover:bg-blue-700"
+                >
+                    <CalendarDays className="h-4 w-4" />
+                    Lihat Appointment
+                </Link>
             </div>
 
-            <div className="max-w-3xl space-y-3">
-                {sections.map((section, idx) => {
-                    const IconComponent = iconMap[section.icon] ?? Layout;
-                    const isPinned = section.key === 'navbar' || section.key === 'footer';
+            <div className="mb-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                {cards.map((card) => {
+                    const Icon = card.icon;
 
                     return (
                         <div
-                            key={section.key}
-                            draggable={!isPinned}
-                            onDragStart={(e) => handleDragStart(e, idx)}
-                            onDragOver={(e) => handleDragOver(e, idx)}
-                            onDragEnd={handleDragEnd}
-                            className={`flex items-center justify-between p-4 rounded-2xl border transition-all bg-white dark:bg-[#151d2a] ${
-                                draggedIndex === idx
-                                    ? 'border-blue-500 ring-2 ring-blue-500/10 opacity-50 scale-[0.98]'
-                                    : section.is_visible
-                                      ? 'border-slate-100 dark:border-slate-800 shadow-sm hover:border-slate-200 dark:hover:border-slate-750'
-                                      : 'border-slate-100/60 dark:border-slate-900/60 bg-slate-50/50 dark:bg-slate-900/20 opacity-70'
-                            }`}
+                            key={card.label}
+                            className="rounded-3xl border border-slate-100 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-slate-800 dark:bg-[#151d2a]"
                         >
-                            <div className="flex items-center gap-4 flex-1 min-w-0">
-                                {/* Grip/Lock Icon */}
-                                {isPinned ? (
-                                    <div className="flex h-8 w-8 items-center justify-center text-slate-300 dark:text-slate-700">
-                                        <Lock className="h-4 w-4" />
-                                    </div>
-                                ) : (
-                                    <div className="flex h-8 w-8 items-center justify-center text-slate-400 dark:text-slate-650 cursor-grab hover:text-slate-600 active:cursor-grabbing">
-                                        <GripVertical className="h-4 w-4" />
-                                    </div>
-                                )}
-
-                                {/* Icon Indicator */}
-                                <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ring-1 ${
-                                    section.is_visible
-                                        ? 'bg-blue-50/60 text-blue-600 ring-blue-100/50 dark:bg-blue-950/30 dark:text-blue-400 dark:ring-blue-900/30'
-                                        : 'bg-slate-100 text-slate-400 ring-slate-200/50 dark:bg-slate-800 dark:text-slate-500 dark:ring-slate-750/30'
-                                }`}>
-                                    <IconComponent className="h-5 w-5" />
+                            <div className="mb-5 flex items-center justify-between">
+                                <div className={`flex h-11 w-11 items-center justify-center rounded-2xl ${card.iconClass}`}>
+                                    <Icon className="h-5 w-5" />
                                 </div>
-
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex items-center gap-2">
-                                        <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200">
-                                            {section.label}
-                                        </h3>
-                                        {isPinned && (
-                                            <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 bg-slate-100 dark:bg-slate-800 dark:text-slate-500 px-1.5 py-0.5 rounded">
-                                                Pinned
-                                            </span>
-                                        )}
-                                    </div>
-                                    <p className="text-xs text-slate-400 dark:text-slate-500 truncate leading-relaxed">
-                                        {section.desc}
-                                    </p>
-                                </div>
+                                <TrendingUp className="h-4 w-4 text-slate-300 dark:text-slate-600" />
                             </div>
-
-                            <div className="flex items-center gap-2.5">
-                                {/* Show/Hide Toggle Button */}
-                                {!isPinned && (
-                                    <button
-                                        type="button"
-                                        onClick={() => handleToggleVisibility(section.key, section.is_visible)}
-                                        className={`flex h-9 w-9 items-center justify-center rounded-xl border transition-colors ${
-                                            section.is_visible
-                                                ? 'border-slate-100 bg-white hover:bg-slate-50 text-slate-600 dark:border-slate-800 dark:bg-[#121824] dark:hover:bg-[#1a2235] dark:text-slate-350'
-                                                : 'border-rose-100 bg-rose-50/40 text-rose-500 hover:bg-rose-50 dark:border-rose-950/20 dark:bg-rose-950/10 dark:text-rose-450 dark:hover:bg-rose-950/20'
-                                        }`}
-                                        title={section.is_visible ? 'Sembunyikan' : 'Tampilkan'}
-                                    >
-                                        {section.is_visible ? (
-                                            <Eye className="h-4 w-4" />
-                                        ) : (
-                                            <EyeOff className="h-4 w-4" />
-                                        )}
-                                    </button>
-                                )}
-
-                                {/* Link to Edit Section */}
-                                <Link
-                                    href={`/admin/sections/${section.key}`}
-                                    className="inline-flex items-center justify-center rounded-xl border border-slate-100 bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-[#121824] dark:hover:bg-[#1a2235] px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors shadow-sm"
-                                >
-                                    Edit Konten
-                                </Link>
-                            </div>
+                            <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">{card.label}</p>
+                            <div className="mt-1 text-3xl font-black tracking-tight text-slate-900 dark:text-white">{card.value}</div>
+                            <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">{card.desc}</p>
                         </div>
                     );
                 })}
+            </div>
+
+            <div className="grid gap-6 xl:grid-cols-[1.35fr_0.85fr]">
+                <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-[#151d2a]">
+                    <div className="mb-6 flex items-center justify-between">
+                        <div>
+                            <h3 className="text-base font-bold text-slate-900 dark:text-slate-50">Tren Pendaftar 7 Hari</h3>
+                            <p className="text-sm text-slate-500 dark:text-slate-400">Jumlah appointment berdasarkan tanggal daftar.</p>
+                        </div>
+                    </div>
+
+                    <div className="flex h-72 items-end gap-3 rounded-2xl bg-slate-50 p-4 dark:bg-slate-900/35">
+                        {chartData.map((item) => {
+                            const height = Math.max((item.total / maxValue) * 100, item.total > 0 ? 12 : 4);
+
+                            return (
+                                <div key={item.label} className="flex h-full flex-1 flex-col items-center justify-end gap-2">
+                                    <div className="text-xs font-bold text-slate-500 dark:text-slate-400">{item.total}</div>
+                                    <div className="flex h-full w-full items-end justify-center">
+                                        <div
+                                            className="w-full max-w-12 rounded-t-2xl bg-gradient-to-t from-blue-600 to-sky-400 shadow-[0_12px_24px_-14px_rgba(37,99,235,0.9)] transition-all hover:from-blue-700 hover:to-sky-500"
+                                            style={{ height: `${height}%` }}
+                                        />
+                                    </div>
+                                    <div className="text-[11px] font-semibold text-slate-400 dark:text-slate-500">{item.label}</div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-[#151d2a]">
+                    <div className="mb-5 flex items-center justify-between">
+                        <div>
+                            <h3 className="text-base font-bold text-slate-900 dark:text-slate-50">Appointment Terbaru</h3>
+                            <p className="text-sm text-slate-500 dark:text-slate-400">5 pendaftar terakhir.</p>
+                        </div>
+                    </div>
+
+                    <div className="space-y-3">
+                        {latestAppointments.length === 0 ? (
+                            <div className="rounded-2xl border border-dashed border-slate-200 p-8 text-center dark:border-slate-800">
+                                <CalendarDays className="mx-auto mb-3 h-8 w-8 text-slate-300 dark:text-slate-700" />
+                                <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">Belum ada appointment</p>
+                            </div>
+                        ) : (
+                            latestAppointments.map((appointment) => (
+                                <div key={appointment.id} className="rounded-2xl border border-slate-100 p-4 dark:border-slate-800/80">
+                                    <div className="mb-3 flex items-center gap-3">
+                                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400">
+                                            <School className="h-4.5 w-4.5" />
+                                        </div>
+                                        <div className="min-w-0">
+                                            <p className="truncate text-sm font-bold text-slate-800 dark:text-slate-100">{appointment.institution}</p>
+                                            <p className="truncate text-xs text-slate-400 dark:text-slate-500">{appointment.name}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                                        <Clock3 className="h-3.5 w-3.5" />
+                                        {formatDate(appointment.scheduled_at)}
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     );

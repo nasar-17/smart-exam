@@ -19,7 +19,13 @@ class SectionController extends Controller
     {
         abort_unless(in_array($section, $this->validSections), 404);
 
-        $fields = LandingContent::where('section', $section)
+        $query = LandingContent::where('section', $section);
+
+        if ($section === 'hero') {
+            $query->whereNotIn('key', ['cta_secondary_text', 'cta_secondary_link', 'hero_bg_image']);
+        }
+
+        $fields = $query
             ->orderBy('order')
             ->get()
             ->map(fn ($item) => [

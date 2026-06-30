@@ -15,8 +15,7 @@ export default function Hero({ data }: { data?: any }) {
     const socialProofSub = data?.social_proof_sub ?? '/ ★ 4.9 Rating';
     const ctaPrimaryText = data?.cta_primary_text ?? 'Mulai Gratis Sekarang';
     const ctaPrimaryLink = data?.cta_primary_link ?? '#pricing';
-    const ctaSecondaryText = data?.cta_secondary_text ?? 'Lihat Demo';
-    const ctaSecondaryLink = data?.cta_secondary_link ?? '#howitworks';
+    const heroBgImage = data?.hero_bg_image || data?.bg_image_url || 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1920&q=80&auto=format&fit=crop';
     const heroImage =
         data?.hero_image && data.hero_image !== ''
             ? data.hero_image
@@ -30,7 +29,14 @@ export default function Hero({ data }: { data?: any }) {
     const cardPrice = data?.card_price ?? 'Gratis Trial';
     const cardRating = data?.card_rating ?? '4.9';
 
-    // Looping Typing Animation for the last 2 words (accent text)
+    // Apply background image via inline style on container
+    const heroBgStyle = {
+        backgroundImage: `url(${heroBgImage})`,
+        backgroundPosition: 'center center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+    };
+
     const words = data?.title_accent
         ? data.title_accent.split(',').map((w: string) => w.trim())
         : ['Digital Modern', 'Aman & Adil', 'Praktis & Akurat'];
@@ -74,8 +80,11 @@ export default function Hero({ data }: { data?: any }) {
             className="relative flex min-h-[100dvh] items-center overflow-hidden bg-black"
         >
             {/* Background image & overlay */}
-            <div className="hero-bg-image" />
-            <div className="hero-bg-overlay" />
+            <div
+                className="hero-bg-image absolute inset-0 z-0"
+                style={{ ...heroBgStyle, filter: 'brightness(0.35) saturate(0.7)' }}
+            />
+            <div className="hero-bg-overlay absolute inset-0 z-[1]" />
 
             <div className="relative z-10 mx-auto w-full max-w-[1200px] px-6 py-20 lg:py-28">
                 <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
@@ -182,15 +191,7 @@ export default function Hero({ data }: { data?: any }) {
                                     fontFamily: "'Sora', sans-serif",
                                 }}
                             >
-                                {ctaPrimaryText} — Gratis
-                                <ArrowRight className="h-4 w-4" />
-                            </a>
-                            <a
-                                href={ctaSecondaryLink}
-                                className="inline-flex items-center gap-2 text-[0.95rem] font-semibold text-white/80 underline underline-offset-4 transition-all hover:text-white"
-                                style={{ fontFamily: "'Satoshi', sans-serif" }}
-                            >
-                                {ctaSecondaryText}
+                                {ctaPrimaryText}
                                 <ArrowRight className="h-4 w-4" />
                             </a>
                         </div>

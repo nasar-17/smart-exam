@@ -68,7 +68,7 @@ export default function Navbar({ data }: { data?: any }) {
             >
                 <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-6">
                     {/* Logo */}
-                    <a href="#hero" className="flex items-center gap-2.5">
+                    <a href="#hero" className="flex items-center">
                         <img
                             src="/Logo smart exam.png"
                             alt="Smart Exam"

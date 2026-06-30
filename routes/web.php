@@ -19,6 +19,9 @@ Route::prefix('admin')
         Route::get('/', [AdminDashboardController::class, 'index'])
             ->name('dashboard');
 
+        Route::get('/settings', [AdminDashboardController::class, 'settings'])
+            ->name('settings');
+
         Route::get('/appointments', [App\Http\Controllers\Admin\AppointmentController::class, 'index'])
             ->name('appointments.index');
         Route::delete('/appointments/{id}', [App\Http\Controllers\Admin\AppointmentController::class, 'destroy'])
