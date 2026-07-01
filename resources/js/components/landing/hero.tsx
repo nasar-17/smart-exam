@@ -1,10 +1,8 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Users, Star, CheckCircle, Award } from 'lucide-react';
+import { ArrowRight, Star, CheckCircle, Award } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function Hero({ data }: { data?: any }) {
-    const badgeText = data?.badge_text ?? '500+ Institusi Aktif';
-    const badgeLink = data?.badge_link ?? '#testimonials';
     const title = data?.title ?? 'Platform Ujian';
     const titleAccent = data?.title_accent ?? 'Digital Modern';
     const subtitle =
@@ -102,23 +100,6 @@ export default function Hero({ data }: { data?: any }) {
                         transition={{ duration: 0.6 }}
                         className="flex flex-col"
                     >
-                        {/* Badge */}
-                        <div className="mb-8 flex items-center gap-2" data-preview-field="badge_text">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm">
-                                <Users className="h-[15px] w-[15px] text-white" />
-                            </div>
-                            <span className="text-sm font-semibold text-white/90">
-                                {badgeText}
-                            </span>
-                            <a
-                                href={badgeLink}
-                                className="text-sm font-bold underline underline-offset-2"
-                                style={{ color: '#60a5fa' }}
-                            >
-                                Lihat Testimoni
-                            </a>
-                        </div>
-
                         {/* Headline */}
                         <h1
                             className="mb-6 text-white"
