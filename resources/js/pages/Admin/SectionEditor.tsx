@@ -234,31 +234,29 @@ export default function SectionEditor({ section, fields }: Props) {
                 preserveScroll: true,
                 onSuccess: () => {
                     setSaveStatus('saved');
+                    toast.success('Perubahan berhasil disimpan');
                 },
                 onError: () => {
                     setSaveStatus('error');
-                    toast.error('Gagal menyimpan perubahan otomatis');
+                    toast.error('Gagal menyimpan perubahan');
                 },
             }
         );
     }, [section]);
 
-    // Track changes and debounce
+    // Track changes to update dirty state
     useEffect(() => {
         const hasChanged = JSON.stringify(localFields) !== JSON.stringify(fields);
-        
-        if (!hasChanged) {
-            return;
+
+        if (hasChanged) {
+            if (saveStatus !== 'saving' && saveStatus !== 'error') {
+                setSaveStatus('dirty');
+            }
+        } else if (saveStatus !== 'saving') {
+            setSaveStatus('saved');
         }
+    }, [localFields, fields, saveStatus]);
 
-        setSaveStatus('dirty');
-
-        const timer = setTimeout(() => {
-            performSave(localFields);
-        }, 3000); // 3 seconds debounce
-
-        return () => clearTimeout(timer);
-    }, [localFields, fields, performSave]);
 
     const isNavbar = section === 'navbar';
 
@@ -294,7 +292,7 @@ export default function SectionEditor({ section, fields }: Props) {
                             handleChange(field.key, val);
                             setPreviewUrls((p) => ({ ...p, [field.key]: val }));
                         }}
-                        onUpload={(file) => handleImageUpload(file.key, file)}
+                        onUpload={(file) => handleImageUpload(field.key, file)}
                     />
                 );
             case 'json':
@@ -338,14 +336,14 @@ export default function SectionEditor({ section, fields }: Props) {
         );
     };
 
-    const renderCombinedNonJsonFields = (fields: Field[]) => {
+    const renderCombinedNonJsonFields = (fields: Field[], cols: 2 | 3 = 2) => {
         return (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+            <div className={`grid grid-cols-1 ${cols === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-x-6 gap-y-4`}>
                 {fields.map((field) => {
                     const fullWidth = isFullWidthField(field);
 
                     return (
-                        <div key={field.key} className={fullWidth ? 'md:col-span-2' : 'md:col-span-1'}>
+                        <div key={field.key} className={fullWidth ? (cols === 3 ? 'md:col-span-3' : 'md:col-span-2') : 'md:col-span-1'}>
                             {renderField(field)}
                         </div>
                     );
@@ -393,7 +391,7 @@ export default function SectionEditor({ section, fields }: Props) {
                         </div>
                     ) : (
                         /* Single unified card layout if there are no JSON fields */
-                        <div className="max-w-3xl mx-auto bg-white dark:bg-[#151d2a] rounded-2xl p-6 border border-slate-200/60 dark:border-slate-800/80 shadow-sm space-y-4">
+                        <div className="max-w-5xl mx-auto bg-white dark:bg-[#151d2a] rounded-2xl p-6 border border-slate-200/60 dark:border-slate-800/80 shadow-sm space-y-4">
                             <div>
                                 <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                                     {`${sectionLabel} Settings`}
@@ -403,7 +401,7 @@ export default function SectionEditor({ section, fields }: Props) {
                                 </p>
                             </div>
                             <div className="border-t border-slate-100 dark:border-slate-800/80 my-3" />
-                            {renderCombinedNonJsonFields(nonJsonFields)}
+                            {renderCombinedNonJsonFields(nonJsonFields, 3)}
                         </div>
                     )}
                 </div>
@@ -420,31 +418,42 @@ export default function SectionEditor({ section, fields }: Props) {
                             Kembali ke Dashboard
                         </Link>
                         
-                        <div className="flex items-center gap-2 text-xs font-semibold">
-                            {saveStatus === 'saved' && (
-                                <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
-                                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                                    Semua perubahan disimpan otomatis
-                                </span>
-                            )}
-                            {saveStatus === 'saving' && (
-                                <span className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400 animate-pulse">
-                                    <span className="h-2 w-2 rounded-full bg-blue-500" />
-                                    Menyimpan...
-                                </span>
-                            )}
-                            {saveStatus === 'dirty' && (
-                                <span className="flex items-center gap-1.5 text-amber-500 animate-pulse">
-                                    <span className="h-2 w-2 rounded-full bg-amber-500" />
-                                    Sedang mengetik (menyimpan dalam 3 detik...)
-                                </span>
-                            )}
-                            {saveStatus === 'error' && (
-                                <span className="flex items-center gap-1.5 text-rose-500">
-                                    <span className="h-2 w-2 rounded-full bg-rose-500" />
-                                    Gagal menyimpan otomatis
-                                </span>
-                            )}
+                        <div className="flex items-center gap-4">
+                            <button
+                                type="button"
+                                onClick={() => performSave(localFields)}
+                                disabled={saveStatus === 'saving' || saveStatus === 'saved'}
+                                className={`text-sm font-semibold px-5 py-2.5 rounded-xl transition-all shadow-sm ${
+                                    saveStatus === 'saving'
+                                        ? 'bg-blue-400 text-white cursor-not-allowed'
+                                        : saveStatus === 'saved'
+                                          ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed border border-slate-200/50 dark:border-slate-700/50'
+                                          : 'bg-blue-600 hover:bg-blue-700 text-white cursor-pointer'
+                                }`}
+                            >
+                                {saveStatus === 'saving' ? 'Menyimpan...' : 'Simpan Perubahan'}
+                            </button>
+
+                            <div className="flex items-center gap-2 text-xs font-semibold">
+                                {saveStatus === 'saved' && (
+                                    <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+                                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                                        Semua perubahan telah disimpan
+                                    </span>
+                                )}
+                                {saveStatus === 'dirty' && (
+                                    <span className="flex items-center gap-1.5 text-amber-500 animate-pulse">
+                                        <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                                        Ada perubahan yang belum disimpan
+                                    </span>
+                                )}
+                                {saveStatus === 'error' && (
+                                    <span className="flex items-center gap-1.5 text-rose-500">
+                                        <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+                                        Gagal menyimpan perubahan
+                                    </span>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
