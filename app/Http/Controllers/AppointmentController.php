@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAppointmentRequest;
 use App\Services\AppointmentService;
+use Illuminate\Http\RedirectResponse;
 
 class AppointmentController extends Controller
 {
@@ -11,7 +12,7 @@ class AppointmentController extends Controller
         private AppointmentService $appointmentService
     ) {}
 
-    public function store(StoreAppointmentRequest $request)
+    public function store(StoreAppointmentRequest $request): RedirectResponse
     {
         $result = $this->appointmentService->create($request->validated());
 

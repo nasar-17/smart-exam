@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { CalendarClock, CalendarDays, Clock3, Mail, School, TrendingUp, UserCheck, UsersRound } from 'lucide-react';
+import { formatDateShort } from '@/lib/formatters';
 
 type Stats = {
     totalAppointments: number;
@@ -27,13 +28,6 @@ type Props = {
     chartData: ChartItem[];
     latestAppointments: Appointment[];
 };
-
-const formatDate = (date: string) =>
-    new Date(date).toLocaleDateString('id-ID', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-    });
 
 export default function Dashboard({ stats, chartData, latestAppointments }: Props) {
     const maxValue = Math.max(...chartData.map((item) => item.total), 1);
@@ -173,7 +167,7 @@ export default function Dashboard({ stats, chartData, latestAppointments }: Prop
                                     </div>
                                     <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
                                         <Clock3 className="h-3.5 w-3.5" />
-                                        {formatDate(appointment.scheduled_at)}
+                                        {formatDateShort(appointment.scheduled_at)}
                                     </div>
                                 </div>
                             ))

@@ -1,49 +1,19 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import {
-    AlignJustify,
-    BarChart2,
-    CreditCard,
     Eye,
     EyeOff,
     GripVertical,
-    Image as ImageIcon,
-    Info,
     Layout,
-    ListOrdered,
     Lock,
-    MessageSquare,
-    Phone,
-    Star,
-    Zap,
 } from 'lucide-react';
 import { useState } from 'react';
-import type { DragEvent, ElementType } from 'react';
+import type { DragEvent } from 'react';
 import { toast } from 'sonner';
-
-type Section = {
-    key: string;
-    label: string;
-    icon: string;
-    desc: string;
-    is_visible: boolean;
-};
-
-const iconMap: Record<string, ElementType> = {
-    layout: Layout,
-    image: ImageIcon,
-    'bar-chart-2': BarChart2,
-    info: Info,
-    star: Star,
-    'list-ordered': ListOrdered,
-    'credit-card': CreditCard,
-    'message-square': MessageSquare,
-    zap: Zap,
-    phone: Phone,
-    'align-justify': AlignJustify,
-};
+import { iconMap } from '@/lib/section-icons';
+import type { Section } from '@/lib/section-icons';
 
 export default function Settings() {
-    const { adminSections } = usePage().props as unknown as { adminSections: Section[] };
+    const { adminSections } = usePage().props;
     const [sections, setSections] = useState<Section[]>(adminSections);
     const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 

@@ -1,55 +1,26 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
-    Layout,
-    Image,
-    BarChart2,
-    Info,
-    Star,
-    ListOrdered,
-    CreditCard,
-    MessageSquare,
-    Zap,
-    Phone,
-    AlignJustify,
-    LayoutDashboard,
-    ExternalLink,
-    LogOut,
-    Sun,
-    Moon,
     Calendar,
+    ExternalLink,
+    LayoutDashboard,
+    Layout,
+    LogOut,
+    Moon,
     Settings,
+    Sun,
 } from 'lucide-react';
 import { useEffect, useState  } from 'react';
 import type {PropsWithChildren} from 'react';
 import { toast } from 'sonner';
 import { useAppearance } from '@/hooks/use-appearance';
+import { iconMap } from '@/lib/section-icons';
 
 interface AdminLayoutProps {
     title?: string;
 }
 
-type Section = { key: string; label: string; icon: string; desc: string };
-
-const iconMap: Record<string, React.ElementType> = {
-    'layout': Layout,
-    'image': Image,
-    'bar-chart-2': BarChart2,
-    'info': Info,
-    'star': Star,
-    'list-ordered': ListOrdered,
-    'credit-card': CreditCard,
-    'message-square': MessageSquare,
-    'zap': Zap,
-    'phone': Phone,
-    'align-justify': AlignJustify,
-};
-
 export default function AdminLayout({ children, title = 'Admin Panel' }: PropsWithChildren<AdminLayoutProps>) {
-    const { auth, adminSections, appointmentCount } = usePage().props as unknown as {
-        auth: { user?: { email?: string } };
-        adminSections: Section[];
-        appointmentCount: number;
-    };
+    const { auth, adminSections, appointmentCount } = usePage().props;
     const { url } = usePage();
     const { resolvedAppearance, updateAppearance } = useAppearance();
     const [mounted, setMounted] = useState(false);

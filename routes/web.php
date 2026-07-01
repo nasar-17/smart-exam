@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AppointmentController as AdminAppointmentController;
 use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\LandingController;
@@ -22,9 +23,9 @@ Route::prefix('admin')
         Route::get('/settings', [AdminDashboardController::class, 'settings'])
             ->name('settings');
 
-        Route::get('/appointments', [App\Http\Controllers\Admin\AppointmentController::class, 'index'])
+        Route::get('/appointments', [AdminAppointmentController::class, 'index'])
             ->name('appointments.index');
-        Route::delete('/appointments/{id}', [App\Http\Controllers\Admin\AppointmentController::class, 'destroy'])
+        Route::delete('/appointments/{id}', [AdminAppointmentController::class, 'destroy'])
             ->name('appointments.destroy');
 
         Route::get('/sections/{section}', [SectionController::class, 'edit'])

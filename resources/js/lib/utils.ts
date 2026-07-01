@@ -10,3 +10,24 @@ export function cn(...inputs: ClassValue[]) {
 export function toUrl(url: NonNullable<InertiaLinkProps['href']>): string {
     return typeof url === 'string' ? url : url.url;
 }
+
+/**
+ * Check if a value represents a boolean option.
+ * Handles true/false literals, string 'true'/'false', and checks field naming conventions.
+ */
+export function isBooleanValue(
+    val: unknown,
+    fieldName?: string,
+): boolean {
+    if (typeof val === 'boolean') return true;
+    if (val === 'true' || val === 'false') return true;
+
+    if (fieldName) {
+        const name = fieldName.toLowerCase();
+        if (name === 'featured' || name === 'active' || name === 'is_visible' || name === 'enabled') {
+            return true;
+        }
+    }
+
+    return false;
+}

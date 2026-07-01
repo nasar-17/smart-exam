@@ -5,6 +5,7 @@ import LucideIconPicker from '@/components/lucide-icon-picker';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { isBooleanValue } from '@/lib/utils';
 
 interface JsonItemModalProps {
     isOpen: boolean;
@@ -93,12 +94,7 @@ onCancel();
                                 const isLongText = typeof itemVal === 'string' && itemVal.length > 80;
 
                                 // Detect boolean option fields
-                                const isBooleanOption =
-                                    itemKey.toLowerCase() === 'featured' ||
-                                    itemVal === true ||
-                                    itemVal === false ||
-                                    String(itemVal).toLowerCase() === 'true' ||
-                                    String(itemVal).toLowerCase() === 'false';
+                                const isBooleanOpt = isBooleanValue(itemVal, itemKey);
 
                                 return (
                                     <div key={itemKey}>
@@ -106,7 +102,7 @@ onCancel();
                                             {itemKey.charAt(0).toUpperCase() + itemKey.slice(1)}
                                         </label>
 
-                                        {isBooleanOption ? (
+                                        {isBooleanOpt ? (
                                             <select
                                                 value={String(itemVal ?? 'false')}
                                                 onChange={(e) => {

@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import About from '@/components/landing/about';
 import Contact from '@/components/landing/contact';
@@ -14,6 +14,7 @@ import Stats from '@/components/landing/stats';
 import Testimonials from '@/components/landing/testimonials';
 import { Toaster } from '@/components/ui/sonner';
 import { useScrollReveal, useStatsCounter } from '@/hooks/use-scroll-reveal';
+import { usePreviewListener } from '@/hooks/usePreviewListener';
 
 type ContentMap = Record<string, any>;
 
@@ -27,57 +28,34 @@ export default function Welcome({ content = {}, sections = [] }: { content?: Con
     const [previewContent, setPreviewContent] = useState<ContentMap>(content);
     const [previewSection, setPreviewSection] = useState<string | null>(null);
 
+    // Read URL query param to check if we are in section preview mode
     useEffect(() => {
-        // Read URL query param to check if we are in section preview mode
         const urlParams = new URLSearchParams(window.location.search);
         const sectionParam = urlParams.get('preview_section');
         if (sectionParam) {
             setPreviewSection(sectionParam);
         }
-
-        // Listen for postMessage changes from SectionEditor
-        const handleMessage = (event: MessageEvent) => {
-            if (event.data && event.data.type === 'smartexam-preview') {
-                setPreviewContent((prev) => ({
-                    ...prev,
-                    ...event.data.data
-                }));
-            } else if (event.data && event.data.type === 'smartexam-focus-field') {
-                const key = event.data.fieldKey;
-                console.log('[Welcome] Received smartexam-focus-field:', key);
-                // Small delay to ensure React has finished rendering the section in the iframe
-                setTimeout(() => {
-                    const element = document.querySelector(`[data-preview-field="${key}"]`);
-                    console.log('[Welcome] querySelector result for', key, ':', element);
-                    document.querySelectorAll('.preview-highlight-active').forEach((el) => {
-                        el.classList.remove('preview-highlight-active');
-                    });
-                    if (element) {
-                        element.classList.add('preview-highlight-active');
-                        console.log('[Welcome] Added preview-highlight-active class to:', element);
-                    } else {
-                        console.warn('[Welcome] Element NOT FOUND for data-preview-field:', key);
-                        console.log('[Welcome] All data-preview-field elements:', document.querySelectorAll('[data-preview-field]'));
-                    }
-                }, 50);
-            } else if (event.data && event.data.type === 'smartexam-blur-field') {
-                const key = event.data.fieldKey;
-                const element = document.querySelector(`[data-preview-field="${key}"]`);
-                if (element) {
-                    element.classList.remove('preview-highlight-active');
-                }
-            }
-        };
-
-        window.addEventListener('message', handleMessage);
-        return () => window.removeEventListener('message', handleMessage);
     }, []);
+
+    const handlePreviewData = useCallback(
+        (data: ContentMap) => {
+            setPreviewContent((prev) => ({
+                ...prev,
+                ...data,
+            }));
+        },
+        [],
+    );
+
+    usePreviewListener({
+        onPreviewData: handlePreviewData,
+    });
 
     useScrollReveal();
     useStatsCounter();
 
     // Map keys to their React components
-    const componentMap: Record<string, React.ComponentType<{ data: any }>> = {
+    const componentMap: Record<string, React.ComponentType<{ data: any }>> = useMemo(() => ({
         navbar: Navbar,
         hero: Hero,
         stats: Stats,
@@ -89,7 +67,7 @@ export default function Welcome({ content = {}, sections = [] }: { content?: Con
         cta: CTA,
         contact: Contact,
         footer: Footer,
-    };
+    }), []);
 
     // If previewSection is set, we want to isolate the preview of that section
     if (previewSection) {

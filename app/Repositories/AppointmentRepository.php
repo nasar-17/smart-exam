@@ -56,7 +56,7 @@ class AppointmentRepository
     public function delete(int $id): bool
     {
         $appointment = $this->findById($id);
-        
+
         if (! $appointment) {
             return false;
         }

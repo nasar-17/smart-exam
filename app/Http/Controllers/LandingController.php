@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\HandleInertiaRequests;
-use App\Models\LandingContent;
-use Illuminate\Http\Request;
+use App\Http\Requests\ContactRequest;
+use App\Repositories\LandingContentRepository;
+use App\Services\LandingContentService;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class LandingController extends Controller
 {
-    public function index()
-    {
-        $content = LandingContent::getAllGrouped();
+    public function __construct(
+        private LandingContentRepository $landingContentRepository,
+        private LandingContentService $landingContentService,
+    ) {}
 
-        // Get single source of truth sections order and visibility config
-        $sections = app(HandleInertiaRequests::class)->share(request())['adminSections'] ?? [];
+    public function index(): Response
+    {
+        $content = $this->landingContentRepository->getAllGrouped();
+        $sections = $this->landingContentService->getAdminSections();
 
         return Inertia::render('welcome', [
             'content' => $content,
@@ -22,16 +27,8 @@ class LandingController extends Controller
         ]);
     }
 
-    public function contact(Request $request)
+    public function contact(ContactRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:100',
-            'email' => 'required|email',
-            'institution' => 'required|string|max:100',
-            'whatsapp' => 'required|string|max:20',
-            'message' => 'nullable|string|max:1000',
-        ]);
-
         // TODO: kirim email / simpan ke DB
         return back()->with('success', 'Pesan Anda berhasil dikirim!');
     }

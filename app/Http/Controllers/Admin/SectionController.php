@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateLandingSectionRequest;
 use App\Services\LandingContentService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class SectionController extends Controller
 {
@@ -14,7 +17,7 @@ class SectionController extends Controller
         private LandingContentService $landingContentService
     ) {}
 
-    public function edit(string $section)
+    public function edit(string $section): Response
     {
         $fields = $this->landingContentService->getFieldsForEdit($section);
 
@@ -24,7 +27,7 @@ class SectionController extends Controller
         ]);
     }
 
-    public function update(UpdateLandingSectionRequest $request, string $section)
+    public function update(UpdateLandingSectionRequest $request, string $section): RedirectResponse
     {
         $result = $this->landingContentService->updateSection(
             $section,
@@ -34,7 +37,7 @@ class SectionController extends Controller
         return back()->with($result['success'] ? 'success' : 'error', $result['message']);
     }
 
-    public function uploadImage(Request $request)
+    public function uploadImage(Request $request): JsonResponse
     {
         $request->validate([
             'image' => 'required|image|max:2048',
@@ -47,7 +50,7 @@ class SectionController extends Controller
         return response()->json($result);
     }
 
-    public function reorder(Request $request)
+    public function reorder(Request $request): RedirectResponse
     {
         $data = $request->validate([
             'order' => 'required|array',
@@ -59,7 +62,7 @@ class SectionController extends Controller
         return back()->with($result['success'] ? 'success' : 'error', $result['message']);
     }
 
-    public function toggleVisibility(Request $request)
+    public function toggleVisibility(Request $request): RedirectResponse
     {
         $data = $request->validate([
             'section' => 'required|string',

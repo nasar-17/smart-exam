@@ -1,5 +1,4 @@
 import { createInertiaApp } from '@inertiajs/react';
-import type { ReactNode } from 'react';
 import './echo';
 import AdminLayout from '@/components/admin/AdminLayout';
 import CursorGlow from '@/components/cursor-glow';

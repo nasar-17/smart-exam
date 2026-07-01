@@ -61,6 +61,46 @@ class LandingContentRepository
         }
     }
 
+    public function getAllGrouped(): array
+    {
+        return LandingContent::all()
+            ->groupBy('section')
+            ->map(function ($items) {
+                return $items->mapWithKeys(function ($item) {
+                    $value = $item->type === 'json'
+                        ? json_decode($item->value, true)
+                        : $item->value;
+
+                    return [$item->key => $value];
+                });
+            })
+            ->toArray();
+    }
+
+    public function getSection(string $section): array
+    {
+        return LandingContent::where('section', $section)
+            ->orderBy('order')
+            ->get()
+            ->mapWithKeys(function ($item) {
+                $value = $item->type === 'json'
+                    ? json_decode($item->value, true)
+                    : $item->value;
+
+                return [$item->key => $value];
+            })
+            ->toArray();
+    }
+
+    public function set(string $section, string $key, mixed $value): void
+    {
+        $isJson = is_array($value);
+        LandingContent::updateOrCreate(
+            ['section' => $section, 'key' => $key],
+            ['value' => $isJson ? json_encode($value) : $value]
+        );
+    }
+
     public function isValidSection(string $section): bool
     {
         return in_array($section, $this->validSections);

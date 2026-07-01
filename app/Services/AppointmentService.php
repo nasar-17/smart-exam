@@ -26,11 +26,14 @@ class AppointmentService
 
     public function getAllForAdmin(): array
     {
-        $this->appointmentRepository->markAllAsRead();
-
         return [
             'appointments' => $this->appointmentRepository->getAll(),
         ];
+    }
+
+    public function markAllAsRead(): void
+    {
+        $this->appointmentRepository->markAllAsRead();
     }
 
     public function delete(int $id): array

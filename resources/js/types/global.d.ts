@@ -1,4 +1,5 @@
 import type { Auth } from '@/types/auth';
+import type { Section } from '@/lib/section-icons';
 
 declare module 'react' {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -13,6 +14,12 @@ declare module '@inertiajs/core' {
             name: string;
             auth: Auth;
             sidebarOpen: boolean;
+            adminSections: Section[];
+            appointmentCount: number;
+            flash: {
+                success?: string;
+                error?: string;
+            };
             [key: string]: unknown;
         };
     }
