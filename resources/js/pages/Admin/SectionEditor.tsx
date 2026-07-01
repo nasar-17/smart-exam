@@ -2,10 +2,10 @@ import { Head, Link, router } from '@inertiajs/react';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import TextField from '@/components/admin/section-fields/TextField';
 import ImageField from '@/components/admin/section-fields/ImageField';
 import JsonField from '@/components/admin/section-fields/JsonField';
 import JsonItemModal from '@/components/admin/section-fields/JsonItemModal';
+import TextField from '@/components/admin/section-fields/TextField';
 
 type Field = {
     key: string;
@@ -39,7 +39,7 @@ export default function SectionEditor({ section, fields }: Props) {
         },
     );
 
-    const [processing, setProcessing] = useState(false);
+
 
     // Modal state for editing JSON items
     const [activeModalField, setActiveModalField] = useState<string | null>(null);
@@ -260,6 +260,101 @@ export default function SectionEditor({ section, fields }: Props) {
         return () => clearTimeout(timer);
     }, [localFields, fields, performSave]);
 
+    const isNavbar = section === 'navbar';
+
+    const renderField = (field: Field) => {
+        switch (field.type) {
+            case 'text':
+                return (
+                    <TextField
+                        key={field.key}
+                        label={field.label}
+                        value={String(field.value ?? '')}
+                        onChange={(val) => handleChange(field.key, val)}
+                    />
+                );
+            case 'textarea':
+                return (
+                    <TextField
+                        key={field.key}
+                        label={field.label}
+                        value={String(field.value ?? '')}
+                        isTextArea
+                        onChange={(val) => handleChange(field.key, val)}
+                    />
+                );
+            case 'image':
+                return (
+                    <ImageField
+                        key={field.key}
+                        label={field.label}
+                        value={String(field.value ?? '')}
+                        previewUrl={previewUrls[field.key]}
+                        onChange={(val) => {
+                            handleChange(field.key, val);
+                            setPreviewUrls((p) => ({ ...p, [field.key]: val }));
+                        }}
+                        onUpload={(file) => handleImageUpload(file.key, file)}
+                    />
+                );
+            case 'json':
+                return (
+                    <JsonField
+                        key={field.key}
+                        label={field.label}
+                        fieldKey={field.key}
+                        items={getJsonItems(field)}
+                        onAdd={() => handleOpenAddModal(field.key, field)}
+                        onEdit={(idx, item) => handleOpenEditModal(field.key, idx, item)}
+                        onDelete={(idx) => removeJsonItem(field.key, idx)}
+                        onReorder={(newItems) => {
+                            setLocalFields((prev) =>
+                                prev.map((f) => (f.key === field.key ? { ...f, value: newItems } : f)),
+                            );
+                        }}
+                    />
+                );
+            default:
+                return null;
+        }
+    };
+
+    const jsonFields = localFields.filter((f) => f.type === 'json');
+    const nonJsonFields = localFields.filter((f) => f.type !== 'json');
+
+    const isFullWidthField = (field: Field) => {
+        if (field.type === 'textarea') {
+            return true;
+        }
+
+        const key = field.key.toLowerCase();
+
+        return (
+            key === 'brand_name' ||
+            key.includes('title') ||
+            key.includes('description') ||
+            key.includes('subtitle') ||
+            key.includes('address')
+        );
+    };
+
+    const renderCombinedNonJsonFields = (fields: Field[]) => {
+        return (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                {fields.map((field) => {
+                    const fullWidth = isFullWidthField(field);
+
+                    return (
+                        <div key={field.key} className={fullWidth ? 'md:col-span-2' : 'md:col-span-1'}>
+                            {renderField(field)}
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    };
+
+
     return (
         <div className="flex flex-col h-full bg-[#f8fafc] dark:bg-[#0f172a]">
             <Head title={`Edit ${sectionLabel}`} />
@@ -267,56 +362,53 @@ export default function SectionEditor({ section, fields }: Props) {
             <form onSubmit={(e) => e.preventDefault()} className="flex flex-col flex-1 min-h-0">
                 {/* Scrollable content area */}
                 <div className="flex-1 overflow-y-auto px-6 py-6 no-scrollbar">
-                    <div className="max-w-4xl space-y-6">
-                        {localFields.map((field) => (
-                            <div key={field.key} className="bg-white dark:bg-[#151d2a] rounded-2xl p-6 border border-slate-100 dark:border-slate-800/80 shadow-sm">
-                                {/* ── TEXT & TEXTAREA ──────────────── */}
-                                {field.type === 'text' && (
-                                    <TextField
-                                        label={field.label}
-                                        value={String(field.value ?? '')}
-                                        onChange={(val) => handleChange(field.key, val)}
-                                    />
-                                )}
+                    {jsonFields.length > 0 ? (
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-6xl mx-auto items-start">
+                            {/* Left Column: General Content Settings */}
+                            {nonJsonFields.length > 0 && (
+                                <div className="lg:col-span-5 bg-white dark:bg-[#151d2a] rounded-2xl p-6 border border-slate-200/60 dark:border-slate-800/80 shadow-sm space-y-4">
+                                    <div>
+                                        <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                                            {isNavbar ? 'Brand Settings' : `${sectionLabel} Settings`}
+                                        </h3>
+                                        <p className="text-[12px] text-slate-500 dark:text-slate-400">
+                                            {isNavbar
+                                                ? 'Kelola identitas brand dan tombol utama.'
+                                                : `Kelola pengaturan konten untuk section ${sectionLabel}.`}
+                                        </p>
+                                    </div>
+                                    <div className="border-t border-slate-100 dark:border-slate-800/80 my-3" />
+                                    {renderCombinedNonJsonFields(nonJsonFields)}
+                                </div>
+                            )}
 
-                                {field.type === 'textarea' && (
-                                    <TextField
-                                        label={field.label}
-                                        value={String(field.value ?? '')}
-                                        isTextArea
-                                        onChange={(val) => handleChange(field.key, val)}
-                                    />
-                                )}
-
-                                {/* ── IMAGE ────────────────────────── */}
-                                {field.type === 'image' && (
-                                    <ImageField
-                                        label={field.label}
-                                        value={String(field.value ?? '')}
-                                        previewUrl={previewUrls[field.key]}
-                                        onChange={(val) => {
-                                            handleChange(field.key, val);
-                                            setPreviewUrls((p) => ({ ...p, [field.key]: val }));
-                                        }}
-                                        onUpload={(file) => handleImageUpload(field.key, file)}
-                                    />
-                                )}
-
-                                {/* ── JSON (array of objects) ──────── */}
-                                {field.type === 'json' && (
-                                    <JsonField
-                                        label={field.label}
-                                        fieldKey={field.key}
-                                        items={getJsonItems(field)}
-                                        onAdd={() => handleOpenAddModal(field.key, field)}
-                                        onEdit={(idx, item) => handleOpenEditModal(field.key, idx, item)}
-                                        onDelete={(idx) => removeJsonItem(field.key, idx)}
-                                    />
-                                )}
+                            {/* Right Column: List Settings (JSON Fields) */}
+                            <div className={`${nonJsonFields.length > 0 ? 'lg:col-span-7' : 'lg:col-span-12'} space-y-6`}>
+                                {jsonFields.map((field) => (
+                                    <div key={field.key} className="bg-white dark:bg-[#151d2a] rounded-2xl p-6 border border-slate-200/60 dark:border-slate-800/80 shadow-sm">
+                                        {renderField(field)}
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
+                        </div>
+                    ) : (
+                        /* Single unified card layout if there are no JSON fields */
+                        <div className="max-w-3xl mx-auto bg-white dark:bg-[#151d2a] rounded-2xl p-6 border border-slate-200/60 dark:border-slate-800/80 shadow-sm space-y-4">
+                            <div>
+                                <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                                    {`${sectionLabel} Settings`}
+                                </h3>
+                                <p className="text-[12px] text-slate-500 dark:text-slate-400">
+                                    {`Kelola pengaturan konten untuk section ${sectionLabel}.`}
+                                </p>
+                            </div>
+                            <div className="border-t border-slate-100 dark:border-slate-800/80 my-3" />
+                            {renderCombinedNonJsonFields(nonJsonFields)}
+                        </div>
+                    )}
                 </div>
+
+
 
                 {/* ── Sticky Bottom Status Bar ──────────────── */}
                 <div className="border-t border-slate-100 dark:border-slate-800/80 bg-white/80 dark:bg-[#151d2a]/80 backdrop-blur-md px-6 py-4 mt-auto">

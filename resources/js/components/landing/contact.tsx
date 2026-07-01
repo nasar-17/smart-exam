@@ -1,6 +1,6 @@
 import { useForm } from '@inertiajs/react';
-import { Mail, MessageCircle, MapPin, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Mail, MessageCircle, MapPin, Clock } from 'lucide-react';
 
 export default function Contact({ data }: { data?: any }) {
     const {

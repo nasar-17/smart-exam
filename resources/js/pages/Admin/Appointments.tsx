@@ -1,7 +1,7 @@
 import { Head, router } from '@inertiajs/react';
-import AdminLayout from '@/components/admin/AdminLayout';
 import { Trash2, Calendar as CalendarIcon, Clock, Mail, PhoneCall, School, User } from 'lucide-react';
 import { toast } from 'sonner';
+import AdminLayout from '@/components/admin/AdminLayout';
 
 type Appointment = {
     id: number;
@@ -33,6 +33,7 @@ export default function Appointments({ appointments }: Props) {
 
     const formatDate = (dateStr: string) => {
         const date = new Date(dateStr);
+
         return date.toLocaleDateString('id-ID', {
             weekday: 'long',
             year: 'numeric',
@@ -43,6 +44,7 @@ export default function Appointments({ appointments }: Props) {
 
     const formatTime = (dateStr: string) => {
         const date = new Date(dateStr);
+
         return date.toLocaleTimeString('id-ID', {
             hour: '2-digit',
             minute: '2-digit',

@@ -1,6 +1,6 @@
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import DynamicLucideIcon from '@/components/dynamic-lucide-icon';
-import { motion, useScroll, useTransform } from 'framer-motion';
 
 const defaultSteps = [
     {
@@ -39,6 +39,7 @@ export default function HowItWorks({ data }: { data?: any }) {
         };
         checkMobile();
         window.addEventListener('resize', checkMobile);
+
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 

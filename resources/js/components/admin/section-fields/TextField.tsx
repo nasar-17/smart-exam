@@ -15,24 +15,25 @@ export default function TextField({
     onChange,
 }: TextFieldProps) {
     return (
-        <div>
-            <label className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300">
+        <div className="space-y-1.5">
+            <label className="block text-[13px] font-medium text-slate-500 dark:text-slate-400">
                 {label}
             </label>
             {isTextArea ? (
                 <textarea
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
-                    rows={4}
-                    className="w-full rounded-xl border-0 bg-[#f1f5f9] dark:bg-[#1e293b] px-4 py-3 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 shadow-none focus:bg-white dark:focus:bg-[#1e293b] focus:ring-2 focus:ring-blue-500/40 focus:outline-none transition-all resize-y ring-1 ring-slate-200/60 dark:ring-slate-700/60"
+                    rows={3}
+                    className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all resize-y"
                 />
             ) : (
                 <Input
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
-                    className="w-full rounded-xl border-0 bg-[#f1f5f9] dark:bg-[#1e293b] px-4 py-3 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 shadow-none focus:bg-white dark:focus:bg-[#1e293b] focus:ring-2 focus:ring-blue-500/40 focus:outline-none transition-all h-auto ring-1 ring-slate-200/60 dark:ring-slate-700/60"
+                    className="w-full h-11 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
                 />
             )}
         </div>
     );
 }
+

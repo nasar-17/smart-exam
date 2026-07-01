@@ -3,10 +3,10 @@ import type { ReactNode } from 'react';
 import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import type { NavItem } from '@/types';
 import { cn } from '@/lib/utils';
-import { edit as profileEdit } from '@/routes/profile';
 import { edit as appearanceEdit } from '@/routes/appearance';
+import { edit as profileEdit } from '@/routes/profile';
+import type { NavItem } from '@/types';
 
 const sidebarNavItems: NavItem[] = [
     {

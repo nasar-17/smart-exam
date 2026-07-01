@@ -15,12 +15,14 @@ export function getLucideIcon(name: string | undefined | null): React.ComponentT
     }
 
     const cacheKey = String(name);
+
     if (iconCache[cacheKey]) {
         return iconCache[cacheKey];
     }
 
     // 1. Clean the name
     let cleanName = name.trim();
+
     if (cleanName.toLowerCase().startsWith('lucide:')) {
         cleanName = cleanName.substring(7);
     }
@@ -29,6 +31,7 @@ export function getLucideIcon(name: string | undefined | null): React.ComponentT
     if (cleanName in LucideIcons) {
         const icon = (LucideIcons as any)[cleanName];
         iconCache[cacheKey] = icon;
+
         return icon;
     }
 
@@ -41,6 +44,7 @@ export function getLucideIcon(name: string | undefined | null): React.ComponentT
     if (pascalName in LucideIcons) {
         const icon = (LucideIcons as any)[pascalName];
         iconCache[cacheKey] = icon;
+
         return icon;
     }
 
@@ -49,11 +53,14 @@ export function getLucideIcon(name: string | undefined | null): React.ComponentT
     const lowerPascal = pascalName.toLowerCase();
     
     const allKeys = Object.keys(LucideIcons);
+
     for (const key of allKeys) {
         const lowerKey = key.toLowerCase();
+
         if (lowerKey === lowerClean || lowerKey === lowerPascal) {
             const icon = (LucideIcons as any)[key];
             iconCache[cacheKey] = icon;
+
             return icon;
         }
     }
@@ -78,6 +85,7 @@ export default function DynamicLucideIcon({
     ...props
 }: DynamicLucideIconProps) {
     const IconComponent = getLucideIcon(name);
+
     return (
         <IconComponent
             className={className}

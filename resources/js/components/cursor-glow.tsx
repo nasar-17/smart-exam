@@ -5,7 +5,10 @@ export default function CursorGlow() {
 
     useEffect(() => {
         const glow = glowRef.current;
-        if (!glow) return;
+
+        if (!glow) {
+return;
+}
 
         let mouseX = 0;
         let mouseY = 0;
@@ -16,6 +19,7 @@ export default function CursorGlow() {
         const onMouseMove = (e: MouseEvent) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
+
             if (!isVisible) {
                 glow.style.opacity = '1';
                 isVisible = true;
@@ -37,6 +41,7 @@ export default function CursorGlow() {
             if (glow) {
                 glow.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
             }
+
             requestAnimationFrame(updatePosition);
         };
 

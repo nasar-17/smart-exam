@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import LucideIconPicker from '@/components/lucide-icon-picker';
-import DynamicLucideIcon from '@/components/dynamic-lucide-icon';
 import { toast } from 'sonner';
+import DynamicLucideIcon from '@/components/dynamic-lucide-icon';
+import LucideIconPicker from '@/components/lucide-icon-picker';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 
 interface JsonItemModalProps {
     isOpen: boolean;
@@ -37,7 +37,11 @@ export default function JsonItemModal({
 
     return (
         <>
-            <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onCancel(); }}>
+            <Dialog open={isOpen} onOpenChange={(open) => {
+ if (!open) {
+onCancel();
+} 
+}}>
                 <DialogContent className="max-w-2xl bg-white dark:bg-[#151d2a] border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl">
                     <DialogHeader>
                         <DialogTitle className="text-slate-800 dark:text-slate-100">

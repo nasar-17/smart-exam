@@ -1,5 +1,5 @@
-import DynamicLucideIcon from '@/components/dynamic-lucide-icon';
 import { motion } from 'framer-motion';
+import DynamicLucideIcon from '@/components/dynamic-lucide-icon';
 
 const defaultFeatures = [
     {

@@ -1,7 +1,4 @@
 import { Link, usePage } from '@inertiajs/react';
-import { useEffect, useState, type PropsWithChildren } from 'react';
-import { useAppearance } from '@/hooks/use-appearance';
-import { toast } from 'sonner';
 import {
     Layout,
     Image,
@@ -22,6 +19,10 @@ import {
     Calendar,
     Settings,
 } from 'lucide-react';
+import { useEffect, useState  } from 'react';
+import type {PropsWithChildren} from 'react';
+import { toast } from 'sonner';
+import { useAppearance } from '@/hooks/use-appearance';
 
 interface AdminLayoutProps {
     title?: string;

@@ -1,14 +1,14 @@
 import { createInertiaApp } from '@inertiajs/react';
 import type { ReactNode } from 'react';
 import './echo';
+import AdminLayout from '@/components/admin/AdminLayout';
+import CursorGlow from '@/components/cursor-glow';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initializeTheme } from '@/hooks/use-appearance';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
-import AdminLayout from '@/components/admin/AdminLayout';
-import CursorGlow from '@/components/cursor-glow';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

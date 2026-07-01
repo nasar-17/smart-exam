@@ -1,5 +1,5 @@
-import { Star } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Star } from 'lucide-react';
 
 export default function Testimonials({ data }: { data?: any }) {
     const badge = data?.header_badge ?? 'Testimoni';
@@ -78,6 +78,7 @@ export default function Testimonials({ data }: { data?: any }) {
                     {loopItems.map((t: any, i: number) => {
                         const gradient = gradients[i % gradients.length];
                         const initials = t.initial || t.initials || (t.name ? t.name.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() : 'SE');
+
                         return (
                             <div
                                 key={i}

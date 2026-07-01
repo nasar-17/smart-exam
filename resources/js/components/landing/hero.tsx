@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { ArrowRight, Users, Star, CheckCircle, Award } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { ArrowRight, Users, Star, CheckCircle, Award } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export default function Hero({ data }: { data?: any }) {
     const badgeText = data?.badge_text ?? '500+ Institusi Aktif';
@@ -52,16 +52,20 @@ export default function Hero({ data }: { data?: any }) {
             if (!isDeleting) {
                 // Typing text
                 setCurrentText(currentFullWord.substring(0, currentText.length + 1));
+
                 if (currentText === currentFullWord) {
                     timer = setTimeout(() => setIsDeleting(true), 2000);
+
                     return;
                 }
             } else {
                 // Deleting text
                 setCurrentText(currentFullWord.substring(0, currentText.length - 1));
+
                 if (currentText === '') {
                     setIsDeleting(false);
                     setCurrentWordIndex((prev) => (prev + 1) % words.length);
+
                     return;
                 }
             }
@@ -71,6 +75,7 @@ export default function Hero({ data }: { data?: any }) {
         };
 
         timer = setTimeout(type, isDeleting ? 30 : 100);
+
         return () => clearTimeout(timer);
     }, [currentText, isDeleting, currentWordIndex]);
 

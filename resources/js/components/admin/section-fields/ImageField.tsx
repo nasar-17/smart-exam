@@ -1,5 +1,5 @@
-import React from 'react';
 import { Upload } from 'lucide-react';
+import React from 'react';
 import { Input } from '@/components/ui/input';
 
 interface ImageFieldProps {
@@ -18,8 +18,8 @@ export default function ImageField({
     onUpload,
 }: ImageFieldProps) {
     return (
-        <div>
-            <label className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300">
+        <div className="space-y-1.5">
+            <label className="block text-[13px] font-medium text-slate-500 dark:text-slate-400">
                 {label}
             </label>
             <div className="space-y-3">
@@ -27,11 +27,11 @@ export default function ImageField({
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
                     placeholder="URL gambar atau upload di bawah"
-                    className="w-full rounded-xl border-0 bg-[#f1f5f9] dark:bg-[#1e293b] px-4 py-3 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 shadow-none focus:bg-white dark:focus:bg-[#1e293b] focus:ring-2 focus:ring-blue-500/40 focus:outline-none transition-all h-auto ring-1 ring-slate-200/60 dark:ring-slate-700/60"
+                    className="w-full h-11 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
                 />
-                <div className="flex items-center gap-4">
-                    <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-white dark:bg-[#1e293b] hover:bg-slate-50 dark:hover:bg-[#334155] px-4 py-2.5 text-sm transition ring-1 ring-slate-200/60 dark:ring-slate-700/60 font-semibold text-slate-600 dark:text-slate-300">
-                        <Upload className="h-4 w-4" />
+                <div className="flex items-center gap-3">
+                    <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 px-3.5 py-2 text-xs font-semibold transition border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 shadow-sm h-9">
+                        <Upload className="h-3.5 w-3.5" />
                         Upload Gambar
                         <input
                             type="file"
@@ -39,6 +39,7 @@ export default function ImageField({
                             className="hidden"
                             onChange={(e) => {
                                 const file = e.target.files?.[0];
+
                                 if (file) {
                                     onUpload(file);
                                 }
@@ -49,7 +50,7 @@ export default function ImageField({
                         <img
                             src={previewUrl}
                             alt="Preview"
-                            className="h-16 w-auto rounded-xl ring-1 ring-slate-200/60 dark:ring-slate-700/60 object-cover"
+                            className="h-10 w-auto rounded-lg border border-slate-200 dark:border-slate-800 object-cover"
                         />
                     )}
                 </div>
@@ -57,3 +58,4 @@ export default function ImageField({
         </div>
     );
 }
+

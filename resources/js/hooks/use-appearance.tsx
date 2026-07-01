@@ -77,6 +77,7 @@ export function initializeTheme(): void {
 
     // Reset appearance if not set OR if user is on old "system" default
     const stored = localStorage.getItem('appearance');
+
     if (!stored || stored === 'system') {
         localStorage.setItem('appearance', 'light');
         setCookie('appearance', 'light');

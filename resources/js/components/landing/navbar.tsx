@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
 import { usePage, Link } from '@inertiajs/react';
 import { Sun, Moon } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useAppearance } from '@/hooks/use-appearance';
 
 const defaultNavLinks = [
@@ -30,6 +30,7 @@ export default function Navbar({ data }: { data?: any }) {
         // ScrollSpy logic using IntersectionObserver
         const sections = links.map((link: any) => {
             const id = link.href.replace('#', '');
+
             return document.getElementById(id);
         });
 
@@ -48,13 +49,17 @@ export default function Navbar({ data }: { data?: any }) {
         }, observerOptions);
 
         sections.forEach((section: any) => {
-            if (section) observer.observe(section);
+            if (section) {
+observer.observe(section);
+}
         });
 
         return () => {
             window.removeEventListener('scroll', handleScroll);
             sections.forEach((section: any) => {
-                if (section) observer.unobserve(section);
+                if (section) {
+observer.unobserve(section);
+}
             });
         };
     }, [links]);

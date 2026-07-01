@@ -1,5 +1,5 @@
-import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 
 const defaultInstitutions = [
     'UH|Universitas Hasanuddin',
@@ -243,6 +243,7 @@ export default function About({ data }: { data?: any }) {
                                 ...itemsInstitutions,
                             ].map((inst, index) => {
                                 const [abbr, name] = inst.split('|');
+
                                 return (
                                     <div
                                         key={index}

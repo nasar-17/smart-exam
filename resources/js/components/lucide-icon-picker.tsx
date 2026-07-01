@@ -84,6 +84,7 @@ export default function LucideIconPicker({ onSelect, onClose }: Props) {
     const openLucideGallery = () => {
         window.open('https://lucide.dev/icons', '_blank', 'noopener,noreferrer');
     };
+
     return (
         <div 
             className="space-y-4 p-1"
