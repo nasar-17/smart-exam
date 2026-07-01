@@ -2,15 +2,14 @@ import { motion } from 'framer-motion';
 
 export default function Stats({ data }: { data?: any }) {
     const defaults = [
-        { target: '500', suffix: '+', label: 'Sekolah & Institusi' },
-        { target: '1', suffix: ' Juta+', label: 'Ujian Diselenggarakan' },
-        { target: '98', suffix: '%', label: 'Tingkat Kepuasan' },
-        { target: '3', suffix: ' Menit', label: 'Setup Pertama' },
+        { value: '500+', label: 'Sekolah & Institusi' },
+        { value: '1 Juta+', label: 'Ujian Diselenggarakan' },
+        { value: '98%', label: 'Tingkat Kepuasan' },
+        { value: '3 Menit', label: 'Setup Pertama' },
     ];
     const stats = data
         ? [1, 2, 3, 4].map((i) => ({
-              target: data[`stat_${i}_value`] || defaults[i - 1].target,
-              suffix: data[`stat_${i}_suffix`] || defaults[i - 1].suffix,
+              value: data[`stat_${i}_value`] || defaults[i - 1].value,
               label: data[`stat_${i}_label`] || defaults[i - 1].label,
           }))
         : defaults;
@@ -41,7 +40,7 @@ export default function Stats({ data }: { data?: any }) {
                                 data-preview-field={`stat_${i + 1}_value`}
                                 style={{ fontFamily: "'Sora', sans-serif", color: 'var(--lp-blue-text)' }}
                             >
-                                {stat.target}<span data-preview-field={`stat_${i + 1}_suffix`}>{stat.suffix}</span>
+                                {stat.value}
                             </div>
                             <div 
                                 className="text-sm px-4" 

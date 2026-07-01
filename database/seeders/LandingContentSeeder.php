@@ -43,18 +43,14 @@ class LandingContentSeeder extends Seeder
             ['section' => 'hero', 'key' => 'card_rating',     'value' => '4.9',                                                                                     'type' => 'text',     'label' => 'Kartu Mini — Rating',             'order' => 17],
 
             // ── STATS ───────────────────────────────────────
-            ['section' => 'stats', 'key' => 'stat_1_value', 'value' => '500', 'type' => 'text', 'label' => 'Angka Stat 1', 'order' => 1],
-            ['section' => 'stats', 'key' => 'stat_1_suffix', 'value' => '+', 'type' => 'text', 'label' => 'Suffix Stat 1', 'order' => 2],
-            ['section' => 'stats', 'key' => 'stat_1_label', 'value' => 'Sekolah & Institusi', 'type' => 'text', 'label' => 'Label Stat 1', 'order' => 3],
-            ['section' => 'stats', 'key' => 'stat_2_value', 'value' => '1', 'type' => 'text', 'label' => 'Angka Stat 2', 'order' => 4],
-            ['section' => 'stats', 'key' => 'stat_2_suffix', 'value' => ' Juta+', 'type' => 'text', 'label' => 'Suffix Stat 2', 'order' => 5],
-            ['section' => 'stats', 'key' => 'stat_2_label', 'value' => 'Ujian Diselenggarakan', 'type' => 'text', 'label' => 'Label Stat 2', 'order' => 6],
-            ['section' => 'stats', 'key' => 'stat_3_value', 'value' => '98', 'type' => 'text', 'label' => 'Angka Stat 3', 'order' => 7],
-            ['section' => 'stats', 'key' => 'stat_3_suffix', 'value' => '%', 'type' => 'text', 'label' => 'Suffix Stat 3', 'order' => 8],
-            ['section' => 'stats', 'key' => 'stat_3_label', 'value' => 'Tingkat Kepuasan', 'type' => 'text', 'label' => 'Label Stat 3', 'order' => 9],
-            ['section' => 'stats', 'key' => 'stat_4_value', 'value' => '3', 'type' => 'text', 'label' => 'Angka Stat 4', 'order' => 10],
-            ['section' => 'stats', 'key' => 'stat_4_suffix', 'value' => ' Menit', 'type' => 'text', 'label' => 'Suffix Stat 4', 'order' => 11],
-            ['section' => 'stats', 'key' => 'stat_4_label', 'value' => 'Setup Pertama', 'type' => 'text', 'label' => 'Label Stat 4', 'order' => 12],
+            ['section' => 'stats', 'key' => 'stat_1_value', 'value' => '500+', 'type' => 'text', 'label' => 'Angka Statistik 1 (contoh: 500+)', 'order' => 1],
+            ['section' => 'stats', 'key' => 'stat_1_label', 'value' => 'Sekolah & Institusi', 'type' => 'text', 'label' => 'Label Stat 1', 'order' => 2],
+            ['section' => 'stats', 'key' => 'stat_2_value', 'value' => '1 Juta+', 'type' => 'text', 'label' => 'Angka Statistik 2 (contoh: 1 Juta+)', 'order' => 3],
+            ['section' => 'stats', 'key' => 'stat_2_label', 'value' => 'Ujian Diselenggarakan', 'type' => 'text', 'label' => 'Label Stat 2', 'order' => 4],
+            ['section' => 'stats', 'key' => 'stat_3_value', 'value' => '98%', 'type' => 'text', 'label' => 'Angka Statistik 3 (contoh: 98%)', 'order' => 5],
+            ['section' => 'stats', 'key' => 'stat_3_label', 'value' => 'Tingkat Kepuasan', 'type' => 'text', 'label' => 'Label Stat 3', 'order' => 6],
+            ['section' => 'stats', 'key' => 'stat_4_value', 'value' => '3 Menit', 'type' => 'text', 'label' => 'Angka Statistik 4 (contoh: 3 Menit)', 'order' => 7],
+            ['section' => 'stats', 'key' => 'stat_4_label', 'value' => 'Setup Pertama', 'type' => 'text', 'label' => 'Label Stat 4', 'order' => 8],
 
             // ── ABOUT ───────────────────────────────────────
             ['section' => 'about', 'key' => 'title', 'value' => 'Kami Percaya Teknologi Bisa Membuat', 'type' => 'text', 'label' => 'Judul (baris 1)', 'order' => 1],
