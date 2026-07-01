@@ -87,6 +87,7 @@ export default function Hero({ data }: { data?: any }) {
             {/* Background image & overlay */}
             <div
                 className="hero-bg-image absolute inset-0 z-0"
+                data-preview-field="hero_bg_image"
                 style={{ ...heroBgStyle, filter: 'brightness(0.35) saturate(0.7)' }}
             />
             <div className="hero-bg-overlay absolute inset-0 z-[1]" />
@@ -234,6 +235,7 @@ export default function Hero({ data }: { data?: any }) {
                                     src={heroImage}
                                     alt="Hero visual"
                                     className="h-full w-full object-cover object-center"
+                                    data-preview-field="hero_image"
                                 />
                             </motion.div>
 
@@ -263,7 +265,7 @@ export default function Hero({ data }: { data?: any }) {
                                     <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#E8580A]">
                                         <CheckCircle className="h-3 w-3 text-white" />
                                     </div>
-                                    <span className="text-xs font-semibold text-[#1a1a1a]">
+                                    <span className="text-xs font-semibold text-[#1a1a1a]" data-preview-field="float_q1">
                                         {floatQ1}
                                     </span>
                                 </motion.div>
@@ -294,7 +296,7 @@ export default function Hero({ data }: { data?: any }) {
                                     <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#2563EB]">
                                         <CheckCircle className="h-3 w-3 text-white" />
                                     </div>
-                                    <span className="text-xs font-semibold text-[#1a1a1a]">
+                                    <span className="text-xs font-semibold text-[#1a1a1a]" data-preview-field="float_q2">
                                         {floatQ2}
                                     </span>
                                 </motion.div>
@@ -331,18 +333,18 @@ export default function Hero({ data }: { data?: any }) {
                                         <Award className="h-5 w-5 text-[#2563EB]" />
                                     </div>
                                     <div>
-                                        <p className="text-xs font-bold text-[#1a1a1a]">
+                                        <p className="text-xs font-bold text-[#1a1a1a]" data-preview-field="card_title">
                                             {cardTitle}
                                         </p>
-                                        <p className="text-[10px] text-[#666]">
+                                        <p className="text-[10px] text-[#666]" data-preview-field="card_sub">
                                             {cardSub}
                                         </p>
-                                        <p className="text-sm font-extrabold text-[#0a0a0a]">
+                                        <p className="text-sm font-extrabold text-[#0a0a0a]" data-preview-field="card_price">
                                             {cardPrice}
                                         </p>
                                         <div className="flex items-center gap-0.5">
                                             <Star className="h-3 w-3 fill-[#f59e0b] text-[#f59e0b]" />
-                                            <span className="text-[10px] font-bold text-[#f59e0b]">
+                                            <span className="text-[10px] font-bold text-[#f59e0b]" data-preview-field="card_rating">
                                                 {cardRating}
                                             </span>
                                         </div>
@@ -380,10 +382,11 @@ export default function Hero({ data }: { data?: any }) {
                                     <p
                                         className="text-[2.2rem] leading-none font-black text-[#0a0a0a]"
                                         style={{ fontFamily: "'Sora', sans-serif" }}
+                                        data-preview-field="stat_pct"
                                     >
                                         {statPct}
                                     </p>
-                                    <p className="mt-0.5 text-xs font-medium whitespace-pre-line text-[#555]">
+                                    <p className="mt-0.5 text-xs font-medium whitespace-pre-line text-[#555]" data-preview-field="stat_label">
                                         {statLabel}
                                     </p>
                                 </motion.div>

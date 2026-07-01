@@ -51,8 +51,8 @@ export default function HowItWorks({ data }: { data?: any }) {
     const scaleY = useTransform(scrollYProgress, [0, 0.9], [0, 1]);
     const opacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
 
-    const title = data?.header_title ?? 'Langkah Mudah';
-    const titleHighlight = data?.header_title_highlight ?? 'Cara Kerja';
+    const title = data?.title ?? 'Langkah Mudah';
+    const titleHighlight = data?.title_highlight ?? 'Cara Kerja';
     const subtitle =
         data?.header_subtitle ??
         'Smart Exam dirancang untuk memudahkan proses ujian sekolah secara digital. Hanya butuh 4 langkah mudah.';
@@ -78,14 +78,14 @@ export default function HowItWorks({ data }: { data?: any }) {
                 >
                     <h2
                         className="mb-4 text-[40px] font-bold tracking-tight"
-                        data-preview-field="header_title"
+                        data-preview-field="title"
                         style={{
                             fontFamily: "'Sora', sans-serif",
                             color: 'var(--lp-text-primary)',
                         }}
                     >
                         {title}{' '}
-                        <span className="gradient-text" data-preview-field="header_title_highlight">{titleHighlight}</span>
+                        <span className="gradient-text" data-preview-field="title_highlight">{titleHighlight}</span>
                     </h2>
                     <p
                         className="mx-auto max-w-xl text-base"

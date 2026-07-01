@@ -14,13 +14,9 @@ class LandingContentRepository
 
     public function getFieldsBySection(string $section): Collection
     {
-        $query = LandingContent::where('section', $section);
-
-        if ($section === 'hero') {
-            $query->whereNotIn('key', ['cta_secondary_text', 'cta_secondary_link', 'hero_bg_image']);
-        }
-
-        return $query->orderBy('order')->get();
+        return LandingContent::where('section', $section)
+            ->orderBy('order')
+            ->get();
     }
 
     public function updateField(string $section, string $key, mixed $value): bool
