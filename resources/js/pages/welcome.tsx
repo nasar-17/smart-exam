@@ -84,10 +84,17 @@ export default function Welcome({ content = {}, sections = [] }: { content?: Con
                     [data-preview-field] {
                         outline: 3px solid transparent;
                         outline-offset: 3px;
-                        transition: outline-color 0.25s ease;
+                        transition: outline-color 0.2s ease, box-shadow 0.2s ease;
                     }
                     .preview-highlight-active {
-                        outline-color: rgba(59,130,246,0.9) !important;
+                        outline: 3px solid rgba(59,130,246,1) !important;
+                        outline-offset: 3px;
+                        box-shadow: 0 0 20px rgba(59,130,246,0.6), 0 0 40px rgba(59,130,246,0.3) !important;
+                        animation: preview-glow-pulse 1s ease-in-out infinite;
+                    }
+                    @keyframes preview-glow-pulse {
+                        0%, 100% { outline-color: rgba(59,130,246,1); box-shadow: 0 0 20px rgba(59,130,246,0.6), 0 0 40px rgba(59,130,246,0.3); }
+                        50% { outline-color: rgba(96,165,250,1); box-shadow: 0 0 30px rgba(59,130,246,0.9), 0 0 60px rgba(59,130,246,0.5); }
                     }
                 `}} />
                 <Component data={previewContent[previewSection]} />
