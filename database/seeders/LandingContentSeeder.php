@@ -13,8 +13,7 @@ class LandingContentSeeder extends Seeder
             // ── NAVBAR ──────────────────────────────────────
             ['section' => 'navbar', 'key' => 'brand_name', 'value' => 'Smart Exam', 'type' => 'text', 'label' => 'Nama Brand', 'order' => 1],
             ['section' => 'navbar', 'key' => 'cta_text', 'value' => 'Coba Gratis', 'type' => 'text', 'label' => 'Teks Tombol CTA', 'order' => 2],
-            ['section' => 'navbar', 'key' => 'cta_link', 'value' => '#pricing', 'type' => 'text', 'label' => 'Link Tombol CTA', 'order' => 3],
-            ['section' => 'navbar', 'key' => 'nav_links', 'type' => 'json', 'label' => 'Daftar Menu Navigasi (JSON)', 'order' => 4, 'value' => json_encode([
+            ['section' => 'navbar', 'key' => 'nav_links', 'type' => 'json', 'label' => 'Daftar Menu Navigasi (JSON)', 'order' => 3, 'value' => json_encode([
                 ['href' => '#hero', 'label' => 'Beranda'],
                 ['href' => '#about', 'label' => 'Tentang'],
                 ['href' => '#features', 'label' => 'Fitur'],
@@ -26,25 +25,23 @@ class LandingContentSeeder extends Seeder
 
             // ── HERO ────────────────────────────────────────
             ['section' => 'hero', 'key' => 'badge_text',      'value' => '500+ Institusi Aktif',                                                                   'type' => 'text',     'label' => 'Badge Text (kiri atas)',          'order' => 1],
-            ['section' => 'hero', 'key' => 'badge_link',      'value' => '#testimonials',                                                                          'type' => 'text',     'label' => 'Badge Link',                      'order' => 2],
-            ['section' => 'hero', 'key' => 'title',           'value' => 'Platform Ujian',                                                                         'type' => 'text',     'label' => 'Judul Baris 1',                   'order' => 3],
-            ['section' => 'hero', 'key' => 'title_accent',    'value' => 'Digital Modern, Aman & Adil, Praktis & Akurat',                                          'type' => 'text',     'label' => 'Judul Baris 2 (Looping teks animasi, pisahkan dengan koma)', 'order' => 4],
-            ['section' => 'hero', 'key' => 'subtitle',        'value' => 'Kelola soal, pantau peserta, dan analisis hasil — semua dalam satu platform yang cerdas, aman, dan efisien.', 'type' => 'textarea', 'label' => 'Subjudul',                        'order' => 5],
-            ['section' => 'hero', 'key' => 'social_proof_text', 'value' => 'Digunakan oleh 10.000+ guru',                                                          'type' => 'text',     'label' => 'Social Proof Teks',               'order' => 6],
-            ['section' => 'hero', 'key' => 'social_proof_sub',  'value' => '/ ★ 4.9 Rating',                                                                       'type' => 'text',     'label' => 'Social Proof Sub (rating)',        'order' => 7],
-            ['section' => 'hero', 'key' => 'cta_primary_text',  'value' => 'Mulai Gratis Sekarang',                                                                 'type' => 'text',     'label' => 'Teks CTA Primer',                 'order' => 8],
-            ['section' => 'hero', 'key' => 'cta_primary_link',  'value' => '#pricing',                                                                              'type' => 'text',     'label' => 'Link CTA Primer',                 'order' => 9],
+            ['section' => 'hero', 'key' => 'title',           'value' => 'Platform Ujian',                                                                         'type' => 'text',     'label' => 'Judul Baris 1',                   'order' => 2],
+            ['section' => 'hero', 'key' => 'title_accent',    'value' => 'Digital Modern, Aman & Adil, Praktis & Akurat',                                          'type' => 'text',     'label' => 'Judul Baris 2 (Looping teks animasi, pisahkan dengan koma)', 'order' => 3],
+            ['section' => 'hero', 'key' => 'subtitle',        'value' => 'Kelola soal, pantau peserta, dan analisis hasil — semua dalam satu platform yang cerdas, aman, dan efisien.', 'type' => 'textarea', 'label' => 'Subjudul',                        'order' => 4],
+            ['section' => 'hero', 'key' => 'social_proof_text', 'value' => 'Digunakan oleh 10.000+ guru',                                                          'type' => 'text',     'label' => 'Social Proof Teks',               'order' => 5],
+            ['section' => 'hero', 'key' => 'social_proof_sub',  'value' => '/ ★ 4.9 Rating',                                                                       'type' => 'text',     'label' => 'Social Proof Sub (rating)',        'order' => 6],
+            ['section' => 'hero', 'key' => 'cta_primary_text',  'value' => 'Mulai Gratis Sekarang',                                                                 'type' => 'text',     'label' => 'Teks CTA Primer',                 'order' => 7],
 
-            ['section' => 'hero', 'key' => 'hero_image',      'value' => '',                                                                                        'type' => 'image',    'label' => 'Gambar Hero (kanan, opsional)',    'order' => 10],
-            ['section' => 'hero', 'key' => 'hero_bg_image',   'value' => '',                                                                                        'type' => 'image',    'label' => 'Gambar Background Hero',          'order' => 10.5],
-            ['section' => 'hero', 'key' => 'stat_pct',        'value' => '98%',                                                                                     'type' => 'text',     'label' => 'Angka Statistik (badge kanan)',    'order' => 11],
-            ['section' => 'hero', 'key' => 'stat_label',      'value' => "Tingkat\nKepuasan",                                                                       'type' => 'text',     'label' => 'Label Statistik Badge',           'order' => 12],
-            ['section' => 'hero', 'key' => 'float_q1',        'value' => 'Ujian Aman & Anti-Kecurangan?',                                                           'type' => 'text',     'label' => 'Floating Tag 1 (di atas gambar)', 'order' => 13],
-            ['section' => 'hero', 'key' => 'float_q2',        'value' => 'Laporan Otomatis Tersedia?',                                                              'type' => 'text',     'label' => 'Floating Tag 2 (di bawah tag 1)', 'order' => 14],
-            ['section' => 'hero', 'key' => 'card_title',      'value' => 'Smart Exam',                                                                              'type' => 'text',     'label' => 'Kartu Mini — Nama Produk',        'order' => 15],
-            ['section' => 'hero', 'key' => 'card_sub',        'value' => 'Ujian Digital',                                                                           'type' => 'text',     'label' => 'Kartu Mini — Sub Teks',           'order' => 16],
-            ['section' => 'hero', 'key' => 'card_price',      'value' => 'Gratis Trial',                                                                            'type' => 'text',     'label' => 'Kartu Mini — Harga/CTA',         'order' => 17],
-            ['section' => 'hero', 'key' => 'card_rating',     'value' => '4.9',                                                                                     'type' => 'text',     'label' => 'Kartu Mini — Rating',             'order' => 18],
+            ['section' => 'hero', 'key' => 'hero_image',      'value' => '',                                                                                        'type' => 'image',    'label' => 'Gambar Hero (kanan, opsional)',    'order' => 8],
+            ['section' => 'hero', 'key' => 'hero_bg_image',   'value' => '',                                                                                        'type' => 'image',    'label' => 'Gambar Background Hero',          'order' => 9],
+            ['section' => 'hero', 'key' => 'stat_pct',        'value' => '98%',                                                                                     'type' => 'text',     'label' => 'Angka Statistik (badge kanan)',    'order' => 10],
+            ['section' => 'hero', 'key' => 'stat_label',      'value' => "Tingkat\nKepuasan",                                                                       'type' => 'text',     'label' => 'Label Statistik Badge',           'order' => 11],
+            ['section' => 'hero', 'key' => 'float_q1',        'value' => 'Ujian Aman & Anti-Kecurangan?',                                                           'type' => 'text',     'label' => 'Floating Tag 1 (di atas gambar)', 'order' => 12],
+            ['section' => 'hero', 'key' => 'float_q2',        'value' => 'Laporan Otomatis Tersedia?',                                                              'type' => 'text',     'label' => 'Floating Tag 2 (di bawah tag 1)', 'order' => 13],
+            ['section' => 'hero', 'key' => 'card_title',      'value' => 'Smart Exam',                                                                              'type' => 'text',     'label' => 'Kartu Mini — Nama Produk',        'order' => 14],
+            ['section' => 'hero', 'key' => 'card_sub',        'value' => 'Ujian Digital',                                                                           'type' => 'text',     'label' => 'Kartu Mini — Sub Teks',           'order' => 15],
+            ['section' => 'hero', 'key' => 'card_price',      'value' => 'Gratis Trial',                                                                            'type' => 'text',     'label' => 'Kartu Mini — Harga/CTA',         'order' => 16],
+            ['section' => 'hero', 'key' => 'card_rating',     'value' => '4.9',                                                                                     'type' => 'text',     'label' => 'Kartu Mini — Rating',             'order' => 17],
 
             // ── STATS ───────────────────────────────────────
             ['section' => 'stats', 'key' => 'stat_1_value', 'value' => '500', 'type' => 'text', 'label' => 'Angka Stat 1', 'order' => 1],
