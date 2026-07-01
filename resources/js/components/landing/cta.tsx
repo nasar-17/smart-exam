@@ -117,10 +117,11 @@ export default function CTA({ data }: { data?: any }) {
 
                     <h2
                         className="mb-5 text-[38px] leading-tight font-bold tracking-tight md:text-[50px]"
+                        data-preview-field="title"
                         style={{ color: 'var(--lp-text-primary)', fontFamily: "'Sora', sans-serif" }}
                         dangerouslySetInnerHTML={{ __html: title }}
                     />
-                    <p className="mx-auto mb-10 max-w-2xl text-lg" style={{ color: 'var(--lp-text-secondary)' }}>
+                    <p className="mx-auto mb-10 max-w-2xl text-lg" data-preview-field="subtitle" style={{ color: 'var(--lp-text-secondary)' }}>
                         {subtitle}
                     </p>
                     <div className="mb-8 flex flex-wrap items-center justify-center gap-4">
@@ -142,15 +143,17 @@ export default function CTA({ data }: { data?: any }) {
                         style={{ borderColor: 'var(--lp-border-subtle)' }}
                     >
                         {[
-                            { icon: Lock, text: badge1 },
-                            { icon: Zap, text: badge2 },
+                            { icon: Lock, text: badge1, field: 'badge_1' },
+                            { icon: Zap, text: badge2, field: 'badge_2' },
                             {
                                 icon: CreditCard,
                                 text: badge3,
+                                field: 'badge_3',
                             },
                         ].map((badge, i) => (
                             <div
                                 key={i}
+                                data-preview-field={badge.field}
                                 className="flex items-center gap-2 text-xs" style={{ color: 'var(--lp-text-muted)' }}
                             >
                                 <badge.icon className="h-3.5 w-3.5" style={{ color: 'var(--lp-blue-icon)' }} />

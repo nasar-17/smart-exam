@@ -78,6 +78,7 @@ export default function HowItWorks({ data }: { data?: any }) {
                 >
                     <h2
                         className="mb-4 text-[40px] font-bold tracking-tight"
+                        data-preview-field="header_title"
                         style={{
                             fontFamily: "'Sora', sans-serif",
                             color: 'var(--lp-text-primary)',
@@ -88,6 +89,7 @@ export default function HowItWorks({ data }: { data?: any }) {
                     </h2>
                     <p
                         className="mx-auto max-w-xl text-base"
+                        data-preview-field="header_subtitle"
                         style={{ color: 'var(--lp-text-secondary)' }}
                     >
                         {subtitle}

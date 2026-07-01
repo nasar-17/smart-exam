@@ -40,11 +40,18 @@ export default function Stats({ data }: { data?: any }) {
                                 className="stat-num mb-1 text-4xl font-bold tracking-tight"
                                 data-target={stat.target}
                                 data-suffix={stat.suffix}
+                                data-preview-field={`stat_${i + 1}_value`}
                                 style={{ fontFamily: "'Sora', sans-serif", color: 'var(--lp-blue-text)' }}
                             >
-                                0{stat.suffix}
+                                {stat.target}{stat.suffix}
                             </div>
-                            <div className="text-sm px-4" style={{ color: 'var(--lp-text-muted)' }}>{stat.label}</div>
+                            <div 
+                                className="text-sm px-4" 
+                                data-preview-field={`stat_${i + 1}_label`}
+                                style={{ color: 'var(--lp-text-muted)' }}
+                            >
+                                {stat.label}
+                            </div>
                         </motion.div>
                     ))}
                 </div>

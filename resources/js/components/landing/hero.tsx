@@ -102,7 +102,7 @@ export default function Hero({ data }: { data?: any }) {
                         className="flex flex-col"
                     >
                         {/* Badge */}
-                        <div className="mb-8 flex items-center gap-2">
+                        <div className="mb-8 flex items-center gap-2" data-preview-field="badge_text">
                             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm">
                                 <Users className="h-[15px] w-[15px] text-white" />
                             </div>
@@ -121,6 +121,7 @@ export default function Hero({ data }: { data?: any }) {
                         {/* Headline */}
                         <h1
                             className="mb-6 text-white"
+                            data-preview-field="title"
                             style={{
                                 fontFamily: "'Sora', sans-serif",
                                 fontSize: 'clamp(2.2rem, 4.8vw, 3.6rem)',
@@ -143,6 +144,7 @@ export default function Hero({ data }: { data?: any }) {
                         {/* Subtitle */}
                         <p
                             className="mb-8 max-w-[460px] text-white/70"
+                            data-preview-field="subtitle"
                             style={{
                                 fontFamily: "'Satoshi', sans-serif",
                                 fontSize: 'clamp(0.95rem, 1.6vw, 1.1rem)',

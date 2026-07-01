@@ -81,6 +81,7 @@ export default function About({ data }: { data?: any }) {
                     >
                         <div
                             className="mb-6 inline-block rounded-full px-4 py-1.5 text-xs font-bold tracking-wider uppercase"
+                            data-preview-field="badge"
                             style={{
                                 fontFamily: "'Sora', sans-serif",
                                 background: 'var(--lp-blue-light)',
@@ -92,6 +93,7 @@ export default function About({ data }: { data?: any }) {
 
                         <h2
                             className="mb-6 text-[38px] leading-tight font-bold tracking-tight"
+                            data-preview-field="title"
                             style={{
                                 fontFamily: "'Sora', sans-serif",
                                 color: 'var(--lp-text-primary)',
@@ -103,18 +105,20 @@ export default function About({ data }: { data?: any }) {
                                 {titleHighlight}
                             </span>
                         </h2>
-                        <p
-                            className="mb-4 text-base leading-relaxed"
-                            style={{ color: 'var(--lp-text-secondary)' }}
-                        >
-                            {paragraph1}
-                        </p>
-                        <p
-                            className="mb-8 text-base leading-relaxed"
-                            style={{ color: 'var(--lp-text-secondary)' }}
-                        >
-                            {paragraph2}
-                        </p>
+                        <div data-preview-field="description">
+                            <p
+                                className="mb-4 text-base leading-relaxed"
+                                style={{ color: 'var(--lp-text-secondary)' }}
+                            >
+                                {paragraph1}
+                            </p>
+                            <p
+                                className="mb-8 text-base leading-relaxed"
+                                style={{ color: 'var(--lp-text-secondary)' }}
+                            >
+                                {paragraph2}
+                            </p>
+                        </div>
                     </motion.div>
                 </div>
 

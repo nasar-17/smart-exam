@@ -1,6 +1,7 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
+import { Monitor, Smartphone } from 'lucide-react';
 
 import ImageField from '@/components/admin/section-fields/ImageField';
 import JsonField from '@/components/admin/section-fields/JsonField';
@@ -21,7 +22,23 @@ type Props = {
 };
 
 export default function SectionEditor({ section, fields }: Props) {
-    const [localFields, setLocalFields] = useState<Field[]>(fields);
+    const [localFields, setLocalFields] = useState<Field[]>(() => {
+        return fields.map((f) => {
+            if (f.type === 'json' && Array.isArray(f.value)) {
+                return {
+                    ...f,
+                    value: f.value.map((item) => {
+                        if (item && typeof item === 'object' && item._is_primitive_string) {
+                            return item.value;
+                        }
+                        return item;
+                    }),
+                };
+            }
+            return f;
+        });
+    });
+    const [viewport, setViewport] = useState<'desktop' | 'mobile'>('desktop');
     const [previewUrls, setPreviewUrls] = useState<Record<string, string>>(
         () => {
             const urls: Record<string, string> = {};
@@ -38,6 +55,41 @@ export default function SectionEditor({ section, fields }: Props) {
             return urls;
         },
     );
+
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [containerWidth, setContainerWidth] = useState(800);
+    const iframeRef = useRef<HTMLIFrameElement>(null);
+
+    const sendPreviewData = useCallback(() => {
+        if (iframeRef.current && iframeRef.current.contentWindow) {
+            const previewData = localFields.reduce<Record<string, any>>((acc, f) => {
+                acc[f.key] = f.value;
+                return acc;
+            }, {});
+
+            iframeRef.current.contentWindow.postMessage({
+                type: 'smartexam-preview',
+                data: {
+                    [section]: previewData
+                }
+            }, '*');
+        }
+    }, [localFields, section]);
+
+    useEffect(() => {
+        if (!containerRef.current) return;
+        const observer = new ResizeObserver((entries) => {
+            for (let entry of entries) {
+                setContainerWidth(entry.contentRect.width);
+            }
+        });
+        observer.observe(containerRef.current);
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
+        sendPreviewData();
+    }, [sendPreviewData]);
 
 
 
@@ -222,10 +274,21 @@ export default function SectionEditor({ section, fields }: Props) {
 
     const performSave = useCallback((fieldsToSave: Field[]) => {
         setSaveStatus('saving');
-        const formFields = fieldsToSave.map((f) => ({
-            key: f.key,
-            value: f.value,
-        }));
+        const formFields = fieldsToSave.map((f) => {
+            let val = f.value;
+            if (f.type === 'json' && Array.isArray(val)) {
+                val = val.map((item) => {
+                    if (item && typeof item === 'object' && item._is_primitive_string) {
+                        return item.value;
+                    }
+                    return item;
+                });
+            }
+            return {
+                key: f.key,
+                value: val,
+            };
+        });
         
         router.post(
             `/admin/sections/${section}`,
@@ -260,61 +323,98 @@ export default function SectionEditor({ section, fields }: Props) {
 
     const isNavbar = section === 'navbar';
 
-    const renderField = (field: Field) => {
-        switch (field.type) {
-            case 'text':
-                return (
-                    <TextField
-                        key={field.key}
-                        label={field.label}
-                        value={String(field.value ?? '')}
-                        onChange={(val) => handleChange(field.key, val)}
-                    />
-                );
-            case 'textarea':
-                return (
-                    <TextField
-                        key={field.key}
-                        label={field.label}
-                        value={String(field.value ?? '')}
-                        isTextArea
-                        onChange={(val) => handleChange(field.key, val)}
-                    />
-                );
-            case 'image':
-                return (
-                    <ImageField
-                        key={field.key}
-                        label={field.label}
-                        value={String(field.value ?? '')}
-                        previewUrl={previewUrls[field.key]}
-                        onChange={(val) => {
-                            handleChange(field.key, val);
-                            setPreviewUrls((p) => ({ ...p, [field.key]: val }));
-                        }}
-                        onUpload={(file) => handleImageUpload(field.key, file)}
-                    />
-                );
-            case 'json':
-                return (
-                    <JsonField
-                        key={field.key}
-                        label={field.label}
-                        fieldKey={field.key}
-                        items={getJsonItems(field)}
-                        onAdd={() => handleOpenAddModal(field.key, field)}
-                        onEdit={(idx, item) => handleOpenEditModal(field.key, idx, item)}
-                        onDelete={(idx) => removeJsonItem(field.key, idx)}
-                        onReorder={(newItems) => {
-                            setLocalFields((prev) =>
-                                prev.map((f) => (f.key === field.key ? { ...f, value: newItems } : f)),
-                            );
-                        }}
-                    />
-                );
-            default:
-                return null;
+    const handleFieldFocus = (key: string) => {
+        console.log('[SectionEditor] handleFieldFocus:', key, '| iframeRef:', iframeRef.current);
+        if (iframeRef.current && iframeRef.current.contentWindow) {
+            console.log('[SectionEditor] Sending postMessage smartexam-focus-field:', key);
+            iframeRef.current.contentWindow.postMessage({
+                type: 'smartexam-focus-field',
+                fieldKey: key,
+            }, '*');
+        } else {
+            console.warn('[SectionEditor] iframeRef.current is null or contentWindow missing!');
         }
+    };
+
+    const renderField = (field: Field) => {
+        const renderFieldContent = () => {
+            switch (field.type) {
+                case 'text':
+                    return (
+                        <TextField
+                            key={field.key}
+                            label={field.label}
+                            value={String(field.value ?? '')}
+                            onChange={(val) => handleChange(field.key, val)}
+                        />
+                    );
+                case 'textarea':
+                    return (
+                        <TextField
+                            key={field.key}
+                            label={field.label}
+                            value={String(field.value ?? '')}
+                            isTextArea
+                            onChange={(val) => handleChange(field.key, val)}
+                        />
+                    );
+                case 'image':
+                    return (
+                        <ImageField
+                            key={field.key}
+                            label={field.label}
+                            value={String(field.value ?? '')}
+                            previewUrl={previewUrls[field.key]}
+                            onChange={(val) => {
+                                handleChange(field.key, val);
+                                setPreviewUrls((p) => ({ ...p, [field.key]: val }));
+                            }}
+                            onUpload={(file) => handleImageUpload(field.key, file)}
+                        />
+                    );
+                case 'json':
+                    return (
+                        <JsonField
+                            key={field.key}
+                            label={field.label}
+                            fieldKey={field.key}
+                            items={getJsonItems(field)}
+                            onAdd={() => handleOpenAddModal(field.key, field)}
+                            onEdit={(idx, item) => handleOpenEditModal(field.key, idx, item)}
+                            onDelete={(idx) => removeJsonItem(field.key, idx)}
+                            onReorder={(newItems) => {
+                                const unwrappedItems = newItems.map((item) => {
+                                    if (item && typeof item === 'object' && item._is_primitive_string) {
+                                        return item.value;
+                                    }
+                                    return item;
+                                });
+                                setLocalFields((prev) =>
+                                    prev.map((f) => (f.key === field.key ? { ...f, value: unwrappedItems } : f)),
+                                );
+                            }}
+                        />
+                    );
+                default:
+                    return null;
+            }
+        };
+
+        return (
+            <div
+                onMouseEnter={() => handleFieldFocus(field.key)}
+                onMouseLeave={() => {
+                    if (iframeRef.current?.contentWindow) {
+                        iframeRef.current.contentWindow.postMessage({
+                            type: 'smartexam-blur-field',
+                            fieldKey: field.key,
+                        }, '*');
+                    }
+                }}
+            >
+                {renderFieldContent()}
+            </div>
+        );
     };
 
     const jsonFields = localFields.filter((f) => f.type === 'json');
@@ -343,7 +443,10 @@ export default function SectionEditor({ section, fields }: Props) {
                     const fullWidth = isFullWidthField(field);
 
                     return (
-                        <div key={field.key} className={fullWidth ? (cols === 3 ? 'md:col-span-3' : 'md:col-span-2') : 'md:col-span-1'}>
+                        <div 
+                            key={field.key} 
+                            className={fullWidth ? (cols === 3 ? 'md:col-span-3' : 'md:col-span-2') : 'md:col-span-1'}
+                        >
                             {renderField(field)}
                         </div>
                     );
@@ -357,104 +460,180 @@ export default function SectionEditor({ section, fields }: Props) {
         <div className="flex flex-col h-full bg-[#f8fafc] dark:bg-[#0f172a]">
             <Head title={`Edit ${sectionLabel}`} />
 
-            <form onSubmit={(e) => e.preventDefault()} className="flex flex-col flex-1 min-h-0">
-                {/* Scrollable content area */}
-                <div className="flex-1 overflow-y-auto px-6 py-6 no-scrollbar">
-                    {jsonFields.length > 0 ? (
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-6xl mx-auto items-start">
-                            {/* Left Column: General Content Settings */}
-                            {nonJsonFields.length > 0 && (
-                                <div className="lg:col-span-5 bg-white dark:bg-[#151d2a] rounded-2xl p-6 border border-slate-200/60 dark:border-slate-800/80 shadow-sm space-y-4">
-                                    <div>
-                                        <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                                            {isNavbar ? 'Brand Settings' : `${sectionLabel} Settings`}
-                                        </h3>
-                                        <p className="text-[12px] text-slate-500 dark:text-slate-400">
-                                            {isNavbar
-                                                ? 'Kelola identitas brand dan tombol utama.'
-                                                : `Kelola pengaturan konten untuk section ${sectionLabel}.`}
-                                        </p>
+            <form onSubmit={(e) => e.preventDefault()} className="flex flex-col lg:flex-row flex-1 min-h-0 overflow-hidden">
+                {/* Left Side: Form Editor */}
+                <div className="w-full lg:w-1/2 flex flex-col min-h-0 border-r border-slate-200/60 dark:border-slate-800/80 bg-white dark:bg-[#151d2a]">
+                    <div className="flex-1 overflow-y-auto px-6 py-6 no-scrollbar space-y-6">
+                        {jsonFields.length > 0 ? (
+                            <div className="space-y-6">
+                                {/* Left Column: General Content Settings */}
+                                {nonJsonFields.length > 0 && (
+                                    <div className="bg-white dark:bg-[#151d2a] rounded-2xl p-6 border border-slate-200/60 dark:border-slate-800/80 shadow-sm space-y-4">
+                                        <div>
+                                            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                                                {isNavbar ? 'Brand Settings' : `${sectionLabel} Settings`}
+                                            </h3>
+                                            <p className="text-[12px] text-slate-500 dark:text-slate-400">
+                                                {isNavbar
+                                                    ? 'Kelola identitas brand dan tombol utama.'
+                                                    : `Kelola pengaturan konten untuk section ${sectionLabel}.`}
+                                            </p>
+                                        </div>
+                                        <div className="border-t border-slate-100 dark:border-slate-800/80 my-3" />
+                                        {renderCombinedNonJsonFields(nonJsonFields, 2)}
                                     </div>
-                                    <div className="border-t border-slate-100 dark:border-slate-800/80 my-3" />
-                                    {renderCombinedNonJsonFields(nonJsonFields)}
-                                </div>
-                            )}
+                                )}
 
-                            {/* Right Column: List Settings (JSON Fields) */}
-                            <div className={`${nonJsonFields.length > 0 ? 'lg:col-span-7' : 'lg:col-span-12'} space-y-6`}>
-                                {jsonFields.map((field) => (
-                                    <div key={field.key} className="bg-white dark:bg-[#151d2a] rounded-2xl p-6 border border-slate-200/60 dark:border-slate-800/80 shadow-sm">
-                                        {renderField(field)}
-                                    </div>
-                                ))}
+                                {/* Right Column: List Settings (JSON Fields) */}
+                                <div className="space-y-6">
+                                    {jsonFields.map((field) => (
+                                        <div key={field.key} className="bg-white dark:bg-[#151d2a] rounded-2xl p-6 border border-slate-200/60 dark:border-slate-800/80 shadow-sm">
+                                            {renderField(field)}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : (
+                            /* Single unified card layout if there are no JSON fields (rendered in 3 columns for desktop) */
+                            <div className="bg-white dark:bg-[#151d2a] rounded-2xl p-6 border border-slate-200/60 dark:border-slate-800/80 shadow-sm space-y-4">
+                                <div>
+                                    <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                                        {`${sectionLabel} Settings`}
+                                    </h3>
+                                    <p className="text-[12px] text-slate-500 dark:text-slate-400">
+                                        {`Kelola pengaturan konten untuk section ${sectionLabel}.`}
+                                    </p>
+                                </div>
+                                <div className="border-t border-slate-100 dark:border-slate-800/80 my-3" />
+                                {renderCombinedNonJsonFields(nonJsonFields, 3)}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Sticky Bottom Status Bar (Left side only) */}
+                    <div className="border-t border-slate-100 dark:border-slate-800/80 bg-white/80 dark:bg-[#151d2a]/80 backdrop-blur-md px-6 py-4 mt-auto">
+                        <div className="flex items-center justify-between">
+                            <Link
+                                href="/admin"
+                                className="text-sm font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors px-4 py-2 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200/50 dark:border-slate-700/50"
+                            >
+                                Kembali
+                            </Link>
+                            
+                            <div className="flex items-center gap-4">
+                                <button
+                                    type="button"
+                                    onClick={() => performSave(localFields)}
+                                    disabled={saveStatus === 'saving' || saveStatus === 'saved'}
+                                    className={`text-sm font-semibold px-5 py-2.5 rounded-xl transition-all shadow-sm ${
+                                        saveStatus === 'saving'
+                                            ? 'bg-blue-400 text-white cursor-not-allowed'
+                                            : saveStatus === 'saved'
+                                              ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed border border-slate-200/50 dark:border-slate-700/50'
+                                              : 'bg-blue-600 hover:bg-blue-700 text-white cursor-pointer'
+                                    }`}
+                                >
+                                    {saveStatus === 'saving' ? 'Menyimpan...' : 'Simpan Perubahan'}
+                                </button>
+
+                                <div className="flex items-center gap-2 text-xs font-semibold">
+                                    {saveStatus === 'saved' && (
+                                        <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+                                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                                            Tersimpan
+                                        </span>
+                                    )}
+                                    {saveStatus === 'dirty' && (
+                                        <span className="flex items-center gap-1.5 text-amber-500 animate-pulse">
+                                            <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                                            Ada perubahan
+                                        </span>
+                                    )}
+                                    {saveStatus === 'error' && (
+                                        <span className="flex items-center gap-1.5 text-rose-500">
+                                            <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+                                            Gagal
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                         </div>
-                    ) : (
-                        /* Single unified card layout if there are no JSON fields */
-                        <div className="max-w-5xl mx-auto bg-white dark:bg-[#151d2a] rounded-2xl p-6 border border-slate-200/60 dark:border-slate-800/80 shadow-sm space-y-4">
-                            <div>
-                                <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                                    {`${sectionLabel} Settings`}
-                                </h3>
-                                <p className="text-[12px] text-slate-500 dark:text-slate-400">
-                                    {`Kelola pengaturan konten untuk section ${sectionLabel}.`}
-                                </p>
-                            </div>
-                            <div className="border-t border-slate-100 dark:border-slate-800/80 my-3" />
-                            {renderCombinedNonJsonFields(nonJsonFields, 3)}
-                        </div>
-                    )}
+                    </div>
                 </div>
 
-
-
-                {/* ── Sticky Bottom Status Bar ──────────────── */}
-                <div className="border-t border-slate-100 dark:border-slate-800/80 bg-white/80 dark:bg-[#151d2a]/80 backdrop-blur-md px-6 py-4 mt-auto">
-                    <div className="flex items-center justify-between max-w-4xl">
-                        <Link
-                            href="/admin"
-                            className="text-sm font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors px-4 py-2 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200/50 dark:border-slate-700/50"
-                        >
-                            Kembali ke Dashboard
-                        </Link>
-                        
-                        <div className="flex items-center gap-4">
+                {/* Right Side: Live Preview Panel */}
+                <div className="hidden lg:flex lg:w-1/2 flex-col min-h-0 bg-slate-50 dark:bg-[#0b0f19]">
+                    {/* Toolbar */}
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200/60 dark:border-slate-800/80 bg-white dark:bg-[#151d2a]">
+                        <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">Live Preview ({sectionLabel})</span>
+                        <div className="flex items-center bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl border border-slate-200/50 dark:border-slate-700/50">
                             <button
                                 type="button"
-                                onClick={() => performSave(localFields)}
-                                disabled={saveStatus === 'saving' || saveStatus === 'saved'}
-                                className={`text-sm font-semibold px-5 py-2.5 rounded-xl transition-all shadow-sm ${
-                                    saveStatus === 'saving'
-                                        ? 'bg-blue-400 text-white cursor-not-allowed'
-                                        : saveStatus === 'saved'
-                                          ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed border border-slate-200/50 dark:border-slate-700/50'
-                                          : 'bg-blue-600 hover:bg-blue-700 text-white cursor-pointer'
+                                onClick={() => setViewport('desktop')}
+                                className={`p-1.5 rounded-lg transition-colors ${
+                                    viewport === 'desktop'
+                                        ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 shadow-sm'
+                                        : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'
                                 }`}
+                                title="Desktop View"
                             >
-                                {saveStatus === 'saving' ? 'Menyimpan...' : 'Simpan Perubahan'}
+                                <Monitor className="h-4 w-4" />
                             </button>
-
-                            <div className="flex items-center gap-2 text-xs font-semibold">
-                                {saveStatus === 'saved' && (
-                                    <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
-                                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                                        Semua perubahan telah disimpan
-                                    </span>
-                                )}
-                                {saveStatus === 'dirty' && (
-                                    <span className="flex items-center gap-1.5 text-amber-500 animate-pulse">
-                                        <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                                        Ada perubahan yang belum disimpan
-                                    </span>
-                                )}
-                                {saveStatus === 'error' && (
-                                    <span className="flex items-center gap-1.5 text-rose-500">
-                                        <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
-                                        Gagal menyimpan perubahan
-                                    </span>
-                                )}
-                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setViewport('mobile')}
+                                className={`p-1.5 rounded-lg transition-colors ${
+                                    viewport === 'mobile'
+                                        ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 shadow-sm'
+                                        : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'
+                                }`}
+                                title="Mobile View"
+                             >
+                                <Smartphone className="h-4 w-4" />
+                            </button>
                         </div>
+                    </div>
+
+                    {/* Preview Viewport Frame */}
+                    <div ref={containerRef} className="flex-1 overflow-hidden p-6 flex justify-center items-center w-full">
+                        {viewport === 'desktop' ? (
+                            <div 
+                                className="w-full transition-all duration-300 ease-in-out border border-slate-200/60 dark:border-slate-800/80 rounded-2xl shadow-xl overflow-hidden relative"
+                                style={{ 
+                                    height: `${Math.max(100, containerWidth * (9 / 16))}px`
+                                }}
+                            >
+                                <iframe
+                                    ref={iframeRef}
+                                    src={`/?preview_section=${section}`}
+                                    onLoad={sendPreviewData}
+                                    tabIndex={-1}
+                                    style={{
+                                        width: '1280px',
+                                        height: '720px',
+                                        transform: `scale(${Math.max(0.1, containerWidth / 1280)})`,
+                                        transformOrigin: 'top left',
+                                        border: '0',
+                                        outline: '0',
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                    }}
+                                />
+                            </div>
+                        ) : (
+                            <div 
+                                className="w-full max-w-[375px] aspect-[9/16] transition-all duration-300 ease-in-out border border-slate-200/60 dark:border-slate-800/80 rounded-2xl shadow-xl overflow-hidden relative"
+                            >
+                                <iframe
+                                    ref={iframeRef}
+                                    src={`/?preview_section=${section}`}
+                                    onLoad={sendPreviewData}
+                                    tabIndex={-1}
+                                    className="w-full h-full border-0 outline-none animate-fade-in"
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
             </form>

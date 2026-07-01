@@ -34,6 +34,7 @@ export default function Testimonials({ data }: { data?: any }) {
                 >
                     <div
                         className="mb-4 inline-block rounded-full px-3 py-1 text-xs font-bold tracking-wider uppercase"
+                        data-preview-field="header_badge"
                         style={{
                             background: 'var(--lp-blue-light)',
                             color: 'var(--lp-blue-text)',
@@ -44,6 +45,7 @@ export default function Testimonials({ data }: { data?: any }) {
                     </div>
                     <h2
                         className="mb-2 text-[40px] font-bold tracking-tight"
+                        data-preview-field="header_title"
                         style={{ fontFamily: "'Sora', sans-serif", color: 'var(--lp-text-primary)' }}
                     >
                         {title}

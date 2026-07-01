@@ -101,6 +101,7 @@ export default function Features({ data }: { data?: any }) {
                 >
                     <div
                         className="mb-4 inline-block rounded-full px-3 py-1 text-xs font-bold tracking-wider uppercase"
+                        data-preview-field="header_badge"
                         style={{
                             background: 'var(--lp-blue-light)',
                             color: 'var(--lp-blue-text)',
@@ -110,6 +111,7 @@ export default function Features({ data }: { data?: any }) {
                     </div>
                     <h2
                         className="mb-4 text-[40px] font-bold tracking-tight"
+                        data-preview-field="header_title"
                         style={{
                             fontFamily: "'Sora', sans-serif",
                             color: 'var(--lp-text-primary)',
@@ -120,6 +122,7 @@ export default function Features({ data }: { data?: any }) {
                     </h2>
                     <p
                         className="mx-auto max-w-lg text-base"
+                        data-preview-field="header_subtitle"
                         style={{ color: 'var(--lp-text-secondary)' }}
                     >
                         {subtitle}
