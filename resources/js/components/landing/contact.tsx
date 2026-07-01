@@ -50,11 +50,12 @@ export default function Contact({ data }: { data?: any }) {
                     </div>
                     <h2
                         className="mb-4 text-[40px] font-bold tracking-tight"
+                        data-preview-field="title"
                         style={{ fontFamily: "'Sora', sans-serif", color: 'var(--lp-text-primary)' }}
                     >
                         {title}
                     </h2>
-                    <p className="mx-auto max-w-2xl text-base" style={{ color: 'var(--lp-text-secondary)' }}>
+                    <p className="mx-auto max-w-2xl text-base" data-preview-field="subtitle" style={{ color: 'var(--lp-text-secondary)' }}>
                         {subtitle}
                     </p>
                 </motion.div>
@@ -199,24 +200,24 @@ export default function Contact({ data }: { data?: any }) {
                     <div className="space-y-6 md:col-span-2 md:pl-6">
                         {[
                             {
-                                icon: Mail,
+                                icon: Mail, field: 'email',
                                 label: 'Email',
                                 value: data?.email ?? 'hello@smartexam.id',
                                 href: data?.email ? `mailto:${data.email}` : 'mailto:hello@smartexam.id',
                             },
                             {
-                                icon: MessageCircle,
+                                icon: MessageCircle, field: 'whatsapp',
                                 label: 'WhatsApp',
                                 value: data?.whatsapp ?? '+62 812-xxxx-xxxx',
                                 href: data?.whatsapp ? `https://wa.me/${data.whatsapp.replace(/[^0-9]/g, '')}` : '#',
                             },
                             {
-                                icon: MapPin,
+                                icon: MapPin, field: 'address',
                                 label: 'Alamat',
                                 value: data?.address ?? 'Jl. A.P. Pettarani, Makassar,\nSulawesi Selatan',
                             },
                             {
-                                icon: Clock,
+                                icon: Clock, field: 'hours',
                                 label: 'Jam Operasional',
                                 value: data?.hours ?? 'Senin\u2013Jumat, 08.00\u201317.00 WITA',
                             },
@@ -228,6 +229,7 @@ export default function Contact({ data }: { data?: any }) {
                                 viewport={{ once: false }}
                                 transition={{ duration: 0.5, delay: i * 0.1 }}
                                 className="flex items-start gap-4 rounded-xl p-4 transition-all duration-300"
+                                data-preview-field={item.field}
                                 style={{
                                     background: 'var(--lp-step-card-bg)',
                                     border: '1px solid var(--lp-border-subtle)',

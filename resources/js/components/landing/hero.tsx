@@ -132,7 +132,7 @@ export default function Hero({ data }: { data?: any }) {
                             }}
                         >
                             {title}
-                            <span className="block text-[#60a5fa]">
+                            <span className="block text-[#60a5fa]" data-preview-field="title_accent">
                                 {currentText}
                                 <span className="animate-pulse ml-1 text-white">|</span>
                             </span>
@@ -175,12 +175,13 @@ export default function Hero({ data }: { data?: any }) {
                             </div>
                             <div className="h-4 w-px bg-white/20" />
                             <div>
-                                <span className="text-sm font-semibold text-white/95">
+                                <span className="text-sm font-semibold text-white/95" data-preview-field="social_proof_text">
                                     {socialProofText}
                                 </span>
                                 <span
                                     className="ml-2 text-sm font-bold"
                                     style={{ color: '#60a5fa' }}
+                                    data-preview-field="social_proof_sub"
                                 >
                                     {socialProofSub}
                                 </span>
@@ -197,6 +198,7 @@ export default function Hero({ data }: { data?: any }) {
                                     color: '#0a0a0a',
                                     fontFamily: "'Sora', sans-serif",
                                 }}
+                                data-preview-field="cta_primary_text"
                             >
                                 {ctaPrimaryText}
                                 <ArrowRight className="h-4 w-4" />

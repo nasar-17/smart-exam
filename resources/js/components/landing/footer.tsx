@@ -75,7 +75,7 @@ export default function Footer({ data }: { data?: any }) {
                                 <span style={{ color: '#60A5FA' }}>Exam</span>
                             </span>
                         </div>
-                        <p className="mb-6 text-sm leading-relaxed" style={{ color: 'var(--lp-text-secondary)' }}>
+                        <p className="mb-6 text-sm leading-relaxed" data-preview-field="tagline" style={{ color: 'var(--lp-text-secondary)' }}>
                             {tagline}
                         </p>
                         <div className="flex gap-3">
@@ -84,6 +84,7 @@ export default function Footer({ data }: { data?: any }) {
                                     key={i}
                                     href={s.href}
                                     className="flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-300 hover:scale-105 hover:bg-[#2563EB] group"
+                                    data-preview-field={['social_instagram', 'social_twitter', 'social_linkedin', 'social_youtube'][i]}
                                     style={{
                                         background: 'var(--lp-card-highlight)',
                                         border: '1px solid var(--lp-border-card)',
@@ -121,7 +122,7 @@ export default function Footer({ data }: { data?: any }) {
                     className="flex flex-wrap items-center justify-between gap-4 border-t pt-8"
                     style={{ borderColor: 'var(--lp-border-subtle)' }}
                 >
-                    <p className="text-xs" style={{ color: 'var(--lp-text-muted)' }}>
+                    <p className="text-xs" data-preview-field="copyright" style={{ color: 'var(--lp-text-muted)' }}>
                         {copyright}
                     </p>
                 </div>

@@ -51,13 +51,14 @@ export default function About({ data }: { data?: any }) {
         >
             <div className="mx-auto max-w-[1200px] px-6">
                 <div className="flex flex-col items-center gap-16 md:flex-row lg:gap-20">
-                    {/* Left: Image (returned to original place with loop slide-left animation) */}
+                    {/* Left: Image */}
                     <motion.div
                         initial={{ opacity: 0, x: -40 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: false }}
                         transition={{ duration: 0.6 }}
                         className="w-full flex-1"
+                        data-preview-field="image_url"
                     >
                         <img
                             src={imageUrl}
@@ -101,19 +102,21 @@ export default function About({ data }: { data?: any }) {
                         >
                             {title}
                             <br />
-                            <span className="gradient-text">
+                            <span className="gradient-text" data-preview-field="title_highlight">
                                 {titleHighlight}
                             </span>
                         </h2>
-                        <div data-preview-field="description">
+                        <div>
                             <p
                                 className="mb-4 text-base leading-relaxed"
+                                data-preview-field="paragraph_1"
                                 style={{ color: 'var(--lp-text-secondary)' }}
                             >
                                 {paragraph1}
                             </p>
                             <p
                                 className="mb-8 text-base leading-relaxed"
+                                data-preview-field="paragraph_2"
                                 style={{ color: 'var(--lp-text-secondary)' }}
                             >
                                 {paragraph2}
@@ -122,7 +125,7 @@ export default function About({ data }: { data?: any }) {
                     </motion.div>
                 </div>
 
-                {/* Visi & Misi Section (Reversed Layout: Left Content, Right Image) */}
+                {/* Visi & Misi Section */}
                 <div className="mt-24 flex flex-col items-center gap-16 md:flex-row lg:gap-20">
                     {/* Left: Visi & Misi Content */}
                     <motion.div
@@ -136,6 +139,7 @@ export default function About({ data }: { data?: any }) {
                         <div>
                             <h3
                                 className="mb-4 flex items-center gap-3 text-xl font-bold"
+                                data-preview-field="visi_title"
                                 style={{
                                     fontFamily: "'Sora', sans-serif",
                                     color: 'var(--lp-text-primary)',
@@ -146,6 +150,7 @@ export default function About({ data }: { data?: any }) {
                             </h3>
                             <p
                                 className="text-base leading-relaxed"
+                                data-preview-field="visi_text"
                                 style={{ color: 'var(--lp-text-secondary)' }}
                             >
                                 {visiText}
@@ -156,6 +161,7 @@ export default function About({ data }: { data?: any }) {
                         <div>
                             <h3
                                 className="mb-4 flex items-center gap-3 text-xl font-bold"
+                                data-preview-field="misi_title"
                                 style={{
                                     fontFamily: "'Sora', sans-serif",
                                     color: 'var(--lp-text-primary)',
@@ -166,6 +172,7 @@ export default function About({ data }: { data?: any }) {
                             </h3>
                             <ul
                                 className="space-y-4 text-base"
+                                data-preview-field="misi_items"
                                 style={{ color: 'var(--lp-text-secondary)' }}
                             >
                                 {misiItems.map((item: string, i: number) => (
@@ -173,9 +180,7 @@ export default function About({ data }: { data?: any }) {
                                         <span className="mt-0.5 font-bold text-blue-400">
                                             •
                                         </span>
-                                        <span>
-                                            {item}
-                                        </span>
+                                        <span>{item}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -189,6 +194,7 @@ export default function About({ data }: { data?: any }) {
                         viewport={{ once: false }}
                         transition={{ duration: 0.6, delay: 0.15 }}
                         className="w-full flex-1"
+                        data-preview-field="image_2_url"
                     >
                         <img
                             src={image2Url}
@@ -203,7 +209,7 @@ export default function About({ data }: { data?: any }) {
                     </motion.div>
                 </div>
 
-                {/* Dipercaya oleh institusi terkemuka (Moving/sliding loop from left to right) */}
+                {/* Institutions */}
                 <div
                     className="mt-24 border-t pt-10"
                     style={{ borderColor: 'var(--lp-border-subtle)' }}
@@ -215,7 +221,6 @@ export default function About({ data }: { data?: any }) {
                         Dipercaya oleh institusi terkemuka
                     </p>
                     <div className="relative w-full overflow-hidden">
-                        {/* Gradient mask for fade edges */}
                         <div
                             className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20"
                             style={{
@@ -233,14 +238,13 @@ export default function About({ data }: { data?: any }) {
 
                         <motion.div
                             className="flex w-max gap-0 whitespace-nowrap"
-                            animate={{ x: [-1000, 0] }} // Loop from left to right
+                            animate={{ x: [-1000, 0] }}
                             transition={{
                                 repeat: Infinity,
                                 ease: 'linear',
                                 duration: 25,
                             }}
                         >
-                            {/* Render duplicated list for seamless looping */}
                             {[
                                 ...itemsInstitutions,
                                 ...itemsInstitutions,

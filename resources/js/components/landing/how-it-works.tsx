@@ -85,7 +85,7 @@ export default function HowItWorks({ data }: { data?: any }) {
                         }}
                     >
                         {title}{' '}
-                        <span className="gradient-text">{titleHighlight}</span>
+                        <span className="gradient-text" data-preview-field="header_title_highlight">{titleHighlight}</span>
                     </h2>
                     <p
                         className="mx-auto max-w-xl text-base"

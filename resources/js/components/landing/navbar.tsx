@@ -73,7 +73,7 @@ observer.unobserve(section);
             >
                 <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-6">
                     {/* Logo */}
-                    <a href="#hero" className="flex items-center">
+                    <a href="#hero" className="flex items-center" data-preview-field="brand_name">
                         <img
                             src="/Logo smart exam.png"
                             alt="Smart Exam"
@@ -104,6 +104,7 @@ observer.unobserve(section);
                     <div className="hidden items-center gap-3 md:flex">
                         <a
                             href={data?.cta_link || '#pricing'}
+                            data-preview-field="cta_text"
                             className="nav-cta-btn items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold inline-flex"
                             style={{
                                 background: '#2563EB',

@@ -38,12 +38,10 @@ export default function Stats({ data }: { data?: any }) {
                         >
                             <div
                                 className="stat-num mb-1 text-4xl font-bold tracking-tight"
-                                data-target={stat.target}
-                                data-suffix={stat.suffix}
                                 data-preview-field={`stat_${i + 1}_value`}
                                 style={{ fontFamily: "'Sora', sans-serif", color: 'var(--lp-blue-text)' }}
                             >
-                                {stat.target}{stat.suffix}
+                                {stat.target}<span data-preview-field={`stat_${i + 1}_suffix`}>{stat.suffix}</span>
                             </div>
                             <div 
                                 className="text-sm px-4" 
