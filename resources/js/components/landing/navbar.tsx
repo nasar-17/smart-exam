@@ -164,7 +164,7 @@ observer.unobserve(section);
                         </a>
                     ))}
                     <a
-                        href="#pricing"
+                        href={data?.cta_link || '#pricing'}
                         className="mt-2 inline-block rounded-full px-6 py-3 text-sm font-semibold"
                         style={{ background: '#fff', color: '#2563EB' }}
                         onClick={() => setMobileOpen(false)}

@@ -13,6 +13,7 @@ class LandingContentSeeder extends Seeder
             // ── NAVBAR ──────────────────────────────────────
             ['section' => 'navbar', 'key' => 'brand_name', 'value' => 'Smart Exam', 'type' => 'text', 'label' => 'Nama Brand', 'order' => 1],
             ['section' => 'navbar', 'key' => 'cta_text', 'value' => 'Coba Gratis', 'type' => 'text', 'label' => 'Teks Tombol CTA', 'order' => 2],
+            ['section' => 'navbar', 'key' => 'cta_link', 'value' => '#pricing', 'type' => 'text', 'label' => 'Link Tombol CTA', 'order' => 2.5],
             ['section' => 'navbar', 'key' => 'nav_links', 'type' => 'json', 'label' => 'Daftar Menu Navigasi (JSON)', 'order' => 3, 'value' => json_encode([
                 ['href' => '#hero', 'label' => 'Beranda'],
                 ['href' => '#about', 'label' => 'Tentang'],
