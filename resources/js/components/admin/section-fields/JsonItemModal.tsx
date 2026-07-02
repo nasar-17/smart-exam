@@ -333,7 +333,17 @@ onCancel();
             </Dialog>
 
             <Dialog open={iconPickerOpen} onOpenChange={setIconPickerOpen}>
-                <DialogContent className="max-h-[85vh] max-w-3xl overflow-y-auto rounded-2xl p-6">
+                <DialogContent className="max-h-[85vh] max-w-3xl overflow-y-auto rounded-2xl p-6 [&>button[class*='absolute']]:hidden">
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setIconPickerOpen(false);
+                            setActiveIconField(null);
+                        }}
+                        className="absolute top-4 right-4 rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 transition-all active:scale-95 border border-slate-200/50 dark:border-slate-800 shadow-sm"
+                    >
+                        Tutup
+                    </button>
                     <DialogHeader className="space-y-1 pb-2">
                         <DialogTitle className="text-lg font-bold" style={{ fontFamily: "'Sora', sans-serif" }}>
                             Pilih Icon

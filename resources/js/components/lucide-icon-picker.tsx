@@ -163,16 +163,7 @@ export default function LucideIconPicker({ onSelect, onClose }: Props) {
                 )}
             </div>
 
-            <div className="flex justify-end gap-2 border-t border-slate-100 pt-3 dark:border-slate-800">
-                <Button
-                    type="button"
-                    variant="ghost"
-                    onClick={onClose}
-                    className="rounded-xl font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800"
-                >
-                    Tutup
-                </Button>
-            </div>
+
         </div>
     );
 }
