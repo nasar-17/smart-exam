@@ -2,6 +2,7 @@ import { ExternalLink, Search } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import DynamicLucideIcon from '@/components/dynamic-lucide-icon';
 
 const ICONS = [
     'User', 'UserPlus', 'UserMinus', 'UserCheck', 'UserX', 'UserCircle',
@@ -148,9 +149,10 @@ export default function LucideIconPicker({ onSelect, onClose }: Props) {
                                 title={`lucide:${icon}`}
                             >
                                 <div className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-100 group-hover:bg-blue-100 dark:bg-slate-700 dark:group-hover:bg-blue-950/50">
-                                    <span className="text-[10px] font-bold uppercase text-slate-600 group-hover:text-blue-600 dark:text-slate-300 dark:group-hover:text-blue-400">
-                                        {icon.substring(0, 2)}
-                                    </span>
+                                    <DynamicLucideIcon
+                                        name={`lucide:${icon}`}
+                                        className="h-4.5 w-4.5 text-slate-600 group-hover:text-blue-600 dark:text-slate-300 dark:group-hover:text-blue-400"
+                                    />
                                 </div>
                                 <span className="w-full truncate text-center text-[10px] font-medium text-slate-600 group-hover:text-blue-700 dark:text-slate-400 dark:group-hover:text-blue-300">
                                     {icon}
