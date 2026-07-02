@@ -100,7 +100,6 @@ export function useJsonFieldManager(
                 const updatedItems = [...items];
 
                 const cleanedData = { ...modal.data };
-                delete cleanedData._is_primitive_string;
 
                 if (index === -1) {
                     updatedItems.push(cleanedData);
@@ -114,7 +113,9 @@ export function useJsonFieldManager(
 
                 const finalValue = updatedItems.map((item) => {
                     if (item._is_primitive_string) return item.value;
-                    return item;
+                    const c = { ...item };
+                    delete c._is_primitive_string;
+                    return c;
                 });
 
                 return { ...f, value: finalValue };
