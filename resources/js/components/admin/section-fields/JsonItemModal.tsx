@@ -75,7 +75,19 @@ export default function JsonItemModal({
 onCancel();
 } 
 }}>
-                <DialogContent className="max-w-2xl bg-white dark:bg-[#151d2a] border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl">
+                <DialogContent
+                    className="max-w-2xl bg-white dark:bg-[#151d2a] border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl"
+                    onPointerDownOutside={(e) => {
+                        if (iconPickerOpen) {
+                            e.preventDefault();
+                        }
+                    }}
+                    onEscapeKeyDown={(e) => {
+                        if (iconPickerOpen) {
+                            e.preventDefault();
+                        }
+                    }}
+                >
                     <DialogHeader>
                         <DialogTitle className="text-slate-800 dark:text-slate-100">
                             {activeModalIndex === -1 ? 'Tambah Item Baru' : 'Edit Item'}
