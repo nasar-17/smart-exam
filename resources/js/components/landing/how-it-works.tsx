@@ -124,8 +124,8 @@ export default function HowItWorks({ data }: { data?: any }) {
                                             x: isMobile ? 40 : (isEven ? 40 : -40),
                                         }}
                                         whileInView={{ opacity: 1, x: 0 }}
-                                        viewport={{ once: true, amount: 0.1 }}
-                                        transition={{ duration: 0.6 }}
+                                        viewport={{ once: false, amount: 0.15 }}
+                                        transition={{ duration: 0.6, delay: isMobile ? 0 : i * 0.15 }}
                                         className={`flex w-full justify-start pl-12 md:w-1/2 ${
                                             isEven
                                                 ? 'md:pl-12 md:pr-0 md:justify-start'
