@@ -211,12 +211,12 @@ export default function Hero({ data }: { data?: any }) {
                                 style={{
                                     background: '#E8580A',
                                 }}
+                                data-preview-field="hero_image"
                             >
                                 <img
                                     src={heroImage}
                                     alt="Hero visual"
                                     className="h-full w-full object-cover object-center"
-                                    data-preview-field="hero_image"
                                 />
                             </motion.div>
 

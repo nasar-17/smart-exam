@@ -80,17 +80,7 @@ export default function About({ data }: { data?: any }) {
                         transition={{ duration: 0.6, delay: 0.15 }}
                         className="w-full flex-1"
                     >
-                        <div
-                            className="mb-6 inline-block rounded-full px-4 py-1.5 text-xs font-bold tracking-wider uppercase"
-                            data-preview-field="badge"
-                            style={{
-                                fontFamily: "'Sora', sans-serif",
-                                background: 'var(--lp-blue-light)',
-                                color: 'var(--lp-blue-text)',
-                            }}
-                        >
-                            Tentang Kami
-                        </div>
+
 
                         <h2
                             className="mb-6 text-[38px] leading-tight font-bold tracking-tight"

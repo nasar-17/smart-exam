@@ -16,7 +16,10 @@ export default function TextField({
 }: TextFieldProps) {
     return (
         <div className="space-y-1.5">
-            <label className="block text-[13px] font-medium text-slate-500 dark:text-slate-400">
+            <label 
+                className="block text-[13px] font-medium text-slate-500 dark:text-slate-400 truncate whitespace-nowrap" 
+                title={label}
+            >
                 {label}
             </label>
             {isTextArea ? (

@@ -85,7 +85,7 @@ export default function SectionEditor({ section, fields }: Props) {
     const sectionLabel = section.charAt(0).toUpperCase() + section.slice(1);
     const isNavbar = section === 'navbar';
     const jsonFields = localFields.filter((f) => f.type === 'json');
-    const nonJsonFields = localFields.filter((f) => f.type !== 'json');
+    const nonJsonFields = localFields.filter((f) => f.type !== 'json' && f.key !== 'header_badge');
 
     const isFullWidthField = (field: Field) => {
         if (field.type === 'textarea') return true;
@@ -100,7 +100,7 @@ export default function SectionEditor({ section, fields }: Props) {
     };
 
     const renderCombinedNonJsonFields = (fields: Field[], cols: 2 | 3 = 2) => (
-        <div className={`grid grid-cols-1 ${cols === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-x-6 gap-y-4`}>
+        <div className={`grid grid-cols-1 ${cols === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-x-6 gap-y-4 items-start`}>
             {fields.map((field) => {
                 const fullWidth = isFullWidthField(field);
                 return (
@@ -197,7 +197,48 @@ export default function SectionEditor({ section, fields }: Props) {
                                     </p>
                                 </div>
                                 <div className="border-t border-slate-100 dark:border-slate-800/80 my-3" />
-                                {renderCombinedNonJsonFields(nonJsonFields, 3)}
+                                {section === 'stats' ? (
+                                    <div className="flex flex-col gap-4">
+                                        {[1, 2, 3, 4].map((num) => {
+                                            const valField = nonJsonFields.find((f) => f.key === `stat_${num}_value`);
+                                            const labelField = nonJsonFields.find((f) => f.key === `stat_${num}_label`);
+                                            return (
+                                                <div key={num} className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start pb-4 border-b border-slate-100/50 dark:border-slate-800/50 last:border-0 last:pb-0">
+                                                    {valField && (
+                                                        <FieldRenderer
+                                                            field={valField}
+                                                            previewUrl={previewUrls[valField.key]}
+                                                            onChange={handleChange}
+                                                            onImageUpload={handleImageUpload}
+                                                            onOpenAddModal={openAddModal}
+                                                            onOpenEditModal={openEditModal}
+                                                            onDeleteItem={removeItem}
+                                                            onReorderItems={reorderItems}
+                                                            onFocus={focusField}
+                                                            onBlur={blurField}
+                                                        />
+                                                    )}
+                                                    {labelField && (
+                                                        <FieldRenderer
+                                                            field={labelField}
+                                                            previewUrl={previewUrls[labelField.key]}
+                                                            onChange={handleChange}
+                                                            onImageUpload={handleImageUpload}
+                                                            onOpenAddModal={openAddModal}
+                                                            onOpenEditModal={openEditModal}
+                                                            onDeleteItem={removeItem}
+                                                            onReorderItems={reorderItems}
+                                                            onFocus={focusField}
+                                                            onBlur={blurField}
+                                                        />
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                ) : (
+                                    renderCombinedNonJsonFields(nonJsonFields, 3)
+                                )}
                             </div>
                         )}
                     </div>

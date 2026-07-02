@@ -60,7 +60,7 @@ export default function HowItWorks({ data }: { data?: any }) {
 
     return (
         <section
-            id="how-it-works"
+            id="howitworks"
             ref={containerRef}
             className="relative py-24 overflow-hidden"
             style={{ background: 'var(--lp-bg-primary)' }}
@@ -72,7 +72,7 @@ export default function HowItWorks({ data }: { data?: any }) {
                 <motion.div
                     initial={{ opacity: 0, y: 35 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false, margin: '-10% 0px -20% 0px' }}
+                    viewport={{ once: true, amount: 0.1 }}
                     transition={{ duration: 0.6 }}
                     className="mb-20 text-center"
                 >
@@ -124,7 +124,7 @@ export default function HowItWorks({ data }: { data?: any }) {
                                             x: isMobile ? 40 : (isEven ? 40 : -40),
                                         }}
                                         whileInView={{ opacity: 1, x: 0 }}
-                                        viewport={{ once: false, margin: '-20% 0px -40% 0px' }}
+                                        viewport={{ once: true, amount: 0.1 }}
                                         transition={{ duration: 0.6 }}
                                         className={`flex w-full justify-start pl-12 md:w-1/2 ${
                                             isEven

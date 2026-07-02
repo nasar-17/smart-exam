@@ -91,11 +91,32 @@ export default function Welcome({ content = {}, sections = [] }: { content?: Con
                         outline: 3px solid rgba(59,130,246,1) !important;
                         outline-offset: 3px;
                         box-shadow: 0 0 20px rgba(59,130,246,0.6), 0 0 40px rgba(59,130,246,0.3) !important;
-                        animation: preview-glow-pulse 1s ease-in-out infinite;
+                        animation: preview-glow-pulse 1.2s ease-in-out infinite;
+                    }
+                    [data-preview-field="hero_bg_image"].preview-highlight-active {
+                        outline-offset: -3px !important;
+                        box-shadow: inset 0 0 30px rgba(59,130,246,0.9), inset 0 0 60px rgba(59,130,246,0.6) !important;
+                        animation: preview-glow-pulse-inset 1.2s ease-in-out infinite;
                     }
                     @keyframes preview-glow-pulse {
-                        0%, 100% { outline-color: rgba(59,130,246,1); box-shadow: 0 0 20px rgba(59,130,246,0.6), 0 0 40px rgba(59,130,246,0.3); }
-                        50% { outline-color: rgba(96,165,250,1); box-shadow: 0 0 30px rgba(59,130,246,0.9), 0 0 60px rgba(59,130,246,0.5); }
+                        0%, 100% { 
+                            outline-color: transparent; 
+                            box-shadow: 0 0 0 rgba(59,130,246,0) !important;
+                        }
+                        50% { 
+                            outline-color: rgba(59,130,246,1); 
+                            box-shadow: 0 0 20px rgba(59,130,246,0.6), 0 0 40px rgba(59,130,246,0.3) !important;
+                        }
+                    }
+                    @keyframes preview-glow-pulse-inset {
+                        0%, 100% { 
+                            outline-color: transparent; 
+                            box-shadow: inset 0 0 0 rgba(59,130,246,0) !important;
+                        }
+                        50% { 
+                            outline-color: rgba(59,130,246,1); 
+                            box-shadow: inset 0 0 30px rgba(59,130,246,0.9), inset 0 0 60px rgba(59,130,246,0.6) !important;
+                        }
                     }
                 `}} />
                 <Component data={previewContent[previewSection]} />

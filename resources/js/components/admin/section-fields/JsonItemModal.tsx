@@ -127,9 +127,17 @@ onCancel();
                                         ) : (
                                             <div className="flex items-end gap-2">
                                                 <Input
-                                                    value={String(itemVal ?? '')}
-                                                    onChange={(e) => setModalData((prev) => ({ ...prev, [itemKey]: e.target.value }))}
-                                                    placeholder={isIconField ? 'Contoh: lucide:users-2' : ''}
+                                                    value={isIconField ? String(itemVal ?? '').replace(/^lucide:/, '') : String(itemVal ?? '')}
+                                                    onChange={(e) => {
+                                                        let val = e.target.value;
+                                                        if (isIconField) {
+                                                            val = val.trim();
+                                                            const cleanName = val.replace(/^lucide:/, '');
+                                                            val = cleanName ? `lucide:${cleanName}` : '';
+                                                        }
+                                                        setModalData((prev) => ({ ...prev, [itemKey]: val }));
+                                                    }}
+                                                    placeholder={isIconField ? 'Contoh: user-plus' : ''}
                                                     className="w-full rounded-xl border-0 bg-[#f1f5f9] dark:bg-[#1e293b] px-4 py-3 text-sm text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/40 focus:outline-none ring-1 ring-slate-200/60 dark:ring-slate-700/60 h-auto"
                                                 />
                                                 {isIconField && (

@@ -32,17 +32,7 @@ export default function Testimonials({ data }: { data?: any }) {
                     transition={{ duration: 0.6 }}
                     className="text-center"
                 >
-                    <div
-                        className="mb-4 inline-block rounded-full px-3 py-1 text-xs font-bold tracking-wider uppercase"
-                        data-preview-field="header_badge"
-                        style={{
-                            background: 'var(--lp-blue-light)',
-                            color: 'var(--lp-blue-text)',
-                            border: '1px solid var(--lp-border)',
-                        }}
-                    >
-                        {badge}
-                    </div>
+
                     <h2
                         className="mb-2 text-[40px] font-bold tracking-tight"
                         data-preview-field="header_title"
