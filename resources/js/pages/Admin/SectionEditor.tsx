@@ -258,9 +258,9 @@ export default function SectionEditor({ section, fields }: Props) {
                 />
             </form>
 
-            {/* JSON Item Modal */}
             <JsonItemModal
                 isOpen={modal.fieldKey !== null}
+                fieldKey={modal.fieldKey}
                 activeModalIndex={modal.index ?? -1}
                 modalData={modal.data}
                 setModalData={setModalData}

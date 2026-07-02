@@ -240,7 +240,7 @@ export default function About({ data }: { data?: any }) {
                                 ...itemsInstitutions,
                                 ...itemsInstitutions,
                             ].map((inst, index) => {
-                                const [abbr, name] = inst.split('|');
+                                const [abbr, name, logo] = inst.split('|');
 
                                 return (
                                     <div
@@ -248,15 +248,25 @@ export default function About({ data }: { data?: any }) {
                                         className="inst-logo-card group flex shrink-0 cursor-pointer items-center gap-3 rounded-2xl border px-4.5 py-2.5 opacity-60 transition-all hover:opacity-100"
                                         style={{ borderColor: 'transparent' }}
                                     >
-                                        <div
-                                            className="inst-logo-badge flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all duration-300"
-                                            style={{
-                                                background: '#2563EB',
-                                                color: '#ffffff',
-                                            }}
-                                        >
-                                            {abbr}
-                                        </div>
+                                        {logo ? (
+                                            <div className="h-8 w-8 shrink-0 rounded-full border border-slate-200/50 dark:border-slate-800/50 overflow-hidden flex items-center justify-center bg-white">
+                                                <img
+                                                    src={logo}
+                                                    alt={name}
+                                                    className="h-full w-full object-contain p-0.5"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div
+                                                className="inst-logo-badge flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all duration-300"
+                                                style={{
+                                                    background: '#2563EB',
+                                                    color: '#ffffff',
+                                                }}
+                                            >
+                                                {abbr}
+                                            </div>
+                                        )}
                                         <span
                                             className="inst-logo-text text-sm font-semibold transition-all duration-300"
                                             style={{

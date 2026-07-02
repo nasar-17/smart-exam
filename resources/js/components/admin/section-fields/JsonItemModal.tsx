@@ -9,6 +9,7 @@ import { isBooleanValue } from '@/lib/utils';
 
 interface JsonItemModalProps {
     isOpen: boolean;
+    fieldKey?: string | null;
     activeModalIndex: number;
     modalData: Record<string, any>;
     setModalData: React.Dispatch<React.SetStateAction<Record<string, any>>>;
@@ -25,6 +26,7 @@ const filterUserKeys = (item: Record<string, unknown>): string[] => {
 
 export default function JsonItemModal({
     isOpen,
+    fieldKey,
     activeModalIndex,
     modalData,
     setModalData,
@@ -35,6 +37,36 @@ export default function JsonItemModal({
     const [activeIconField, setActiveIconField] = useState<string | null>(null);
 
     const visibleKeys = filterUserKeys(modalData);
+
+    const handleFileUpload = async (file: File, onDone: (url: string) => void) => {
+        const formData = new window.FormData();
+        formData.append('image', file);
+
+        const csrfToken =
+            document.cookie
+                .split('; ')
+                .find((c) => c.startsWith('XSRF-TOKEN='))
+                ?.split('=')[1] ?? '';
+
+        try {
+            const res = await fetch('/admin/upload-image', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-XSRF-TOKEN': decodeURIComponent(csrfToken),
+                },
+            });
+            const data = await res.json();
+
+            if (data.url) {
+                onDone(data.url);
+            } else {
+                toast.error('Gagal mengupload gambar');
+            }
+        } catch (err) {
+            toast.error('Gagal mengupload gambar');
+        }
+    };
 
     return (
         <>
@@ -52,16 +84,116 @@ onCancel();
 
                     <div className="space-y-4 my-2 max-h-[60vh] overflow-y-auto pr-1 no-scrollbar">
                         {modalData._is_primitive_string ? (
-                            <div>
-                                <label className="mb-1.5 block text-xs font-semibold text-slate-500 dark:text-slate-400">
-                                    Nilai/Poin
-                                </label>
-                                <Input
-                                    value={String(modalData.value ?? '')}
-                                    onChange={(e) => setModalData((prev) => ({ ...prev, value: e.target.value }))}
-                                    className="w-full rounded-xl border-0 bg-[#f1f5f9] dark:bg-[#1e293b] px-4 py-3 text-sm text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/40 focus:outline-none ring-1 ring-slate-200/60 dark:ring-slate-700/60"
-                                />
-                            </div>
+                            fieldKey === 'institutions' ? (() => {
+                                const valueStr = String(modalData.value ?? '');
+                                const parts = valueStr.split('|');
+                                const initials = parts[0] || '';
+                                const name = parts[1] || '';
+                                const logoUrl = parts[2] || '';
+
+                                return (
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="mb-1.5 block text-xs font-semibold text-slate-500 dark:text-slate-400">
+                                                Singkatan / Inisial (contoh: UH)
+                                            </label>
+                                            <Input
+                                                value={initials}
+                                                onChange={(e) => {
+                                                    const newAbbr = e.target.value;
+                                                    setModalData((prev) => ({
+                                                        ...prev,
+                                                        value: `${newAbbr}|${name}${logoUrl ? '|' + logoUrl : ''}`
+                                                    }));
+                                                }}
+                                                className="w-full rounded-xl border-0 bg-[#f1f5f9] dark:bg-[#1e293b] px-4 py-3 text-sm text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/40 focus:outline-none ring-1 ring-slate-200/60 dark:ring-slate-700/60"
+                                                placeholder="Contoh: UH"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="mb-1.5 block text-xs font-semibold text-slate-500 dark:text-slate-400">
+                                                Nama Institusi
+                                            </label>
+                                            <Input
+                                                value={name}
+                                                onChange={(e) => {
+                                                    const newName = e.target.value;
+                                                    setModalData((prev) => ({
+                                                        ...prev,
+                                                        value: `${initials}|${newName}${logoUrl ? '|' + logoUrl : ''}`
+                                                    }));
+                                                }}
+                                                className="w-full rounded-xl border-0 bg-[#f1f5f9] dark:bg-[#1e293b] px-4 py-3 text-sm text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/40 focus:outline-none ring-1 ring-slate-200/60 dark:ring-slate-700/60"
+                                                placeholder="Contoh: Universitas Hasanuddin"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="mb-1.5 block text-xs font-semibold text-slate-500 dark:text-slate-400">
+                                                Logo / Gambar (opsional)
+                                            </label>
+                                            <div className="flex items-center gap-3">
+                                                <div className="relative flex-1 min-w-0">
+                                                    <Input
+                                                        value={logoUrl}
+                                                        onChange={(e) => {
+                                                            const newLogo = e.target.value;
+                                                            setModalData((prev) => ({
+                                                                ...prev,
+                                                                value: `${initials}|${name}|${newLogo}`
+                                                            }));
+                                                        }}
+                                                        placeholder="URL Gambar / Logo"
+                                                        className="w-full h-11 rounded-xl border-0 bg-[#f1f5f9] dark:bg-[#1e293b] pl-3.5 pr-20 py-2.5 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 shadow-sm focus:ring-2 focus:ring-blue-500/40 focus:outline-none ring-1 ring-slate-200/60 dark:ring-slate-700/60"
+                                                    />
+                                                    <label className="absolute right-1.5 top-1.5 bottom-1.5 inline-flex cursor-pointer items-center gap-1 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 px-2.5 text-[11px] font-semibold transition border border-slate-300/60 dark:border-slate-700/60 text-slate-700 dark:text-slate-300 shadow-sm">
+                                                        <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                                        </svg>
+                                                        Upload
+                                                        <input
+                                                            type="file"
+                                                            accept="image/*"
+                                                            className="hidden"
+                                                            onChange={async (e) => {
+                                                                const file = e.target.files?.[0];
+                                                                if (file) {
+                                                                    await handleFileUpload(file, (url) => {
+                                                                        setModalData((prev) => ({
+                                                                            ...prev,
+                                                                            value: `${initials}|${name}|${url}`
+                                                                        }));
+                                                                        toast.success('Logo berhasil diupload');
+                                                                    });
+                                                                }
+                                                            }}
+                                                        />
+                                                    </label>
+                                                </div>
+                                                {logoUrl && (
+                                                    <div className="h-11 w-11 shrink-0 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-slate-100 dark:bg-slate-950 flex items-center justify-center shadow-sm">
+                                                        <img
+                                                            src={logoUrl}
+                                                            alt="Preview Logo"
+                                                            className="h-full w-full object-cover"
+                                                        />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })() : (
+                                <div>
+                                    <label className="mb-1.5 block text-xs font-semibold text-slate-500 dark:text-slate-400">
+                                        Nilai/Poin
+                                    </label>
+                                    <Input
+                                        value={String(modalData.value ?? '')}
+                                        onChange={(e) => setModalData((prev) => ({ ...prev, value: e.target.value }))}
+                                        className="w-full rounded-xl border-0 bg-[#f1f5f9] dark:bg-[#1e293b] px-4 py-3 text-sm text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500/40 focus:outline-none ring-1 ring-slate-200/60 dark:ring-slate-700/60"
+                                    />
+                                </div>
+                            )
                         ) : (
                             visibleKeys.map((itemKey) => {
                                 const itemVal = modalData[itemKey];
