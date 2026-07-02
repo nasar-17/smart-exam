@@ -149,7 +149,7 @@ export default function JsonField({
                         const isPrimitive = item._is_primitive_string;
                         const displayName = isPrimitive
                             ? String(item.value)
-                            : String(item.name || item.title || item.judul || `Item ${idx + 1}`);
+                            : String(item.name || item.title || item.judul || item.label || item.href || `Item ${idx + 1}`);
                         const displayDesc = isPrimitive
                             ? ''
                             : String(item.description || item.desc || item.deskripsi || item.price_monthly || item.target || '');
