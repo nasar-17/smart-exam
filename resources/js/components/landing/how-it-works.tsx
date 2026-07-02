@@ -109,7 +109,7 @@ export default function HowItWorks({ data }: { data?: any }) {
                         className="absolute top-0 bottom-0 left-[20px] w-[2px] -translate-x-1/2 bg-gradient-to-b from-blue-500 via-blue-400 to-transparent md:left-1/2"
                     />
 
-                    <div className="space-y-16 md:space-y-24">
+                    <div className="space-y-32 md:space-y-[60vh] pb-[20vh]">
                         {items.map((step: any, i: number) => {
                             const isEven = i % 2 === 0;
 
