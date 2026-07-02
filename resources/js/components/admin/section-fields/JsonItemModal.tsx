@@ -336,7 +336,10 @@ onCancel();
                 <DialogContent className="max-h-[85vh] max-w-3xl overflow-y-auto rounded-2xl p-6 [&>button.absolute:not(.custom-close)]:hidden">
                     <button
                         type="button"
-                        onClick={() => {
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onMouseDown={(e) => e.stopPropagation()}
+                        onClick={(e) => {
+                            e.stopPropagation();
                             setIconPickerOpen(false);
                             setActiveIconField(null);
                         }}
