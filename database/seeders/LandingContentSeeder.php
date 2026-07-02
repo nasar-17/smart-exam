@@ -30,6 +30,7 @@ class LandingContentSeeder extends Seeder
             ['section' => 'hero', 'key' => 'social_proof_text', 'value' => 'Digunakan oleh 10.000+ guru',                                                          'type' => 'text',     'label' => 'Social Proof Teks',               'order' => 4],
             ['section' => 'hero', 'key' => 'social_proof_sub',  'value' => '/ ★ 4.9 Rating',                                                                       'type' => 'text',     'label' => 'Social Proof Sub (rating)',        'order' => 5],
             ['section' => 'hero', 'key' => 'cta_primary_text',  'value' => 'Mulai Gratis Sekarang',                                                                 'type' => 'text',     'label' => 'Teks CTA Primer',                 'order' => 6],
+            ['section' => 'hero', 'key' => 'cta_primary_link',  'value' => '#pricing',                                                                               'type' => 'text',     'label' => 'Link CTA Primer (misal: #pricing)', 'order' => 6.5],
 
             ['section' => 'hero', 'key' => 'hero_image',      'value' => '',                                                                                        'type' => 'image',    'label' => 'Gambar Hero (kanan, opsional)',    'order' => 7],
             ['section' => 'hero', 'key' => 'hero_bg_image',   'value' => '',                                                                                        'type' => 'image',    'label' => 'Gambar Background Hero',          'order' => 8],
