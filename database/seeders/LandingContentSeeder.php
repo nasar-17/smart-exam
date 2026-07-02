@@ -149,6 +149,30 @@ class LandingContentSeeder extends Seeder
             ['section' => 'footer', 'key' => 'social_twitter', 'value' => '#', 'type' => 'text', 'label' => 'Link Twitter/X', 'order' => 4],
             ['section' => 'footer', 'key' => 'social_linkedin', 'value' => '#', 'type' => 'text', 'label' => 'Link LinkedIn', 'order' => 5],
             ['section' => 'footer', 'key' => 'social_youtube', 'value' => '#', 'type' => 'text', 'label' => 'Link YouTube', 'order' => 6],
+            ['section' => 'footer', 'key' => 'links_product', 'type' => 'json', 'label' => 'Kolom Link — Produk', 'order' => 7, 'value' => json_encode([
+                ['label' => 'Fitur', 'href' => '#features'],
+                ['label' => 'Harga', 'href' => '#pricing'],
+                ['label' => 'Cara Kerja', 'href' => '#howitworks'],
+                ['label' => 'Update Terbaru', 'href' => '#'],
+                ['label' => 'Status Server', 'href' => '#'],
+            ])],
+            ['section' => 'footer', 'key' => 'links_company', 'type' => 'json', 'label' => 'Kolom Link — Perusahaan', 'order' => 8, 'value' => json_encode([
+                ['label' => 'Tentang Smart Inovasi', 'href' => '#about'],
+                ['label' => 'Blog / Artikel', 'href' => '#'],
+                ['label' => 'Karir', 'href' => '#'],
+                ['label' => 'Press Kit', 'href' => '#'],
+                ['label' => 'Hubungi Kami', 'href' => '#contact'],
+            ])],
+            ['section' => 'footer', 'key' => 'links_support', 'type' => 'json', 'label' => 'Kolom Link — Dukungan', 'order' => 9, 'value' => json_encode([
+                ['label' => 'Pusat Bantuan / FAQ', 'href' => '#'],
+                ['label' => 'Dokumentasi API', 'href' => '#'],
+                ['label' => 'Panduan Penggunaan', 'href' => '#'],
+                ['label' => 'Syarat & Ketentuan', 'href' => '#'],
+                ['label' => 'Kebijakan Privasi', 'href' => '#'],
+            ])],
+            ['section' => 'footer', 'key' => 'column_title_product', 'value' => 'Produk', 'type' => 'text', 'label' => 'Judul Kolom 1 (Produk)', 'order' => 10],
+            ['section' => 'footer', 'key' => 'column_title_company', 'value' => 'Perusahaan', 'type' => 'text', 'label' => 'Judul Kolom 2 (Perusahaan)', 'order' => 11],
+            ['section' => 'footer', 'key' => 'column_title_support', 'value' => 'Dukungan', 'type' => 'text', 'label' => 'Judul Kolom 3 (Dukungan)', 'order' => 12],
         ];
 
         foreach ($data as $item) {
