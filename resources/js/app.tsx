@@ -1,5 +1,5 @@
 import { createInertiaApp } from '@inertiajs/react';
-import './echo';
+import { initEcho } from './echo';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -42,4 +42,6 @@ createInertiaApp({
 
 // This will set light / dark mode on load...
 initializeTheme();
+
+initEcho();
 

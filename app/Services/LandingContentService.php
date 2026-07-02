@@ -94,6 +94,7 @@ class LandingContentService
         );
 
         $this->landingContentRepository->updateMultipleFields($section, $fields);
+        $this->landingContentRepository->flushCache();
 
         return [
             'success' => true,
@@ -114,6 +115,7 @@ class LandingContentService
     public function reorderSections(array $order): array
     {
         $this->landingContentRepository->reorderSections($order);
+        $this->landingContentRepository->flushCache();
 
         return [
             'success' => true,
@@ -124,6 +126,7 @@ class LandingContentService
     public function toggleVisibility(string $section, bool $isVisible): array
     {
         $this->landingContentRepository->updateVisibility($section, $isVisible);
+        $this->landingContentRepository->flushCache();
 
         $status = $isVisible ? 'ditampilkan' : 'disembunyikan';
 

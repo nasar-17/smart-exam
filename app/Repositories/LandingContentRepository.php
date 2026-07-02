@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\LandingContent;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class LandingContentRepository
 {
@@ -59,18 +60,25 @@ class LandingContentRepository
 
     public function getAllGrouped(): array
     {
-        return LandingContent::all()
-            ->groupBy('section')
-            ->map(function ($items) {
-                return $items->mapWithKeys(function ($item) {
-                    $value = $item->type === 'json'
-                        ? json_decode($item->value, true)
-                        : $item->value;
+        return Cache::rememberForever('landing_content_grouped', function () {
+            return LandingContent::all()
+                ->groupBy('section')
+                ->map(function ($items) {
+                    return $items->mapWithKeys(function ($item) {
+                        $value = $item->type === 'json'
+                            ? json_decode($item->value, true)
+                            : $item->value;
 
-                    return [$item->key => $value];
-                });
-            })
-            ->toArray();
+                        return [$item->key => $value];
+                    });
+                })
+                ->toArray();
+        });
+    }
+
+    public function flushCache(): void
+    {
+        Cache::forget('landing_content_grouped');
     }
 
     public function getSection(string $section): array

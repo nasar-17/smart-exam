@@ -1,4 +1,3 @@
-import { usePage, Link } from '@inertiajs/react';
 import { Sun, Moon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useAppearance } from '@/hooks/use-appearance';
@@ -17,8 +16,6 @@ export default function Navbar({ data }: { data?: any }) {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('#hero');
-    const { auth } = usePage().props as any;
-    const isAdmin = auth?.user?.is_admin;
     const links = data?.nav_links ?? defaultNavLinks;
 
     const { appearance, resolvedAppearance, updateAppearance } = useAppearance();
