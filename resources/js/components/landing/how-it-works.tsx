@@ -125,7 +125,7 @@ export default function HowItWorks({ data }: { data?: any }) {
                                         }}
                                         whileInView={{ opacity: 1, x: 0 }}
                                         viewport={{ once: false, amount: 0.15 }}
-                                        transition={{ duration: 0.6, delay: isMobile ? 0 : i * 0.15 }}
+                                        transition={{ duration: 0.4 }}
                                         className={`flex w-full justify-start pl-12 md:w-1/2 ${
                                             isEven
                                                 ? 'md:pl-12 md:pr-0 md:justify-start'
@@ -187,10 +187,9 @@ export default function HowItWorks({ data }: { data?: any }) {
                                     <motion.div
                                         initial={{ opacity: 0, scale: 0 }}
                                         whileInView={{ opacity: 1, scale: 1 }}
-                                        viewport={{ once: false, margin: '-20% 0px -40% 0px' }}
+                                        viewport={{ once: false, amount: 0.15 }}
                                         transition={{
                                             duration: 0.4,
-                                            delay: 0.2,
                                         }}
                                         className="absolute top-8 left-[20px] flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full transition-all duration-300 md:top-1/2 md:left-1/2"
                                         style={{
