@@ -189,7 +189,7 @@ export default function HowItWorks({ data }: { data?: any }) {
                                         whileInView={{ opacity: 1, scale: 1 }}
                                         viewport={{ once: false, amount: 0.15 }}
                                         transition={{
-                                            duration: 0.4,
+                                            duration: 0.25,
                                         }}
                                         className="absolute top-8 left-[20px] flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full transition-all duration-300 md:top-1/2 md:left-1/2"
                                         style={{
