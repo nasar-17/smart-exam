@@ -13,6 +13,7 @@ import Pricing from '@/components/landing/pricing';
 import Stats from '@/components/landing/stats';
 import Testimonials from '@/components/landing/testimonials';
 import { Toaster } from '@/components/ui/sonner';
+import CursorGlow from '@/components/cursor-glow';
 import { useScrollReveal, useStatsCounter } from '@/hooks/use-scroll-reveal';
 import { usePreviewListener } from '@/hooks/usePreviewListener';
 
@@ -140,6 +141,7 @@ export default function Welcome({ content = {}, sections = [] }: { content?: Con
                 <Footer data={previewContent.footer} />
             </div>
             <Toaster />
+            <CursorGlow />
         </>
     );
 }
