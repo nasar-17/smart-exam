@@ -50,9 +50,9 @@ export default function Footer({ data }: { data?: any }) {
     const linksSupport = parseJsonLinks(data?.links_support, DEFAULT_LINKS_SUPPORT);
 
     const footerColumns = [
-        { title: columnTitleProduct, links: linksProduct },
-        { title: columnTitleCompany, links: linksCompany },
-        { title: columnTitleSupport, links: linksSupport },
+        { title: columnTitleProduct, links: linksProduct, titleField: 'column_title_product', linksField: 'links_product' },
+        { title: columnTitleCompany, links: linksCompany, titleField: 'column_title_company', linksField: 'links_company' },
+        { title: columnTitleSupport, links: linksSupport, titleField: 'column_title_support', linksField: 'links_support' },
     ];
 
     const socials = [
@@ -115,10 +115,14 @@ export default function Footer({ data }: { data?: any }) {
                     {/* Link columns */}
                     {footerColumns.map((col) => (
                         <div key={col.title}>
-                            <h4 className="mb-5 text-sm font-semibold" style={{ color: 'var(--lp-text-primary)' }}>
+                            <h4
+                                className="mb-5 text-sm font-semibold"
+                                style={{ color: 'var(--lp-text-primary)' }}
+                                data-preview-field={col.titleField}
+                            >
                                 {col.title}
                             </h4>
-                            <div className="space-y-3">
+                            <div className="space-y-3" data-preview-field={col.linksField}>
                                 {col.links.map((link: { label: string; href: string }) => (
                                     <a
                                         key={link.label}

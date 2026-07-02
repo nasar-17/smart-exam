@@ -10,6 +10,8 @@ interface JsonFieldProps {
     onEdit: (index: number, item: Record<string, any>) => void;
     onDelete: (index: number) => void;
     onReorder?: (newItems: Record<string, any>[]) => void;
+    onHoverItem?: () => void;
+    onLeaveItem?: () => void;
 }
 
 export default function JsonField({
@@ -20,6 +22,8 @@ export default function JsonField({
     onEdit,
     onDelete,
     onReorder,
+    onHoverItem,
+    onLeaveItem,
 }: JsonFieldProps) {
     const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
     const isNavMenu = fieldKey === 'nav_links';
@@ -163,6 +167,8 @@ export default function JsonField({
                                 onDragOver={handleDragOver}
                                 onDragEnter={() => handleDragEnter(idx)}
                                 onDragEnd={handleDragEnd}
+                                onMouseEnter={() => onHoverItem?.()}
+                                onMouseLeave={() => onLeaveItem?.()}
                                 className={`group flex items-start gap-3 rounded-xl border p-4 transition-all duration-200 relative ${
                                     draggedIdx === idx
                                         ? 'border-blue-500 bg-blue-50/20 opacity-50 ring-2 ring-blue-500/10'

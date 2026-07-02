@@ -67,6 +67,8 @@ export default function FieldRenderer({
                         onEdit={(idx, item) => onOpenEditModal(field.key, idx, item)}
                         onDelete={(idx) => onDeleteItem(field.key, idx)}
                         onReorder={(newItems) => onReorderItems(field.key, newItems)}
+                        onHoverItem={() => onFocus(field.key)}
+                        onLeaveItem={() => onBlur(field.key)}
                     />
                 );
             default:
