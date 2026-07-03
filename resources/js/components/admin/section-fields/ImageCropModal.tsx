@@ -65,6 +65,8 @@ export default function ImageCropModal({ isOpen, imageSrc, aspectRatio = 1, isCi
             img.onload = () => {
                 imageRef.current = img;
                 computeSizes(img.naturalWidth, img.naturalHeight);
+                // Draw canvas AFTER size is computed — state update is batched sync here
+                requestAnimationFrame(() => drawCanvas());
             };
         }
     }, [isOpen, imageSrc]);
@@ -72,7 +74,7 @@ export default function ImageCropModal({ isOpen, imageSrc, aspectRatio = 1, isCi
     // Redraw whenever parameters change
     useEffect(() => {
         drawCanvas();
-    }, [zoom, rotation, offset]);
+    }, [zoom, rotation, offset, canvasSize]);
 
     const drawCanvas = () => {
         const canvas = canvasRef.current;
