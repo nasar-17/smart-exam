@@ -17,21 +17,27 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        if (! User::where('email', 'test@example.com')->exists()) {
+            User::factory()->create([
+                'name' => 'Test User',
+                'email' => 'test@example.com',
+            ]);
+        }
 
-        User::factory()->admin()->create([
-            'name' => 'Admin',
-            'email' => 'admin@smartexam.com',
-        ]);
+        if (! User::where('email', 'admin@smartexam.com')->exists()) {
+            User::factory()->admin()->create([
+                'name' => 'Admin',
+                'email' => 'admin@smartexam.com',
+            ]);
+        }
 
-        User::factory()->admin()->create([
-            'name' => 'Nasaruddin',
-            'email' => 'nasaruddinpawe@gmail.com',
-            'password' => bcrypt('password'),
-        ]);
+        if (! User::where('email', 'nasaruddinpawe@gmail.com')->exists()) {
+            User::factory()->admin()->create([
+                'name' => 'Nasaruddin',
+                'email' => 'nasaruddinpawe@gmail.com',
+                'password' => bcrypt('password'),
+            ]);
+        }
 
         $this->call([
             LandingContentSeeder::class,

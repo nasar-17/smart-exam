@@ -2,21 +2,18 @@ import { Form, Head } from '@inertiajs/react';
 import { Lock, LogIn, Mail } from 'lucide-react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
-import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { store } from '@/routes/login';
-import { request } from '@/routes/password';
 
 type Props = {
     status?: string;
-    canResetPassword: boolean;
 };
 
-export default function Login({ status, canResetPassword }: Props) {
+export default function Login({ status }: Props) {
     return (
         <>
             <Head title="Login" />
@@ -66,11 +63,6 @@ export default function Login({ status, canResetPassword }: Props) {
                                     <Label htmlFor="password" className="sr-only">
                                         Password
                                     </Label>
-                                    {canResetPassword && (
-                                        <TextLink href={request()} className="ml-auto text-xs font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400" tabIndex={5}>
-                                            Lupa password?
-                                        </TextLink>
-                                    )}
                                 </div>
                                 <div className="relative">
                                     <Lock className="pointer-events-none absolute left-5 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-slate-400" />
