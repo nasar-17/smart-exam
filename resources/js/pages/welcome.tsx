@@ -94,8 +94,9 @@ export default function Welcome({ content = {}, sections = [] }: { content?: Con
                         animation: preview-glow-pulse 1.2s ease-in-out infinite;
                     }
                     [data-preview-field="hero_bg_image"].preview-highlight-active {
-                        outline-offset: -3px !important;
-                        box-shadow: inset 0 0 30px rgba(59,130,246,0.9), inset 0 0 60px rgba(59,130,246,0.6) !important;
+                        outline: 5px solid rgba(59,130,246,1) !important;
+                        outline-offset: -15px !important;
+                        box-shadow: inset 0 0 80px rgba(59,130,246,0.95), inset 0 0 150px rgba(59,130,246,0.85) !important;
                         animation: preview-glow-pulse-inset 1.2s ease-in-out infinite;
                     }
                     @keyframes preview-glow-pulse {
@@ -115,7 +116,7 @@ export default function Welcome({ content = {}, sections = [] }: { content?: Con
                         }
                         50% { 
                             outline-color: rgba(59,130,246,1); 
-                            box-shadow: inset 0 0 30px rgba(59,130,246,0.9), inset 0 0 60px rgba(59,130,246,0.6) !important;
+                            box-shadow: inset 0 0 80px rgba(59,130,246,0.95), inset 0 0 150px rgba(59,130,246,0.85) !important;
                         }
                     }
                 `}} />
