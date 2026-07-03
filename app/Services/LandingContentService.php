@@ -117,13 +117,12 @@ class LandingContentService
         $path = $image->store('landing', 'public');
         $fullPath = Storage::disk('public')->path($path);
 
-        // Resize gambar — max 1200px lebar, pertahankan aspect ratio, quality 80
+        // Resize gambar — max 2560px lebar (covers 4K), quality 92
         try {
             $img = Image::decodePath($fullPath);
-            $img->scale(width: 1200);
-            $img->save(null, ['quality' => 80]);
+            $img->scaleDown(width: 2560);
+            $img->save(null, ['quality' => 92]);
         } catch (\Exception $e) {
-            // Jika resize gagal, file tetap tersimpan tanpa resize
             report($e);
         }
 
