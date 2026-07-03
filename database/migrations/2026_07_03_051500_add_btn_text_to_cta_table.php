@@ -2,7 +2,6 @@
 
 use App\Models\LandingContent;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -17,7 +16,7 @@ return new class extends Migration
                 'value' => 'Jadwalkan Demo',
                 'type' => 'text',
                 'label' => 'Teks Tombol CTA',
-                'order' => 2.5
+                'order' => 2.5,
             ]
         );
     }
