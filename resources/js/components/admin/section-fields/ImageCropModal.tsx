@@ -120,16 +120,18 @@ export default function ImageCropModal({ isOpen, imageSrc, onCrop, onCancel }: I
         oCtx.rotate((rotation * Math.PI) / 180);
         oCtx.scale(zoom, zoom);
 
-        const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+        // Calculate fit scale for the 400x400 output canvas
+        const scale = Math.min(outputCanvas.width / img.width, outputCanvas.height / img.height);
         const w = img.width * scale;
         const h = img.height * scale;
 
-        // Since canvas coordinate layout matches output canvas center scale
+        // Scale offsets by the ratio of output canvas size to preview canvas size (400 / 300)
+        const ratio = 400 / 300;
         const rad = (rotation * Math.PI) / 180;
         const cos = Math.cos(rad);
         const sin = Math.sin(rad);
-        const tx = offset.x * cos + offset.y * sin;
-        const ty = -offset.x * sin + offset.y * cos;
+        const tx = (offset.x * cos + offset.y * sin) * ratio;
+        const ty = (-offset.x * sin + offset.y * cos) * ratio;
 
         oCtx.drawImage(img, -w / 2 + tx, -h / 2 + ty, w, h);
         oCtx.restore();
