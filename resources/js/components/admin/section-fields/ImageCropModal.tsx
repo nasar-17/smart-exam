@@ -71,8 +71,10 @@ export default function ImageCropModal({ isOpen, imageSrc, onCrop, onCancel }: I
         const cos = Math.cos(rad);
         const sin = Math.sin(rad);
         // Transform the offset based on rotation so dragging direction matches hand movement
-        const tx = offset.x * cos + offset.y * sin;
-        const ty = -offset.x * sin + offset.y * cos;
+        // Scale by 400/300 because DOM client size is 300px but canvas dimension is 400px
+        const ratio = 400 / 300;
+        const tx = (offset.x * cos + offset.y * sin) * ratio;
+        const ty = (-offset.x * sin + offset.y * cos) * ratio;
 
         ctx.drawImage(img, -w / 2 + tx, -h / 2 + ty, w, h);
         ctx.restore();
@@ -104,40 +106,10 @@ export default function ImageCropModal({ isOpen, imageSrc, onCrop, onCancel }: I
 
     const handleSave = () => {
         const canvas = canvasRef.current;
-        const img = imageRef.current;
-        if (!canvas || !img) return;
+        if (!canvas) return;
 
-        // Create a 1:1 high resolution output canvas
-        const outputCanvas = document.createElement('canvas');
-        outputCanvas.width = 400;
-        outputCanvas.height = 400;
-        const oCtx = outputCanvas.getContext('2d');
-        if (!oCtx) return;
-
-        oCtx.save();
-        // Move origin to center of output canvas
-        oCtx.translate(200, 200);
-        oCtx.rotate((rotation * Math.PI) / 180);
-        oCtx.scale(zoom, zoom);
-
-        // Calculate fit scale for the 400x400 output canvas
-        const scale = Math.min(outputCanvas.width / img.width, outputCanvas.height / img.height);
-        const w = img.width * scale;
-        const h = img.height * scale;
-
-        // Scale offsets by the ratio of output canvas size to preview canvas size (400 / 300)
-        const ratio = 400 / 300;
-        const rad = (rotation * Math.PI) / 180;
-        const cos = Math.cos(rad);
-        const sin = Math.sin(rad);
-        const tx = (offset.x * cos + offset.y * sin) * ratio;
-        const ty = (-offset.x * sin + offset.y * cos) * ratio;
-
-        oCtx.drawImage(img, -w / 2 + tx, -h / 2 + ty, w, h);
-        oCtx.restore();
-
-        // Convert output canvas to Blob and File
-        outputCanvas.toBlob((blob) => {
+        // Convert the preview canvas directly to a Blob to guarantee exact match
+        canvas.toBlob((blob) => {
             if (blob) {
                 const croppedFile = new File([blob], 'cropped-avatar.jpg', { type: 'image/jpeg' });
                 onCrop(croppedFile);
@@ -159,12 +131,12 @@ export default function ImageCropModal({ isOpen, imageSrc, onCrop, onCancel }: I
                     <div className="relative w-[300px] h-[300px] rounded-xl overflow-hidden bg-slate-950/60 border border-slate-800 flex items-center justify-center shadow-inner cursor-move">
                         <canvas
                             ref={canvasRef}
-                            width={300}
-                            height={300}
+                            width={400}
+                            height={400}
                             onPointerDown={handlePointerDown}
                             onPointerMove={handlePointerMove}
                             onPointerUp={handlePointerUp}
-                            className="w-full h-full object-cover touch-none"
+                            className="w-[300px] h-[300px] object-cover touch-none"
                         />
                         {/* Circular 1:1 crop mask overlay */}
                         <div className="absolute inset-0 pointer-events-none border-2 border-blue-500 rounded-full shadow-[0_0_0_9999px_rgba(15,23,42,0.7)]" />
