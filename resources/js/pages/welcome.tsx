@@ -102,6 +102,12 @@ export default function Welcome({ content = {}, sections = [] }: { content?: Con
                         box-shadow: inset 0 0 80px rgba(59,130,246,0.95), inset 0 0 150px rgba(59,130,246,0.85) !important;
                         animation: preview-glow-pulse-inset 1.2s ease-in-out infinite;
                     }
+                    [data-preview-field="btn_text"].preview-highlight-active {
+                        outline: 3px solid rgba(255,255,255,1) !important;
+                        outline-offset: 3px;
+                        box-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,0.4) !important;
+                        animation: preview-glow-pulse-white 1.2s ease-in-out infinite;
+                    }
                     @keyframes preview-glow-pulse {
                         0%, 100% { 
                             outline-color: transparent; 
@@ -120,6 +126,16 @@ export default function Welcome({ content = {}, sections = [] }: { content?: Con
                         50% { 
                             outline-color: rgba(59,130,246,1); 
                             box-shadow: inset 0 0 80px rgba(59,130,246,0.95), inset 0 0 150px rgba(59,130,246,0.85) !important;
+                        }
+                    }
+                    @keyframes preview-glow-pulse-white {
+                        0%, 100% { 
+                            outline-color: transparent; 
+                            box-shadow: 0 0 0 rgba(255,255,255,0) !important;
+                        }
+                        50% { 
+                            outline-color: rgba(255,255,255,1); 
+                            box-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,0.4) !important;
                         }
                     }
                 `}} />
