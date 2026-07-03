@@ -118,6 +118,7 @@ class LandingContentSeeder extends Seeder
             // ── TESTIMONIALS ────────────────────────────────
             ['section' => 'testimonials', 'key' => 'header_badge', 'value' => 'Testimoni', 'type' => 'text', 'label' => 'Badge Header', 'order' => 1],
             ['section' => 'testimonials', 'key' => 'header_title', 'value' => 'Apa Kata Mereka yang Sudah Menggunakan Smart Exam?', 'type' => 'text', 'label' => 'Judul', 'order' => 2],
+            ['section' => 'testimonials', 'key' => 'header_rating', 'value' => '4.9/5 dari 500+ pengguna', 'type' => 'text', 'label' => 'Teks Rating', 'order' => 2.5],
             ['section' => 'testimonials', 'key' => 'items', 'type' => 'json', 'label' => 'Daftar Testimoni (JSON)', 'order' => 3, 'value' => json_encode([
                 ['initial' => 'N', 'name' => 'Dra. Hj. Nuraini, M.Pd.', 'role' => 'Kepala Sekolah, SMA Negeri 5 Makassar', 'quote' => 'Smart Exam benar-benar mengubah cara kami menyelenggarakan ujian semester. Tidak ada lagi drama fotokopi soal tengah malam!', 'rating' => 5, 'avatar' => ''],
                 ['initial' => 'A', 'name' => 'Bpk. Ahmad Fauzi, S.Pd.', 'role' => 'Guru Matematika, MTs Al-Ikhlas Bone', 'quote' => 'Fitur anti-cheating-nya sangat membantu. Siswa tidak bisa buka tab lain, dan saya bisa pantau mereka secara real-time dari ruang guru.', 'rating' => 5, 'avatar' => ''],

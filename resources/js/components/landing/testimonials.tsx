@@ -4,6 +4,7 @@ import { Star } from 'lucide-react';
 export default function Testimonials({ data }: { data?: any }) {
     const badge = data?.header_badge ?? 'Testimoni';
     const title = data?.header_title ?? 'Apa Kata Mereka yang Sudah Menggunakan Smart Exam?';
+    const rating = data?.header_rating ?? '4.9/5 dari 500+ pengguna';
     const items = data?.items ?? [];
 
     const gradients = [
@@ -47,8 +48,12 @@ export default function Testimonials({ data }: { data?: any }) {
                                 className="h-[18px] w-[18px] fill-[#f5c518] text-[#f5c518]"
                             />
                         ))}
-                        <span className="ml-2 text-sm font-semibold" style={{ color: 'var(--lp-text-muted)' }}>
-                            4.9/5 dari 500+ pengguna
+                        <span
+                            className="ml-2 text-sm font-semibold"
+                            data-preview-field="header_rating"
+                            style={{ color: 'var(--lp-text-muted)' }}
+                        >
+                            {rating}
                         </span>
                     </div>
                 </motion.div>
