@@ -31,9 +31,8 @@
             }
         </style>
 
-        <link rel="icon" href="/favicon.ico" sizes="any">
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/Logo smart exam.png" type="image/png">
+        <link rel="apple-touch-icon" href="/Logo smart exam.png">
 
         {{-- Landing page fonts --}}
         <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
