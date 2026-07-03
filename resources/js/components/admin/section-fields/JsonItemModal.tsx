@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { isBooleanValue } from '@/lib/utils';
+import ImageCropModal from '@/components/admin/section-fields/ImageCropModal';
 
 interface JsonItemModalProps {
     isOpen: boolean;
@@ -35,6 +36,9 @@ export default function JsonItemModal({
 }: JsonItemModalProps) {
     const [iconPickerOpen, setIconPickerOpen] = useState(false);
     const [activeIconField, setActiveIconField] = useState<string | null>(null);
+    const [cropModalOpen, setCropModalOpen] = useState(false);
+    const [cropSrc, setCropSrc] = useState('');
+    const [activeImageKey, setActiveImageKey] = useState<string | null>(null);
 
     const visibleKeys = filterUserKeys(modalData);
 
@@ -234,6 +238,7 @@ onCancel();
                                     );
                                 }
 
+                                const isImageField = itemKey.toLowerCase() === 'avatar' || itemKey.toLowerCase() === 'image' || itemKey.toLowerCase() === 'foto';
                                 const isIconField = itemKey.toLowerCase() === 'icon';
                                 const isLongText = typeof itemVal === 'string' && itemVal.length > 80;
 
@@ -246,7 +251,47 @@ onCancel();
                                             {itemKey.charAt(0).toUpperCase() + itemKey.slice(1)}
                                         </label>
 
-                                        {isBooleanOpt ? (
+                                        {isImageField ? (
+                                            <div className="flex items-center gap-4">
+                                                <div className="flex-1">
+                                                    <label className="flex h-11 w-full cursor-pointer items-center justify-center rounded-xl bg-blue-600 font-semibold text-white hover:bg-blue-700 active:scale-[0.98] transition-all shadow-sm">
+                                                        <span>Upload Foto</span>
+                                                        <input
+                                                            type="file"
+                                                            accept="image/*"
+                                                            className="hidden"
+                                                            onChange={(e) => {
+                                                                const file = e.target.files?.[0];
+                                                                if (file) {
+                                                                    const reader = new FileReader();
+                                                                    reader.onload = () => {
+                                                                        setCropSrc(reader.result as string);
+                                                                        setActiveImageKey(itemKey);
+                                                                        setCropModalOpen(true);
+                                                                    };
+                                                                    reader.readAsDataURL(file);
+                                                                }
+                                                                // Reset value so same file can be uploaded again
+                                                                e.target.value = '';
+                                                            }}
+                                                        />
+                                                    </label>
+                                                </div>
+                                                {itemVal ? (
+                                                    <div className="h-11 w-11 shrink-0 rounded-xl border border-slate-200/60 dark:border-slate-800 overflow-hidden bg-slate-100 dark:bg-slate-950 flex items-center justify-center shadow-sm">
+                                                        <img
+                                                            src={itemVal}
+                                                            alt="Preview Avatar"
+                                                            className="h-full w-full object-cover"
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <div className="h-11 w-11 shrink-0 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/20 flex items-center justify-center text-xs text-slate-400 font-semibold">
+                                                        Kosong
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ) : isBooleanOpt ? (
                                             <select
                                                 value={String(itemVal ?? 'false')}
                                                 onChange={(e) => {
@@ -376,6 +421,37 @@ onCancel();
                     )}
                 </DialogContent>
             </Dialog>
+
+            {cropModalOpen && activeImageKey && (
+                <ImageCropModal
+                    isOpen={cropModalOpen}
+                    imageSrc={cropSrc}
+                    onCancel={() => {
+                        setCropModalOpen(false);
+                        setCropSrc('');
+                        setActiveImageKey(null);
+                    }}
+                    onCrop={async (croppedFile) => {
+                        setCropModalOpen(false);
+                        const loadingToast = toast.loading('Mengunggah gambar hasil potong...');
+                        try {
+                            await handleFileUpload(croppedFile, (url) => {
+                                setModalData((prev) => ({
+                                    ...prev,
+                                    [activeImageKey]: url,
+                                }));
+                                toast.dismiss(loadingToast);
+                                toast.success('Foto berhasil diunggah');
+                            });
+                        } catch (err) {
+                            toast.dismiss(loadingToast);
+                            toast.error('Gagal mengunggah foto');
+                        }
+                        setCropSrc('');
+                        setActiveImageKey(null);
+                    }}
+                />
+            )}
         </>
     );
 }

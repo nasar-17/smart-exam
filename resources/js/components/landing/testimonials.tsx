@@ -90,14 +90,22 @@ export default function Testimonials({ data }: { data?: any }) {
                                     }}
                                 />
                                 <div className="flex items-center gap-4">
-                                    <div
-                                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
-                                        style={{
-                                            background: `linear-gradient(${gradient})`,
-                                        }}
-                                    >
-                                        {initials}
-                                    </div>
+                                    {t.avatar ? (
+                                        <img
+                                            src={t.avatar}
+                                            alt={t.name}
+                                            className="h-10 w-10 rounded-full object-cover shrink-0 border border-slate-200/20 dark:border-slate-800/80 shadow-sm"
+                                        />
+                                    ) : (
+                                        <div
+                                            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
+                                            style={{
+                                                background: `linear-gradient(${gradient})`,
+                                            }}
+                                        >
+                                            {initials}
+                                        </div>
+                                    )}
                                     <div className="min-w-0">
                                         <div className="text-sm font-semibold truncate" style={{ color: 'var(--lp-text-primary)' }}>
                                             {t.name}
