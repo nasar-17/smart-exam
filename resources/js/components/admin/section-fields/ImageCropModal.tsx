@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { RotateCw, ZoomIn, ZoomOut, Check, X } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 
 interface ImageCropModalProps {
     isOpen: boolean;
@@ -27,6 +27,7 @@ export default function ImageCropModal({ isOpen, imageSrc, aspectRatio = 1, isCi
     // Physical canvas dimensions (high resolution output)
     let canvasWidth = 400;
     let canvasHeight = 400;
+
     if (ratio >= 1) {
         canvasHeight = Math.round(400 / ratio);
     } else {
@@ -36,6 +37,7 @@ export default function ImageCropModal({ isOpen, imageSrc, aspectRatio = 1, isCi
     // Display size in DOM (fits in a 300x300 box)
     let displayWidth = 300;
     let displayHeight = 300;
+
     if (ratio >= 1) {
         displayHeight = Math.round(300 / ratio);
     } else {
@@ -65,10 +67,16 @@ export default function ImageCropModal({ isOpen, imageSrc, aspectRatio = 1, isCi
     const drawCanvas = () => {
         const canvas = canvasRef.current;
         const img = imageRef.current;
-        if (!canvas || !img) return;
+
+        if (!canvas || !img) {
+return;
+}
 
         const ctx = canvas.getContext('2d');
-        if (!ctx) return;
+
+        if (!ctx) {
+return;
+}
 
         // Clear canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -111,7 +119,10 @@ export default function ImageCropModal({ isOpen, imageSrc, aspectRatio = 1, isCi
     };
 
     const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
-        if (!isDragging) return;
+        if (!isDragging) {
+return;
+}
+
         setOffset({
             x: e.clientX - dragStart.x,
             y: e.clientY - dragStart.y,
@@ -129,7 +140,10 @@ export default function ImageCropModal({ isOpen, imageSrc, aspectRatio = 1, isCi
 
     const handleSave = () => {
         const canvas = canvasRef.current;
-        if (!canvas) return;
+
+        if (!canvas) {
+return;
+}
 
         // Convert the preview canvas directly to a Blob to guarantee exact match
         canvas.toBlob((blob) => {
@@ -141,7 +155,11 @@ export default function ImageCropModal({ isOpen, imageSrc, aspectRatio = 1, isCi
     };
 
     return (
-        <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onCancel(); }}>
+        <Dialog open={isOpen} onOpenChange={(open) => {
+ if (!open) {
+onCancel();
+} 
+}}>
             <DialogContent className="max-w-md bg-[#151d2a] border-slate-800 rounded-2xl shadow-xl text-white">
                 <DialogHeader>
                     <DialogTitle className="text-lg font-bold text-center text-slate-100" style={{ fontFamily: "'Sora', sans-serif" }}>

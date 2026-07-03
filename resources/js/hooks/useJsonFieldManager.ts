@@ -25,9 +25,11 @@ export function useJsonFieldManager(
                     if (typeof item === 'string') {
                         return { _is_primitive_string: true, value: item };
                     }
+
                     return item as Record<string, any>;
                 });
             }
+
             return [];
         },
         [],
@@ -52,6 +54,7 @@ export function useJsonFieldManager(
                         if (k.toLowerCase() === 'id') {
                             return [k, ''];
                         }
+
                         return [
                             k,
                             Array.isArray(v)
@@ -90,11 +93,16 @@ export function useJsonFieldManager(
 
     const saveModalData = useCallback(() => {
         const { fieldKey, index } = modal;
-        if (fieldKey === null || index === null) return;
+
+        if (fieldKey === null || index === null) {
+return;
+}
 
         setLocalFields((prev) =>
             prev.map((f) => {
-                if (f.key !== fieldKey) return f;
+                if (f.key !== fieldKey) {
+return f;
+}
 
                 const items = getJsonItems(f);
                 const updatedItems = [...items];
@@ -105,16 +113,22 @@ export function useJsonFieldManager(
                     updatedItems.push(cleanedData);
                 } else {
                     const originalItem = items[index];
+
                     if (originalItem && 'id' in originalItem) {
                         cleanedData.id = originalItem.id;
                     }
+
                     updatedItems[index] = cleanedData;
                 }
 
                 const finalValue = updatedItems.map((item) => {
-                    if (item._is_primitive_string) return item.value;
+                    if (item._is_primitive_string) {
+return item.value;
+}
+
                     const c = { ...item };
                     delete c._is_primitive_string;
+
                     return c;
                 });
 
@@ -130,12 +144,17 @@ export function useJsonFieldManager(
         (key: string, index: number) => {
             setLocalFields((prev) =>
                 prev.map((f) => {
-                    if (f.key !== key) return f;
+                    if (f.key !== key) {
+return f;
+}
 
                     const items = getJsonItems(f);
                     const filtered = items.filter((_, i) => i !== index);
                     const finalValue = filtered.map((item) => {
-                        if (item._is_primitive_string) return item.value;
+                        if (item._is_primitive_string) {
+return item.value;
+}
+
                         return item;
                     });
 
@@ -152,6 +171,7 @@ export function useJsonFieldManager(
                 if (item && typeof item === 'object' && item._is_primitive_string) {
                     return item.value;
                 }
+
                 return item;
             });
             setLocalFields((prev) =>

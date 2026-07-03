@@ -6,6 +6,7 @@ use App\Models\LandingContent;
 use App\Repositories\LandingContentRepository;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
 
 class LandingContentService
 {
@@ -102,9 +103,30 @@ class LandingContentService
         ];
     }
 
-    public function uploadImage(UploadedFile $image): array
+    public function uploadImage(UploadedFile $image, ?string $oldImageUrl = null): array
     {
+        // Hapus file lama jika ada
+        if ($oldImageUrl) {
+            $oldPath = str_replace(Storage::url(''), '', $oldImageUrl);
+            if (Storage::disk('public')->exists($oldPath)) {
+                Storage::disk('public')->delete($oldPath);
+            }
+        }
+
+        // Simpan file sementara
         $path = $image->store('landing', 'public');
+        $fullPath = Storage::disk('public')->path($path);
+
+        // Resize gambar — max 1200px lebar, pertahankan aspect ratio, quality 80
+        try {
+            $img = Image::decodePath($fullPath);
+            $img->scale(width: 1200);
+            $img->save(null, ['quality' => 80]);
+        } catch (\Exception $e) {
+            // Jika resize gagal, file tetap tersimpan tanpa resize
+            report($e);
+        }
+
         $url = Storage::url($path);
 
         return [

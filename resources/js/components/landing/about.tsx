@@ -241,7 +241,11 @@ export default function About({ data }: { data?: any }) {
                                 ...itemsInstitutions,
                             ].map((inst, index) => {
                                 const instStr = typeof inst === 'string' ? inst : (inst && typeof inst === 'object' && 'value' in inst ? String((inst as any).value) : '');
-                                if (!instStr) return null;
+
+                                if (!instStr) {
+return null;
+}
+
                                 const [abbr, name, logo] = instStr.split('|');
 
                                 return (

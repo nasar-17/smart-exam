@@ -28,6 +28,7 @@ export function usePreviewListener({ onPreviewData }: UsePreviewListenerOptions)
                         const element = document.querySelector(
                             `[data-preview-field="${key}"]`,
                         );
+
                         if (element) {
                             element.classList.add('preview-highlight-active');
                         }
@@ -40,15 +41,18 @@ export function usePreviewListener({ onPreviewData }: UsePreviewListenerOptions)
                     const element = document.querySelector(
                         `[data-preview-field="${key}"]`,
                     );
+
                     if (element) {
                         element.classList.remove('preview-highlight-active');
                     }
+
                     break;
                 }
             }
         };
 
         window.addEventListener('message', handleMessage);
+
         return () => window.removeEventListener('message', handleMessage);
     }, []);
 }

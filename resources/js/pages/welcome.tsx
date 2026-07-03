@@ -1,6 +1,7 @@
 import { Head } from '@inertiajs/react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import CursorGlow from '@/components/cursor-glow';
 import About from '@/components/landing/about';
 import Contact from '@/components/landing/contact';
 import CTA from '@/components/landing/cta';
@@ -13,7 +14,6 @@ import Pricing from '@/components/landing/pricing';
 import Stats from '@/components/landing/stats';
 import Testimonials from '@/components/landing/testimonials';
 import { Toaster } from '@/components/ui/sonner';
-import CursorGlow from '@/components/cursor-glow';
 import { useScrollReveal, useStatsCounter } from '@/hooks/use-scroll-reveal';
 import { usePreviewListener } from '@/hooks/usePreviewListener';
 
@@ -33,6 +33,7 @@ export default function Welcome({ content = {}, sections = [] }: { content?: Con
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const sectionParam = urlParams.get('preview_section');
+
         if (sectionParam) {
             setPreviewSection(sectionParam);
         }
@@ -73,9 +74,11 @@ export default function Welcome({ content = {}, sections = [] }: { content?: Con
     // If previewSection is set, we want to isolate the preview of that section
     if (previewSection) {
         const Component = componentMap[previewSection];
+
         if (!Component) {
             return <div className="p-6 text-center text-slate-500">Preview tidak tersedia untuk bagian {previewSection}</div>;
         }
+
         return (
             <div
                 className="dark w-full h-auto min-h-screen flex flex-col justify-start"

@@ -1,8 +1,8 @@
 import { ExternalLink, Search } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import DynamicLucideIcon from '@/components/dynamic-lucide-icon';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import DynamicLucideIcon from '@/components/dynamic-lucide-icon';
 
 const ICONS = [
     'User', 'UserPlus', 'UserMinus', 'UserCheck', 'UserX', 'UserCircle',

@@ -2,14 +2,14 @@ import { Head, router } from '@inertiajs/react';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import FieldRenderer from '@/components/admin/section-fields/FieldRenderer';
-import JsonItemModal from '@/components/admin/section-fields/JsonItemModal';
 import PreviewPanel from '@/components/admin/PreviewPanel';
 import SaveStatusBar from '@/components/admin/SaveStatusBar';
-import { useSectionEditor } from '@/hooks/useSectionEditor';
-import type { Field } from '@/hooks/useSectionEditor';
+import FieldRenderer from '@/components/admin/section-fields/FieldRenderer';
+import JsonItemModal from '@/components/admin/section-fields/JsonItemModal';
 import { useJsonFieldManager } from '@/hooks/useJsonFieldManager';
 import { usePreviewCommunication } from '@/hooks/usePreviewCommunication';
+import { useSectionEditor } from '@/hooks/useSectionEditor';
+import type { Field } from '@/hooks/useSectionEditor';
 
 type Props = {
     section: string;
@@ -42,8 +42,11 @@ export default function SectionEditor({ section, fields }: Props) {
                 urls[f.key] = f.value;
             }
         });
+
         return urls;
     });
+
+    const [uploadingKeys, setUploadingKeys] = useState<Set<string>>(new Set());
 
     useEffect(() => {
         sendPreviewData();
@@ -51,22 +54,24 @@ export default function SectionEditor({ section, fields }: Props) {
 
     const handleImageUpload = useCallback(
         async (key: string, file: File) => {
+            const previousUrl = previewUrls[key];
+            const csrfToken =
+                document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '';
+
+            setUploadingKeys((prev) => new Set(prev).add(key));
+
             const formData = new window.FormData();
             formData.append('image', file);
+            formData.append('_token', csrfToken);
 
-            const csrfToken =
-                document.cookie
-                    .split('; ')
-                    .find((c) => c.startsWith('XSRF-TOKEN='))
-                    ?.split('=')[1] ?? '';
+            if (previousUrl) {
+                formData.append('current_url', previousUrl);
+            }
 
             try {
                 const res = await fetch('/admin/upload-image', {
                     method: 'POST',
                     body: formData,
-                    headers: {
-                        'X-XSRF-TOKEN': decodeURIComponent(csrfToken),
-                    },
                 });
                 const data = await res.json();
 
@@ -76,10 +81,18 @@ export default function SectionEditor({ section, fields }: Props) {
                     toast.success('Gambar berhasil diupload');
                 }
             } catch {
+                // Rollback on failure — restore old URL
                 toast.error('Gagal upload gambar');
+            } finally {
+                setUploadingKeys((prev) => {
+                    const next = new Set(prev);
+                    next.delete(key);
+
+                    return next;
+                });
             }
         },
-        [handleChange],
+        [handleChange, previewUrls],
     );
 
     const sectionLabel = section.charAt(0).toUpperCase() + section.slice(1);
@@ -88,8 +101,12 @@ export default function SectionEditor({ section, fields }: Props) {
     const nonJsonFields = localFields.filter((f) => f.type !== 'json' && f.key !== 'header_badge');
 
     const isFullWidthField = (field: Field) => {
-        if (field.type === 'textarea') return true;
+        if (field.type === 'textarea') {
+return true;
+}
+
         const key = field.key.toLowerCase();
+
         return (
             key === 'brand_name' ||
             key.includes('title') ||
@@ -103,6 +120,7 @@ export default function SectionEditor({ section, fields }: Props) {
         <div className={`grid grid-cols-1 ${cols === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-x-6 gap-y-4 items-start`}>
             {fields.map((field) => {
                 const fullWidth = isFullWidthField(field);
+
                 return (
                     <div
                         key={field.key}
@@ -117,6 +135,7 @@ export default function SectionEditor({ section, fields }: Props) {
                         <FieldRenderer
                             field={field}
                             previewUrl={previewUrls[field.key]}
+                            isUploading={uploadingKeys.has(field.key)}
                             onChange={handleChange}
                             onImageUpload={handleImageUpload}
                             onOpenAddModal={openAddModal}
@@ -202,6 +221,7 @@ export default function SectionEditor({ section, fields }: Props) {
                                         {[1, 2, 3, 4].map((num) => {
                                             const valField = nonJsonFields.find((f) => f.key === `stat_${num}_value`);
                                             const labelField = nonJsonFields.find((f) => f.key === `stat_${num}_label`);
+
                                             return (
                                                 <div key={num} className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start pb-4 border-b border-slate-100/50 dark:border-slate-800/50 last:border-0 last:pb-0">
                                                     {valField && (

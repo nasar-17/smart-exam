@@ -9,6 +9,7 @@ export function usePreviewCommunication(section: string, localFields: Field[]) {
             const previewData = localFields.reduce<Record<string, any>>(
                 (acc, f) => {
                     acc[f.key] = f.value;
+
                     return acc;
                 },
                 {},

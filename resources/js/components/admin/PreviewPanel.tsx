@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
 import { Monitor, Smartphone } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 type PreviewPanelProps = {
     section: string;
@@ -13,7 +13,10 @@ export default function PreviewPanel({ section, iframeRef, onLoad }: PreviewPane
     const [containerDimensions, setContainerDimensions] = useState({ width: 800, height: 600 });
 
     useEffect(() => {
-        if (!containerRef.current) return;
+        if (!containerRef.current) {
+return;
+}
+
         const observer = new ResizeObserver((entries) => {
             for (const entry of entries) {
                 // Ensure we get non-zero measurements
@@ -24,6 +27,7 @@ export default function PreviewPanel({ section, iframeRef, onLoad }: PreviewPane
             }
         });
         observer.observe(containerRef.current);
+
         return () => observer.disconnect();
     }, []);
 
@@ -95,6 +99,7 @@ export default function PreviewPanel({ section, iframeRef, onLoad }: PreviewPane
                     const scaleX = (containerDimensions.width * 0.9) / 375;
                     const scaleY = (containerDimensions.height * 0.9) / 667;
                     const scale = Math.max(0.1, Math.min(scaleX, scaleY, 1));
+
                     return (
                         <div
                             className="transition-all duration-300 ease-in-out border border-slate-200/60 dark:border-slate-800/80 rounded-2xl shadow-xl overflow-hidden relative"

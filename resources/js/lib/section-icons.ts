@@ -1,4 +1,3 @@
-import type { ElementType } from 'react';
 import {
     AlignJustify,
     BarChart2,
@@ -12,6 +11,7 @@ import {
     Star,
     Zap,
 } from 'lucide-react';
+import type { ElementType } from 'react';
 
 export type Section = {
     key: string;

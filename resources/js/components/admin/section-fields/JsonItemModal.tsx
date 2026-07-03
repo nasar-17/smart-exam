@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
+import ImageCropModal from '@/components/admin/section-fields/ImageCropModal';
 import DynamicLucideIcon from '@/components/dynamic-lucide-icon';
 import LucideIconPicker from '@/components/lucide-icon-picker';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { isBooleanValue } from '@/lib/utils';
-import ImageCropModal from '@/components/admin/section-fields/ImageCropModal';
 
 interface JsonItemModalProps {
     isOpen: boolean;
@@ -172,6 +172,7 @@ onCancel();
                                                              className="hidden"
                                                              onChange={(e) => {
                                                                  const file = e.target.files?.[0];
+
                                                                  if (file) {
                                                                      const reader = new FileReader();
                                                                      reader.onload = () => {
@@ -181,6 +182,7 @@ onCancel();
                                                                      };
                                                                      reader.readAsDataURL(file);
                                                                  }
+
                                                                  e.target.value = '';
                                                              }}
                                                          />
@@ -263,6 +265,7 @@ onCancel();
                                                             className="hidden"
                                                             onChange={(e) => {
                                                                 const file = e.target.files?.[0];
+
                                                                 if (file) {
                                                                     const reader = new FileReader();
                                                                     reader.onload = () => {
@@ -272,6 +275,7 @@ onCancel();
                                                                     };
                                                                     reader.readAsDataURL(file);
                                                                 }
+
                                                                 // Reset value so same file can be uploaded again
                                                                 e.target.value = '';
                                                             }}
@@ -320,11 +324,13 @@ onCancel();
                                                     value={isIconField ? String(itemVal ?? '').replace(/^lucide:/, '') : String(itemVal ?? '')}
                                                     onChange={(e) => {
                                                         let val = e.target.value;
+
                                                         if (isIconField) {
                                                             val = val.trim();
                                                             const cleanName = val.replace(/^lucide:/, '');
                                                             val = cleanName ? `lucide:${cleanName}` : '';
                                                         }
+
                                                         setModalData((prev) => ({ ...prev, [itemKey]: val }));
                                                     }}
                                                     placeholder={isIconField ? 'Contoh: user-plus' : ''}
@@ -437,6 +443,7 @@ onCancel();
                     onCrop={async (croppedFile) => {
                         setCropModalOpen(false);
                         const loadingToast = toast.loading('Mengunggah gambar hasil potong...');
+
                         try {
                             await handleFileUpload(croppedFile, (url) => {
                                 if (activeImageKey === 'institutions_logo') {
@@ -454,6 +461,7 @@ onCancel();
                                         [activeImageKey]: url,
                                     }));
                                 }
+
                                 toast.dismiss(loadingToast);
                                 toast.success('Foto berhasil diunggah');
                             });
@@ -461,6 +469,7 @@ onCancel();
                             toast.dismiss(loadingToast);
                             toast.error('Gagal mengunggah foto');
                         }
+
                         setCropSrc('');
                         setActiveImageKey(null);
                     }}

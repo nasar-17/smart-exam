@@ -19,11 +19,17 @@ export function isBooleanValue(
     val: unknown,
     fieldName?: string,
 ): boolean {
-    if (typeof val === 'boolean') return true;
-    if (val === 'true' || val === 'false') return true;
+    if (typeof val === 'boolean') {
+return true;
+}
+
+    if (val === 'true' || val === 'false') {
+return true;
+}
 
     if (fieldName) {
         const name = fieldName.toLowerCase();
+
         if (name === 'featured' || name === 'active' || name === 'is_visible' || name === 'enabled') {
             return true;
         }

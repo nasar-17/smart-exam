@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { router } from '@inertiajs/react';
 import type { VisitOptions } from '@inertiajs/core';
+import { router } from '@inertiajs/react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 export type Field = {
@@ -19,10 +19,12 @@ function normalizeFieldValue(f: Field): Field {
                 if (item && typeof item === 'object' && item._is_primitive_string) {
                     return item.value;
                 }
+
                 return item;
             }),
         };
     }
+
     return f;
 }
 
@@ -44,6 +46,7 @@ export function useSectionEditor(section: string, initialFields: Field[]) {
         const normalizedInitial = initialFields.map(normalizeFieldValue);
         const hasChanged =
             JSON.stringify(localFields) !== JSON.stringify(normalizedInitial);
+
         if (hasChanged) {
             if (saveStatus !== 'saving' && saveStatus !== 'error') {
                 setSaveStatus('dirty');
@@ -64,14 +67,17 @@ export function useSectionEditor(section: string, initialFields: Field[]) {
             setSaveStatus('saving');
             const formFields = fieldsToSave.map((f) => {
                 let val = f.value;
+
                 if (f.type === 'json' && Array.isArray(val)) {
                     val = val.map((item) => {
                         if (item && typeof item === 'object' && item._is_primitive_string) {
                             return item.value;
                         }
+
                         return item;
                     });
                 }
+
                 return { key: f.key, value: val };
             });
 

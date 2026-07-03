@@ -40,11 +40,12 @@ class SectionController extends Controller
     public function uploadImage(Request $request): JsonResponse
     {
         $request->validate([
-            'image' => 'required|image|max:2048',
+            'image' => 'required|image|max:10240|mimes:jpg,jpeg,png,webp',
         ]);
 
         $result = $this->landingContentService->uploadImage(
-            $request->file('image')
+            $request->file('image'),
+            $request->input('current_url'),
         );
 
         return response()->json($result);

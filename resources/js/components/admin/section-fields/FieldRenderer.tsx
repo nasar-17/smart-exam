@@ -1,11 +1,12 @@
-import TextField from '@/components/admin/section-fields/TextField';
 import ImageField from '@/components/admin/section-fields/ImageField';
 import JsonField from '@/components/admin/section-fields/JsonField';
+import TextField from '@/components/admin/section-fields/TextField';
 import type { Field } from '@/hooks/useSectionEditor';
 
 type FieldRendererProps = {
     field: Field;
     previewUrl?: string;
+    isUploading?: boolean;
     onChange: (key: string, value: string) => void;
     onImageUpload: (key: string, file: File) => void;
     onOpenAddModal: (fieldKey: string, field: Field) => void;
@@ -19,6 +20,7 @@ type FieldRendererProps = {
 export default function FieldRenderer({
     field,
     previewUrl,
+    isUploading,
     onChange,
     onImageUpload,
     onOpenAddModal,
@@ -49,7 +51,8 @@ export default function FieldRenderer({
                 );
             case 'image': {
                 let aspectRatio = 1;
-                let isCircle = false;
+                const isCircle = false;
+
                 if (field.key === 'hero_image') {
                     aspectRatio = 380 / 420;
                 } else if (field.key === 'hero_bg_image') {
@@ -63,6 +66,7 @@ export default function FieldRenderer({
                         label={field.label}
                         value={String(field.value ?? '')}
                         previewUrl={previewUrl}
+                        isUploading={isUploading}
                         aspectRatio={aspectRatio}
                         isCircle={isCircle}
                         onChange={(val) => onChange(field.key, val)}
@@ -105,8 +109,10 @@ function getJsonItems(field: Field): Record<string, any>[] {
             if (typeof item === 'string') {
                 return { _is_primitive_string: true, value: item };
             }
+
             return item as Record<string, any>;
         });
     }
+
     return [];
 }

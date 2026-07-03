@@ -25,11 +25,18 @@ const DEFAULT_LINKS_SUPPORT = [
 ];
 
 function parseJsonLinks(raw: any, fallback: { label: string; href: string }[]) {
-    if (!raw) return fallback;
+    if (!raw) {
+return fallback;
+}
+
     try {
         const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+
+        if (Array.isArray(parsed) && parsed.length > 0) {
+return parsed;
+}
     } catch (_) {}
+
     return fallback;
 }
 
