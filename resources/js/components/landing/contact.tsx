@@ -38,16 +38,7 @@ export default function Contact({ data }: { data?: any }) {
                     transition={{ duration: 0.6 }}
                     className="mb-14 text-center"
                 >
-                    <div
-                        className="mb-4 inline-block rounded-full px-3 py-1 text-xs font-bold tracking-wider uppercase"
-                        style={{
-                            background: 'var(--lp-blue-light)',
-                            color: 'var(--lp-blue-text)',
-                            border: '1px solid var(--lp-border)',
-                        }}
-                    >
-                        Hubungi Kami
-                    </div>
+
                     <h2
                         className="mb-4 text-[40px] font-bold tracking-tight"
                         data-preview-field="title"
