@@ -27,6 +27,12 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@smartexam.com',
         ]);
 
+        User::factory()->admin()->create([
+            'name' => 'Nasaruddin',
+            'email' => 'nasaruddinpawe@gmail.com',
+            'password' => bcrypt('password'),
+        ]);
+
         $this->call([
             LandingContentSeeder::class,
         ]);
