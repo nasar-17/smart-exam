@@ -84,14 +84,14 @@ export default function About({ data }: { data?: any }) {
 
                         <h2
                             className="mb-6 text-[38px] leading-tight font-bold tracking-tight"
-                            data-preview-field="title"
                             style={{
                                 fontFamily: "'Sora', sans-serif",
                                 color: 'var(--lp-text-primary)',
                             }}
                         >
-                            {title}
-                            <br />
+                            <span className="block" data-preview-field="title">
+                                {title}
+                            </span>
                             <span className="gradient-text" data-preview-field="title_highlight">
                                 {titleHighlight}
                             </span>

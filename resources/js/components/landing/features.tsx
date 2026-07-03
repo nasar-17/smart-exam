@@ -102,13 +102,12 @@ export default function Features({ data }: { data?: any }) {
 
                     <h2
                         className="mb-4 text-[40px] font-bold tracking-tight"
-                        data-preview-field="header_title"
                         style={{
                             fontFamily: "'Sora', sans-serif",
                             color: 'var(--lp-text-primary)',
                         }}
                     >
-                        {title}{' '}
+                        <span data-preview-field="header_title">{title}</span>{' '}
                         <span className="gradient-text" data-preview-field="header_title_highlight">{titleHighlight}</span>
                     </h2>
                     <p

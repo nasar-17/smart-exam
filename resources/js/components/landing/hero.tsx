@@ -103,7 +103,6 @@ export default function Hero({ data }: { data?: any }) {
                         {/* Headline */}
                         <h1
                             className="mb-6 text-white"
-                            data-preview-field="title"
                             style={{
                                 fontFamily: "'Sora', sans-serif",
                                 fontSize: 'clamp(2.2rem, 4.8vw, 3.6rem)',
@@ -113,7 +112,9 @@ export default function Hero({ data }: { data?: any }) {
                                 minHeight: '2.15em',
                             }}
                         >
-                            {title}
+                            <span className="block" data-preview-field="title">
+                                {title}
+                            </span>
                             <span className="block text-[#60a5fa]" data-preview-field="title_accent">
                                 {currentText}
                                 <span className="animate-pulse ml-1 text-white">|</span>
