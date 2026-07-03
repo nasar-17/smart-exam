@@ -47,16 +47,29 @@ export default function FieldRenderer({
                         onChange={(val) => onChange(field.key, val)}
                     />
                 );
-            case 'image':
+            case 'image': {
+                let aspectRatio = 1;
+                let isCircle = false;
+                if (field.key === 'hero_image') {
+                    aspectRatio = 380 / 420;
+                } else if (field.key === 'hero_bg_image') {
+                    aspectRatio = 16 / 9;
+                } else if (field.key === 'image_url' || field.key === 'image_2_url') {
+                    aspectRatio = 4 / 3;
+                }
+
                 return (
                     <ImageField
                         label={field.label}
                         value={String(field.value ?? '')}
                         previewUrl={previewUrl}
+                        aspectRatio={aspectRatio}
+                        isCircle={isCircle}
                         onChange={(val) => onChange(field.key, val)}
                         onUpload={(file) => onImageUpload(field.key, file)}
                     />
                 );
+            }
             case 'json':
                 return (
                     <JsonField

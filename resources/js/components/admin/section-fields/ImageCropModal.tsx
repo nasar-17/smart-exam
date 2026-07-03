@@ -6,11 +6,13 @@ import { RotateCw, ZoomIn, ZoomOut, Check, X } from 'lucide-react';
 interface ImageCropModalProps {
     isOpen: boolean;
     imageSrc: string;
+    aspectRatio?: number; // width / height
+    isCircle?: boolean;
     onCrop: (croppedFile: File) => void;
     onCancel: () => void;
 }
 
-export default function ImageCropModal({ isOpen, imageSrc, onCrop, onCancel }: ImageCropModalProps) {
+export default function ImageCropModal({ isOpen, imageSrc, aspectRatio = 1, isCircle = false, onCrop, onCancel }: ImageCropModalProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [zoom, setZoom] = useState(1);
     const [rotation, setRotation] = useState(0); // in degrees: 0, 90, 180, 270
@@ -18,6 +20,27 @@ export default function ImageCropModal({ isOpen, imageSrc, onCrop, onCancel }: I
     const [isDragging, setIsDragging] = useState(false);
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
     const imageRef = useRef<HTMLImageElement | null>(null);
+
+    // Calculate dimensions based on aspect ratio
+    const ratio = aspectRatio || 1;
+
+    // Physical canvas dimensions (high resolution output)
+    let canvasWidth = 400;
+    let canvasHeight = 400;
+    if (ratio >= 1) {
+        canvasHeight = Math.round(400 / ratio);
+    } else {
+        canvasWidth = Math.round(400 * ratio);
+    }
+
+    // Display size in DOM (fits in a 300x300 box)
+    let displayWidth = 300;
+    let displayHeight = 300;
+    if (ratio >= 1) {
+        displayHeight = Math.round(300 / ratio);
+    } else {
+        displayWidth = Math.round(300 * ratio);
+    }
 
     // Reset settings when modal opens or imageSrc changes
     useEffect(() => {
@@ -71,10 +94,10 @@ export default function ImageCropModal({ isOpen, imageSrc, onCrop, onCancel }: I
         const cos = Math.cos(rad);
         const sin = Math.sin(rad);
         // Transform the offset based on rotation so dragging direction matches hand movement
-        // Scale by 400/300 because DOM client size is 300px but canvas dimension is 400px
-        const ratio = 400 / 300;
-        const tx = (offset.x * cos + offset.y * sin) * ratio;
-        const ty = (-offset.x * sin + offset.y * cos) * ratio;
+        // Scale by drag ratio because DOM client size differs from physical canvas size
+        const dragRatio = canvasWidth / displayWidth;
+        const tx = (offset.x * cos + offset.y * sin) * dragRatio;
+        const ty = (-offset.x * sin + offset.y * cos) * dragRatio;
 
         ctx.drawImage(img, -w / 2 + tx, -h / 2 + ty, w, h);
         ctx.restore();
@@ -111,7 +134,7 @@ export default function ImageCropModal({ isOpen, imageSrc, onCrop, onCancel }: I
         // Convert the preview canvas directly to a Blob to guarantee exact match
         canvas.toBlob((blob) => {
             if (blob) {
-                const croppedFile = new File([blob], 'cropped-avatar.jpg', { type: 'image/jpeg' });
+                const croppedFile = new File([blob], 'cropped-image.jpg', { type: 'image/jpeg' });
                 onCrop(croppedFile);
             }
         }, 'image/jpeg', 0.95);
@@ -122,7 +145,7 @@ export default function ImageCropModal({ isOpen, imageSrc, onCrop, onCancel }: I
             <DialogContent className="max-w-md bg-[#151d2a] border-slate-800 rounded-2xl shadow-xl text-white">
                 <DialogHeader>
                     <DialogTitle className="text-lg font-bold text-center text-slate-100" style={{ fontFamily: "'Sora', sans-serif" }}>
-                        Sesuaikan Foto Profil
+                        Sesuaikan Ukuran Gambar
                     </DialogTitle>
                 </DialogHeader>
 
@@ -131,15 +154,23 @@ export default function ImageCropModal({ isOpen, imageSrc, onCrop, onCancel }: I
                     <div className="relative w-[300px] h-[300px] rounded-xl overflow-hidden bg-slate-950/60 border border-slate-800 flex items-center justify-center shadow-inner cursor-move">
                         <canvas
                             ref={canvasRef}
-                            width={400}
-                            height={400}
+                            width={canvasWidth}
+                            height={canvasHeight}
                             onPointerDown={handlePointerDown}
                             onPointerMove={handlePointerMove}
                             onPointerUp={handlePointerUp}
-                            className="w-[300px] h-[300px] object-cover touch-none"
+                            style={{ width: displayWidth, height: displayHeight }}
+                            className="object-cover touch-none border border-slate-800/80"
                         />
-                        {/* Circular 1:1 crop mask overlay */}
-                        <div className="absolute inset-0 pointer-events-none border-2 border-blue-500 rounded-full shadow-[0_0_0_9999px_rgba(15,23,42,0.7)]" />
+                        {/* Circular 1:1 or Rectangular crop mask overlay */}
+                        {isCircle ? (
+                            <div className="absolute inset-0 pointer-events-none border-2 border-blue-500 rounded-full shadow-[0_0_0_9999px_rgba(15,23,42,0.7)]" />
+                        ) : (
+                            <div
+                                className="absolute pointer-events-none border-2 border-blue-500 shadow-[0_0_0_9999px_rgba(15,23,42,0.7)]"
+                                style={{ width: displayWidth, height: displayHeight }}
+                            />
+                        )}
                     </div>
 
                     {/* Zoom Control Slider */}

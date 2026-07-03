@@ -427,6 +427,8 @@ onCancel();
                 <ImageCropModal
                     isOpen={cropModalOpen}
                     imageSrc={cropSrc}
+                    aspectRatio={1}
+                    isCircle={activeImageKey === 'avatar' || activeImageKey === 'institutions_logo'}
                     onCancel={() => {
                         setCropModalOpen(false);
                         setCropSrc('');
