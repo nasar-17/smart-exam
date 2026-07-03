@@ -255,7 +255,7 @@ export default function About({ data }: { data?: any }) {
                                                 <img
                                                     src={logo}
                                                     alt={name}
-                                                    className="h-full w-full object-contain p-0.5"
+                                                    className="h-full w-full object-cover"
                                                 />
                                             </div>
                                         ) : (
