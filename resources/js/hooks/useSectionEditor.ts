@@ -34,10 +34,16 @@ export function useSectionEditor(section: string, initialFields: Field[]) {
     );
     const [saveStatus, setSaveStatus] = useState<SaveStatus>('saved');
 
+    // Sync with initialFields when props update (e.g. after successful save)
+    useEffect(() => {
+        setLocalFields(initialFields.map(normalizeFieldValue));
+    }, [initialFields]);
+
     // Track dirty state
     useEffect(() => {
+        const normalizedInitial = initialFields.map(normalizeFieldValue);
         const hasChanged =
-            JSON.stringify(localFields) !== JSON.stringify(initialFields);
+            JSON.stringify(localFields) !== JSON.stringify(normalizedInitial);
         if (hasChanged) {
             if (saveStatus !== 'saving' && saveStatus !== 'error') {
                 setSaveStatus('dirty');
