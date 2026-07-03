@@ -60,8 +60,8 @@ export default function ImageCropModal({ isOpen, imageSrc, onCrop, onCancel }: I
         // Apply zoom and offsets
         ctx.scale(zoom, zoom);
 
-        // Calculate aspect ratio fit
-        const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+        // Calculate aspect ratio fit (use Math.max for cover effect)
+        const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
         const w = img.width * scale;
         const h = img.height * scale;
 
