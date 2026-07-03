@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminSettingsController;
 use App\Http\Controllers\Admin\AppointmentController as AdminAppointmentController;
 use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\AppointmentController;
@@ -42,6 +43,13 @@ Route::prefix('admin')
 
         Route::post('/upload-image', [SectionController::class, 'uploadImage'])
             ->name('upload.image');
+
+        Route::get('/settings-akun', [AdminSettingsController::class, 'edit'])
+            ->name('settings-akun.edit');
+        Route::patch('/settings-akun/profile', [AdminSettingsController::class, 'updateProfile'])
+            ->name('settings-akun.profile');
+        Route::put('/settings-akun/password', [AdminSettingsController::class, 'updatePassword'])
+            ->name('settings-akun.password');
     });
 
 require __DIR__.'/settings.php';

@@ -93,7 +93,7 @@ export default function AdminLayout({ children, title = 'Admin Panel' }: PropsWi
                     </Link>
                 </div>
 
-                {/* Dashboard link */}
+                {/* Dashboard */}
                 <div className="px-3 pt-4 pb-1">
                     <Link
                         href="/admin"
@@ -108,9 +108,23 @@ export default function AdminLayout({ children, title = 'Admin Panel' }: PropsWi
                     </Link>
                 </div>
 
-                {/* Nav sections — collapsible dropdown */}
-                <nav className="flex-1 px-3 py-2 space-y-1.5">
-                    {/* Collapsible Header/Trigger */}
+                {/* List Page */}
+                <div className="px-3 py-1">
+                    <Link
+                        href="/admin/settings"
+                        className={`flex items-center gap-2.5 rounded-2xl px-4 py-2.5 text-sm font-semibold transition-all ${
+                            currentPath === '/admin/settings'
+                                ? 'bg-white dark:bg-[#1e2736] text-blue-600 dark:text-blue-400 shadow-[0_8px_20px_-4px_rgba(37,99,235,0.22)] dark:shadow-[0_8px_20px_-4px_rgba(0,0,0,0.4)] border border-slate-100 dark:border-slate-800'
+                                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50/80 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/50'
+                        }`}
+                    >
+                        <List className="h-4 w-4" />
+                        List Page
+                    </Link>
+                </div>
+
+                {/* Sections — collapsible dropdown */}
+                <nav className="flex-1 px-3 py-1 space-y-1.5">
                     <button
                         type="button"
                         onClick={() => setIsSectionsOpen(!isSectionsOpen)}
@@ -132,7 +146,6 @@ export default function AdminLayout({ children, title = 'Admin Panel' }: PropsWi
                         </svg>
                     </button>
 
-                    {/* Dropdown content */}
                     <div
                         className={`space-y-1 overflow-hidden transition-all duration-300 ${
                             isSectionsOpen ? 'max-h-[500px] opacity-100 mt-1 pl-2' : 'max-h-0 opacity-0'
@@ -160,8 +173,11 @@ export default function AdminLayout({ children, title = 'Admin Panel' }: PropsWi
                     </div>
                 </nav>
 
-                {/* Appointment Link */}
-                <div className="px-3 pb-3">
+                {/* Spacer */}
+                <div className="flex-1" />
+
+                {/* Appointment */}
+                <div className="px-3 pb-2">
                     <Link
                         href="/admin/appointments"
                         onClick={handleAppointmentClick}
@@ -181,27 +197,20 @@ export default function AdminLayout({ children, title = 'Admin Panel' }: PropsWi
                             </span>
                         )}
                     </Link>
+                </div>
+
+                {/* Settings */}
+                <div className="px-3 pb-3">
                     <Link
-                        href="/settings/profile"
-                        className={`mt-1 flex items-center gap-2.5 rounded-2xl px-4 py-2.5 text-sm font-semibold transition-all ${
-                            currentPath.startsWith('/settings/')
+                        href="/admin/settings-akun"
+                        className={`flex items-center gap-2.5 rounded-2xl px-4 py-2.5 text-sm font-semibold transition-all ${
+                            currentPath === '/admin/settings-akun'
                                 ? 'bg-white dark:bg-[#1e2736] text-blue-600 dark:text-blue-400 shadow-[0_8px_20px_-4px_rgba(37,99,235,0.22)] dark:shadow-[0_8px_20px_-4px_rgba(0,0,0,0.4)] border border-slate-100 dark:border-slate-800'
                                 : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50/80 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/50'
                         }`}
                     >
                         <Settings className="h-4 w-4" />
-                        Setting
-                    </Link>
-                    <Link
-                        href="/admin/settings"
-                        className={`mt-1 flex items-center gap-2.5 rounded-2xl px-4 py-2.5 text-sm font-semibold transition-all ${
-                            currentPath === '/admin/settings'
-                                ? 'bg-white dark:bg-[#1e2736] text-blue-600 dark:text-blue-400 shadow-[0_8px_20px_-4px_rgba(37,99,235,0.22)] dark:shadow-[0_8px_20px_-4px_rgba(0,0,0,0.4)] border border-slate-100 dark:border-slate-800'
-                                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50/80 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/50'
-                        }`}
-                    >
-                        <List className="h-4 w-4" />
-                        List Page
+                        Settings
                     </Link>
                 </div>
 
