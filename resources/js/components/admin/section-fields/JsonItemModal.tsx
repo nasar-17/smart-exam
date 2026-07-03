@@ -166,23 +166,24 @@ onCancel();
                                                             <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                                                         </svg>
                                                         Upload
-                                                        <input
-                                                            type="file"
-                                                            accept="image/*"
-                                                            className="hidden"
-                                                            onChange={async (e) => {
-                                                                const file = e.target.files?.[0];
-                                                                if (file) {
-                                                                    await handleFileUpload(file, (url) => {
-                                                                        setModalData((prev) => ({
-                                                                            ...prev,
-                                                                            value: `${initials}|${name}|${url}`
-                                                                        }));
-                                                                        toast.success('Logo berhasil diupload');
-                                                                    });
-                                                                }
-                                                            }}
-                                                        />
+                                                         <input
+                                                             type="file"
+                                                             accept="image/*"
+                                                             className="hidden"
+                                                             onChange={(e) => {
+                                                                 const file = e.target.files?.[0];
+                                                                 if (file) {
+                                                                     const reader = new FileReader();
+                                                                     reader.onload = () => {
+                                                                         setCropSrc(reader.result as string);
+                                                                         setActiveImageKey('institutions_logo');
+                                                                         setCropModalOpen(true);
+                                                                     };
+                                                                     reader.readAsDataURL(file);
+                                                                 }
+                                                                 e.target.value = '';
+                                                             }}
+                                                         />
                                                     </label>
                                                 </div>
                                                 {logoUrl && (
@@ -436,10 +437,21 @@ onCancel();
                         const loadingToast = toast.loading('Mengunggah gambar hasil potong...');
                         try {
                             await handleFileUpload(croppedFile, (url) => {
-                                setModalData((prev) => ({
-                                    ...prev,
-                                    [activeImageKey]: url,
-                                }));
+                                if (activeImageKey === 'institutions_logo') {
+                                    const valueStr = String(modalData.value ?? '');
+                                    const parts = valueStr.split('|');
+                                    const initials = parts[0] || '';
+                                    const name = parts[1] || '';
+                                    setModalData((prev) => ({
+                                        ...prev,
+                                        value: `${initials}|${name}|${url}`
+                                    }));
+                                } else {
+                                    setModalData((prev) => ({
+                                        ...prev,
+                                        [activeImageKey]: url,
+                                    }));
+                                }
                                 toast.dismiss(loadingToast);
                                 toast.success('Foto berhasil diunggah');
                             });
