@@ -19,6 +19,7 @@ export default function CTA({ data }: { data?: any }) {
     const badge1 = data?.badge_1 ?? 'Data Aman & Terenkripsi';
     const badge2 = data?.badge_2 ?? 'Setup 3 Menit';
     const badge3 = data?.badge_3 ?? 'Gratis 14 Hari Tanpa Syarat';
+    const btnText = data?.btn_text ?? 'Jadwalkan Demo';
 
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -135,7 +136,7 @@ export default function CTA({ data }: { data?: any }) {
                             }}
                         >
                             <Calendar className="h-[18px] w-[18px]" />
-                            Jadwalkan Demo
+                            <span data-preview-field="btn_text">{btnText}</span>
                         </button>
                     </div>
                     <div

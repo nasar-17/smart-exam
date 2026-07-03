@@ -131,6 +131,7 @@ class LandingContentSeeder extends Seeder
             // ── CTA ─────────────────────────────────────────
             ['section' => 'cta', 'key' => 'title', 'value' => 'Siap Membawa Ujian di Institusimu ke Level Berikutnya?', 'type' => 'text', 'label' => 'Judul', 'order' => 1],
             ['section' => 'cta', 'key' => 'subtitle', 'value' => 'Bergabunglah bersama 500+ institusi pendidikan yang sudah mempercayakan ujian digital mereka ke Smart Exam.', 'type' => 'textarea', 'label' => 'Subjudul', 'order' => 2],
+            ['section' => 'cta', 'key' => 'btn_text', 'value' => 'Jadwalkan Demo', 'type' => 'text', 'label' => 'Teks Tombol CTA', 'order' => 2.5],
             ['section' => 'cta', 'key' => 'badge_1', 'value' => 'Data Aman & Terenkripsi', 'type' => 'text', 'label' => 'Trust Badge 1', 'order' => 3],
             ['section' => 'cta', 'key' => 'badge_2', 'value' => 'Setup 3 Menit', 'type' => 'text', 'label' => 'Trust Badge 2', 'order' => 4],
             ['section' => 'cta', 'key' => 'badge_3', 'value' => 'Gratis 14 Hari Tanpa Syarat', 'type' => 'text', 'label' => 'Trust Badge 3', 'order' => 5],
