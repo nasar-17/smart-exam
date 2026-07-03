@@ -20,28 +20,38 @@ export default function ImageCropModal({ isOpen, imageSrc, aspectRatio = 1, isCi
     const [isDragging, setIsDragging] = useState(false);
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
     const imageRef = useRef<HTMLImageElement | null>(null);
+    const [canvasSize, setCanvasSize] = useState({ width: 400, height: 400 });
+    const [displaySize, setDisplaySize] = useState({ width: 300, height: 300 });
 
-    // Calculate dimensions based on aspect ratio
     const ratio = aspectRatio || 1;
 
-    // Physical canvas dimensions (high resolution output)
-    let canvasWidth = 400;
-    let canvasHeight = 400;
+    function computeSizes(imgWidth: number, imgHeight: number) {
+        // Canvas output — resolusi asli gambar (max 2000px agar tidak kegedean)
+        let cw = imgWidth;
+        let ch = imgHeight;
+        if (ratio >= 1) {
+            ch = Math.round(cw / ratio);
+        } else {
+            cw = Math.round(ch * ratio);
+        }
+        const maxDim = 2000;
+        if (cw > maxDim || ch > maxDim) {
+            const scale = Math.min(maxDim / cw, maxDim / ch);
+            cw = Math.round(cw * scale);
+            ch = Math.round(ch * scale);
+        }
 
-    if (ratio >= 1) {
-        canvasHeight = Math.round(400 / ratio);
-    } else {
-        canvasWidth = Math.round(400 * ratio);
-    }
+        // Display size — viewport 300px
+        let dw = 300;
+        let dh = 300;
+        if (ratio >= 1) {
+            dh = Math.round(300 / ratio);
+        } else {
+            dw = Math.round(300 * ratio);
+        }
 
-    // Display size in DOM (fits in a 300x300 box)
-    let displayWidth = 300;
-    let displayHeight = 300;
-
-    if (ratio >= 1) {
-        displayHeight = Math.round(300 / ratio);
-    } else {
-        displayWidth = Math.round(300 * ratio);
+        setCanvasSize({ width: cw, height: ch });
+        setDisplaySize({ width: dw, height: dh });
     }
 
     // Reset settings when modal opens or imageSrc changes
@@ -54,7 +64,7 @@ export default function ImageCropModal({ isOpen, imageSrc, aspectRatio = 1, isCi
             img.src = imageSrc;
             img.onload = () => {
                 imageRef.current = img;
-                drawCanvas();
+                computeSizes(img.naturalWidth, img.naturalHeight);
             };
         }
     }, [isOpen, imageSrc]);
@@ -103,7 +113,7 @@ return;
         const sin = Math.sin(rad);
         // Transform the offset based on rotation so dragging direction matches hand movement
         // Scale by drag ratio because DOM client size differs from physical canvas size
-        const dragRatio = canvasWidth / displayWidth;
+        const dragRatio = canvasSize.width / displaySize.width;
         const tx = (offset.x * cos + offset.y * sin) * dragRatio;
         const ty = (-offset.x * sin + offset.y * cos) * dragRatio;
 
@@ -172,12 +182,12 @@ onCancel();
                     <div className="relative w-[300px] h-[300px] rounded-xl overflow-hidden bg-slate-950/60 border border-slate-800 flex items-center justify-center shadow-inner cursor-move">
                         <canvas
                             ref={canvasRef}
-                            width={canvasWidth}
-                            height={canvasHeight}
+                            width={canvasSize.width}
+                            height={canvasSize.height}
                             onPointerDown={handlePointerDown}
                             onPointerMove={handlePointerMove}
                             onPointerUp={handlePointerUp}
-                            style={{ width: displayWidth, height: displayHeight }}
+                            style={{ width: displaySize.width, height: displaySize.height }}
                             className="object-cover touch-none border border-slate-800/80"
                         />
                         {/* Circular 1:1 or Rectangular crop mask overlay */}
@@ -186,7 +196,7 @@ onCancel();
                         ) : (
                             <div
                                 className="absolute pointer-events-none border-2 border-blue-500 shadow-[0_0_0_9999px_rgba(15,23,42,0.7)]"
-                                style={{ width: displayWidth, height: displayHeight }}
+                                style={{ width: displaySize.width, height: displaySize.height }}
                             />
                         )}
                     </div>
