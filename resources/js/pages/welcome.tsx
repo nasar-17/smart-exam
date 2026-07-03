@@ -97,10 +97,10 @@ export default function Welcome({ content = {}, sections = [] }: { content?: Con
                         animation: preview-glow-pulse 1.2s ease-in-out infinite;
                     }
                     [data-preview-field="hero_bg_image"].preview-highlight-active {
-                        outline: 5px solid rgba(59,130,246,1) !important;
+                        outline: 5px solid rgba(255,255,255,1) !important;
                         outline-offset: -15px !important;
-                        box-shadow: inset 0 0 80px rgba(59,130,246,0.95), inset 0 0 150px rgba(59,130,246,0.85) !important;
-                        animation: preview-glow-pulse-inset 1.2s ease-in-out infinite;
+                        box-shadow: inset 0 0 80px rgba(255,255,255,0.95), inset 0 0 150px rgba(255,255,255,0.85) !important;
+                        animation: preview-glow-pulse-inset-white 1.2s ease-in-out infinite;
                     }
                     [data-preview-field="btn_text"].preview-highlight-active {
                         outline: 3px solid rgba(255,255,255,1) !important;
@@ -118,14 +118,14 @@ export default function Welcome({ content = {}, sections = [] }: { content?: Con
                             box-shadow: 0 0 20px rgba(59,130,246,0.6), 0 0 40px rgba(59,130,246,0.3) !important;
                         }
                     }
-                    @keyframes preview-glow-pulse-inset {
+                    @keyframes preview-glow-pulse-inset-white {
                         0%, 100% { 
                             outline-color: transparent; 
-                            box-shadow: inset 0 0 0 rgba(59,130,246,0) !important;
+                            box-shadow: inset 0 0 0 rgba(255,255,255,0) !important;
                         }
                         50% { 
-                            outline-color: rgba(59,130,246,1); 
-                            box-shadow: inset 0 0 80px rgba(59,130,246,0.95), inset 0 0 150px rgba(59,130,246,0.85) !important;
+                            outline-color: rgba(255,255,255,1); 
+                            box-shadow: inset 0 0 80px rgba(255,255,255,0.95), inset 0 0 150px rgba(255,255,255,0.85) !important;
                         }
                     }
                     @keyframes preview-glow-pulse-white {
