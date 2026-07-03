@@ -2,7 +2,6 @@
 
 use App\Models\LandingContent;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -17,7 +16,7 @@ return new class extends Migration
                 'value' => '4.9/5 dari 500+ pengguna',
                 'type' => 'text',
                 'label' => 'Teks Rating',
-                'order' => 2.5
+                'order' => 2.5,
             ]
         );
     }

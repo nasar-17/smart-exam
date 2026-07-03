@@ -1,5 +1,6 @@
 import { Loader, Upload } from 'lucide-react';
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 import ImageCropModal from '@/components/admin/section-fields/ImageCropModal';
 import { Input } from '@/components/ui/input';
 
@@ -57,6 +58,11 @@ export default function ImageField({
                                     const file = e.target.files?.[0];
 
                                     if (file) {
+                                        if (file.size > 10 * 1024 * 1024) {
+                                            toast.error('Ukuran gambar maksimal 10 MB');
+                                            e.target.value = '';
+                                            return;
+                                        }
                                         const reader = new FileReader();
                                         reader.onload = () => {
                                             setCropSrc(reader.result as string);

@@ -6,7 +6,6 @@ use App\Models\LandingContent;
 use App\Repositories\LandingContentRepository;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Laravel\Facades\Image;
 
 class LandingContentService
 {
@@ -113,19 +112,8 @@ class LandingContentService
             }
         }
 
-        // Simpan file sementara
+        // Simpan file dengan resolusi asli (tanpa resize/kompresi)
         $path = $image->store('landing', 'public');
-        $fullPath = Storage::disk('public')->path($path);
-
-        // Resize gambar — max 2560px lebar (covers 4K), quality 92
-        try {
-            $img = Image::decodePath($fullPath);
-            $img->scaleDown(width: 2560);
-            $img->save(null, ['quality' => 92]);
-        } catch (\Exception $e) {
-            report($e);
-        }
-
         $url = Storage::url($path);
 
         return [

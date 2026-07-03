@@ -174,6 +174,11 @@ onCancel();
                                                                  const file = e.target.files?.[0];
 
                                                                  if (file) {
+                                                                     if (file.size > 10 * 1024 * 1024) {
+                                                                         toast.error('Ukuran gambar maksimal 10 MB');
+                                                                         e.target.value = '';
+                                                                         return;
+                                                                     }
                                                                      const reader = new FileReader();
                                                                      reader.onload = () => {
                                                                          setCropSrc(reader.result as string);
@@ -267,6 +272,11 @@ onCancel();
                                                                 const file = e.target.files?.[0];
 
                                                                 if (file) {
+                                                                    if (file.size > 10 * 1024 * 1024) {
+                                                                        toast.error('Ukuran gambar maksimal 10 MB');
+                                                                        e.target.value = '';
+                                                                        return;
+                                                                    }
                                                                     const reader = new FileReader();
                                                                     reader.onload = () => {
                                                                         setCropSrc(reader.result as string);
