@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
+use App\Events\ContentUpdated;
 use App\Models\LandingContent;
 use App\Repositories\LandingContentRepository;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class LandingContentService
@@ -87,11 +87,6 @@ class LandingContentService
         ])->toArray();
     }
 
-    private function touchUpdatedAt(): void
-    {
-        Cache::forever('content_updated_at', now()->timestamp);
-    }
-
     public function updateSection(string $section, array $fields): array
     {
         abort_unless(
@@ -101,7 +96,7 @@ class LandingContentService
 
         $this->landingContentRepository->updateMultipleFields($section, $fields);
         $this->landingContentRepository->flushCache();
-        $this->touchUpdatedAt();
+        ContentUpdated::dispatch();
 
         return [
             'success' => true,
@@ -111,7 +106,6 @@ class LandingContentService
 
     public function uploadImage(UploadedFile $image, ?string $oldImageUrl = null): array
     {
-        // Hapus file lama jika ada
         if ($oldImageUrl) {
             $oldPath = str_replace(Storage::url(''), '', $oldImageUrl);
             if (Storage::disk('public')->exists($oldPath)) {
@@ -121,8 +115,7 @@ class LandingContentService
 
         $path = $image->store('landing', 'public');
         $url = Storage::url($path);
-
-        $this->touchUpdatedAt();
+        ContentUpdated::dispatch();
 
         return [
             'url' => $url,
@@ -133,7 +126,7 @@ class LandingContentService
     {
         $this->landingContentRepository->reorderSections($order);
         $this->landingContentRepository->flushCache();
-        $this->touchUpdatedAt();
+        ContentUpdated::dispatch();
 
         return [
             'success' => true,
@@ -145,7 +138,7 @@ class LandingContentService
     {
         $this->landingContentRepository->updateVisibility($section, $isVisible);
         $this->landingContentRepository->flushCache();
-        $this->touchUpdatedAt();
+        ContentUpdated::dispatch();
 
         $status = $isVisible ? 'ditampilkan' : 'disembunyikan';
 

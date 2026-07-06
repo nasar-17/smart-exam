@@ -1,5 +1,5 @@
-import { Head, usePage } from '@inertiajs/react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Head } from '@inertiajs/react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import CursorGlow from '@/components/cursor-glow';
 import About from '@/components/landing/about';
@@ -53,31 +53,22 @@ export default function Welcome({ content = {}, sections = [] }: { content?: Con
         onPreviewData: handlePreviewData,
     });
 
-    const { contentUpdatedAt } = usePage().props;
-    const initialUpdatedAt = useRef(contentUpdatedAt);
     const [needsRefresh, setNeedsRefresh] = useState(false);
 
     useEffect(() => {
-        // Skip polling when in preview mode (SectionEditor live preview)
+        // Skip listening when in preview mode (SectionEditor iframe)
         if (previewSection) return;
 
-        const interval = setInterval(async () => {
-            try {
-                const res = await fetch(window.location.href, {
-                    headers: { 'X-Inertia': 'true', 'Accept': 'text/html, application/xhtml+xml' },
-                });
-                const text = await res.text();
-                const match = text.match(/"contentUpdatedAt":(\d+)/);
-                if (match && Number(match[1]) !== initialUpdatedAt.current) {
+        if (typeof window !== 'undefined' && window.Echo) {
+            window.Echo.channel('content')
+                .listen('.content.updated', () => {
                     setNeedsRefresh(true);
-                    clearInterval(interval);
-                }
-            } catch {
-                // Silently fail — polling is best-effort
-            }
-        }, 30000);
+                });
 
-        return () => clearInterval(interval);
+            return () => {
+                window.Echo.leaveChannel('content');
+            };
+        }
     }, [previewSection]);
 
     useScrollReveal();
