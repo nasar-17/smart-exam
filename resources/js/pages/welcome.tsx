@@ -1,5 +1,5 @@
-import { Head } from '@inertiajs/react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Head, usePage } from '@inertiajs/react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import CursorGlow from '@/components/cursor-glow';
 import About from '@/components/landing/about';
@@ -52,6 +52,33 @@ export default function Welcome({ content = {}, sections = [] }: { content?: Con
     usePreviewListener({
         onPreviewData: handlePreviewData,
     });
+
+    const { contentUpdatedAt } = usePage().props;
+    const initialUpdatedAt = useRef(contentUpdatedAt);
+    const [needsRefresh, setNeedsRefresh] = useState(false);
+
+    useEffect(() => {
+        // Skip polling when in preview mode (SectionEditor live preview)
+        if (previewSection) return;
+
+        const interval = setInterval(async () => {
+            try {
+                const res = await fetch(window.location.href, {
+                    headers: { 'X-Inertia': 'true', 'Accept': 'text/html, application/xhtml+xml' },
+                });
+                const text = await res.text();
+                const match = text.match(/"contentUpdatedAt":(\d+)/);
+                if (match && Number(match[1]) !== initialUpdatedAt.current) {
+                    setNeedsRefresh(true);
+                    clearInterval(interval);
+                }
+            } catch {
+                // Silently fail — polling is best-effort
+            }
+        }, 30000);
+
+        return () => clearInterval(interval);
+    }, [previewSection]);
 
     useScrollReveal();
     useStatsCounter();
@@ -150,6 +177,25 @@ export default function Welcome({ content = {}, sections = [] }: { content?: Con
                 <title>Smart Exam — Platform Ujian Digital untuk Institusi Modern</title>
                 <meta name="description" content="Platform ujian digital modern untuk sekolah dan institusi. Ujian online yang aman, anti-curang, hemat kertas, dan koreksi otomatis instan." />
             </Head>
+            {needsRefresh && (
+                <div className="fixed top-0 left-0 right-0 z-[99999] flex items-center justify-center gap-4 bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg">
+                    <span>Ada perubahan konten, silahkan refresh halaman</span>
+                    <button
+                        type="button"
+                        onClick={() => window.location.reload()}
+                        className="rounded-lg bg-white px-4 py-1.5 text-sm font-bold text-blue-600 transition hover:bg-blue-50"
+                    >
+                        Refresh
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setNeedsRefresh(false)}
+                        className="text-white/70 hover:text-white text-lg leading-none"
+                    >
+                        &times;
+                    </button>
+                </div>
+            )}
             <div
                 className="min-h-screen"
                 style={{ background: 'var(--lp-bg-primary)', color: 'var(--lp-text-primary)', fontFamily: "'Satoshi', sans-serif" }}

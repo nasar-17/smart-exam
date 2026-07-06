@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\LandingContent;
 use App\Repositories\LandingContentRepository;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class LandingContentService
@@ -86,6 +87,11 @@ class LandingContentService
         ])->toArray();
     }
 
+    private function touchUpdatedAt(): void
+    {
+        Cache::forever('content_updated_at', now()->timestamp);
+    }
+
     public function updateSection(string $section, array $fields): array
     {
         abort_unless(
@@ -95,6 +101,7 @@ class LandingContentService
 
         $this->landingContentRepository->updateMultipleFields($section, $fields);
         $this->landingContentRepository->flushCache();
+        $this->touchUpdatedAt();
 
         return [
             'success' => true,
@@ -112,9 +119,10 @@ class LandingContentService
             }
         }
 
-        // Simpan file dengan resolusi asli (tanpa resize/kompresi)
         $path = $image->store('landing', 'public');
         $url = Storage::url($path);
+
+        $this->touchUpdatedAt();
 
         return [
             'url' => $url,
@@ -125,6 +133,7 @@ class LandingContentService
     {
         $this->landingContentRepository->reorderSections($order);
         $this->landingContentRepository->flushCache();
+        $this->touchUpdatedAt();
 
         return [
             'success' => true,
@@ -136,6 +145,7 @@ class LandingContentService
     {
         $this->landingContentRepository->updateVisibility($section, $isVisible);
         $this->landingContentRepository->flushCache();
+        $this->touchUpdatedAt();
 
         $status = $isVisible ? 'ditampilkan' : 'disembunyikan';
 

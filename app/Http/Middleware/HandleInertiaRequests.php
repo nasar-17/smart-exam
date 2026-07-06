@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Repositories\AppointmentRepository;
 use App\Services\LandingContentService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -31,6 +32,7 @@ class HandleInertiaRequests extends Middleware
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'adminSections' => app(LandingContentService::class)->getAdminSections(),
             'appointmentCount' => $request->user() ? app(AppointmentRepository::class)->getUnreadCount() : 0,
+            'contentUpdatedAt' => Cache::get('content_updated_at', 0),
         ];
     }
 }
