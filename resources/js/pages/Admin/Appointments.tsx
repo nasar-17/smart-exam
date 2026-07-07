@@ -1,7 +1,10 @@
 import { Head, router } from '@inertiajs/react';
-import { Trash2, Calendar as CalendarIcon, Clock, Mail, PhoneCall, School, User } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, Mail, PhoneCall, School, Trash2, User, X } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 import AdminLayout from '@/components/admin/AdminLayout';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { formatDate, formatTime } from '@/lib/formatters';
 
 type Appointment = {
@@ -18,16 +21,32 @@ type Props = {
     appointments: Appointment[];
 };
 
+function getWaNumber(raw: string): string {
+    return raw.replace(/[^0-9]/g, '');
+}
+
+function getWaUrl(appointment: Appointment): string {
+    const number = getWaNumber(appointment.whatsapp);
+    const message = encodeURIComponent(
+        `halo kak ${appointment.name} dari ${appointment.institution} kami lihat kakak mendaftar untuk aplikasi smart exam kami, ada yang bisa dibantu?`
+    );
+    return `https://wa.me/${number}?text=${message}`;
+}
+
 export default function Appointments({ appointments }: Props) {
+    const [selected, setSelected] = useState<Appointment | null>(null);
+
     const handleDelete = (id: number) => {
         if (confirm('Apakah Anda yakin ingin menghapus jadwal pendaftaran demo ini?')) {
             router.delete(`/admin/appointments/${id}`, {
+                preserveScroll: true,
                 onSuccess: () => {
                     toast.success('Jadwal demo berhasil dihapus');
+                    if (selected?.id === id) setSelected(null);
                 },
                 onError: () => {
                     toast.error('Gagal menghapus jadwal demo');
-                }
+                },
             });
         }
     };
@@ -35,7 +54,7 @@ export default function Appointments({ appointments }: Props) {
     return (
         <div className="p-6">
             <Head title="Daftar Pengajuan Demo" />
-            
+
             <div className="mb-6">
                 <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-100">
                     Daftar Pengajuan Demo Aplikasi
@@ -52,81 +71,145 @@ export default function Appointments({ appointments }: Props) {
                     <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Data akan otomatis bertambah saat pengguna mendaftar melalui landing page.</p>
                 </div>
             ) : (
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {appointments.map((appointment) => (
-                        <div
+                        <button
+                            type="button"
                             key={appointment.id}
-                            className="bg-white dark:bg-[#151d2a] border border-slate-100 dark:border-slate-800/80 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all relative flex flex-col justify-between"
+                            onClick={() => setSelected(appointment)}
+                            className="bg-white dark:bg-[#151d2a] border border-slate-100 dark:border-slate-800/80 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-blue-200 dark:hover:border-blue-800/60 transition-all text-left w-full relative group"
                         >
-                            <div>
-                                {/* Header / Institution */}
-                                <div className="flex items-center gap-2.5 mb-3.5 pb-2.5 border-b border-slate-100/80 dark:border-slate-800/60 pr-8">
-                                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 ring-1 ring-blue-100/50 dark:ring-blue-900/30">
-                                        <School className="h-4.5 w-4.5" />
+                            {/* Delete button */}
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDelete(appointment.id);
+                                }}
+                                className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-lg text-rose-400 hover:text-rose-600 bg-rose-50 dark:bg-rose-950/20 hover:bg-rose-100 dark:hover:bg-rose-950/40 transition-all opacity-0 group-hover:opacity-100 border border-rose-100/50 dark:border-rose-950/20"
+                                title="Hapus"
+                            >
+                                <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+
+                            <div className="flex items-center gap-3 mb-3">
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 ring-1 ring-blue-100/50 dark:ring-blue-900/30">
+                                    <School className="h-5 w-5" />
+                                </div>
+                                <div className="min-w-0">
+                                    <h3 className="font-bold text-sm text-slate-800 dark:text-slate-100 truncate">
+                                        {appointment.institution}
+                                    </h3>
+                                    <span className="text-[11px] text-slate-400 dark:text-slate-500 truncate block">
+                                        {appointment.name}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                                <CalendarIcon className="h-3.5 w-3.5 shrink-0" />
+                                <span>{formatDate(appointment.scheduled_at)}</span>
+                            </div>
+                        </button>
+                    ))}
+                </div>
+            )}
+
+            {/* Detail Modal */}
+            <Dialog open={selected !== null} onOpenChange={(open) => { if (!open) setSelected(null); }}>
+                <DialogContent className="sm:max-w-md bg-white dark:bg-[#151d2a] border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl">
+                    {selected && (
+                        <>
+                            <DialogHeader>
+                                <DialogTitle className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-3" style={{ fontFamily: "'Sora', sans-serif" }}>
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400">
+                                        <School className="h-5 w-5" />
                                     </div>
-                                    <div className="min-w-0">
-                                        <h3 className="font-bold text-sm text-slate-800 dark:text-slate-100 truncate">
-                                            {appointment.institution}
-                                        </h3>
-                                        <span className="text-[10px] text-slate-400 dark:text-slate-500">
-                                            Nama Institusi
-                                        </span>
+                                    {selected.institution}
+                                </DialogTitle>
+                            </DialogHeader>
+
+                            <div className="space-y-4 py-2">
+                                <div className="flex items-start gap-3">
+                                    <User className="h-4 w-4 text-slate-400 mt-0.5 shrink-0" />
+                                    <div>
+                                        <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">{selected.name}</p>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400">Nama Pendaftar</p>
                                     </div>
                                 </div>
 
-                                {/* Body / User Data */}
-                                <div className="space-y-2">
-                                    <div className="flex items-center gap-2.5 text-xs text-slate-650 dark:text-slate-350">
-                                        <User className="h-4 w-4 text-slate-400" />
-                                        <span className="font-medium truncate">{appointment.name}</span>
-                                    </div>
-                                    
-                                    <div className="flex items-center gap-2.5 text-xs text-slate-650 dark:text-slate-350">
-                                        <Mail className="h-4 w-4 text-slate-400" />
-                                        <a href={`mailto:${appointment.email}`} className="hover:text-blue-600 dark:hover:text-blue-450 transition-colors truncate">
-                                            {appointment.email}
+                                <div className="flex items-start gap-3">
+                                    <Mail className="h-4 w-4 text-slate-400 mt-0.5 shrink-0" />
+                                    <div>
+                                        <a href={`mailto:${selected.email}`} className="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+                                            {selected.email}
                                         </a>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400">Email</p>
                                     </div>
-                                    
-                                    <div className="flex items-center gap-2.5 text-xs text-slate-650 dark:text-slate-350">
-                                        <PhoneCall className="h-4 w-4 text-slate-400" />
-                                        <a 
-                                            href={`https://wa.me/${appointment.whatsapp.replace(/[^0-9]/g, '')}`} 
-                                            target="_blank" 
-                                            rel="noopener noreferrer" 
-                                            className="hover:text-blue-600 dark:hover:text-blue-450 transition-colors truncate"
-                                        >
-                                            {appointment.whatsapp}
-                                        </a>
-                                    </div>
+                                </div>
 
-                                    {/* Scheduled Date */}
-                                    <div className="mt-4 p-3 rounded-xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100/50 dark:border-slate-800/40 space-y-1.5">
-                                        <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
-                                            <CalendarIcon className="h-4 w-4 text-blue-600 dark:text-blue-450" />
-                                            <span>{formatDate(appointment.scheduled_at)}</span>
-                                        </div>
-                                        <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-450">
-                                            <Clock className="h-4 w-4 text-blue-600/70" />
-                                            <span>{formatTime(appointment.scheduled_at)}</span>
-                                        </div>
+                                <div className="flex items-start gap-3">
+                                    <PhoneCall className="h-4 w-4 text-slate-400 mt-0.5 shrink-0" />
+                                    <div>
+                                        <a
+                                            href={`https://wa.me/${getWaNumber(selected.whatsapp)}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+                                        >
+                                            {selected.whatsapp}
+                                        </a>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400">WhatsApp</p>
+                                    </div>
+                                </div>
+
+                                <div className="rounded-xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100/50 dark:border-slate-800/40 p-4 space-y-2">
+                                    <div className="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
+                                        <CalendarIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                                        <span>{formatDate(selected.scheduled_at)}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                                        <Clock className="h-4 w-4 text-blue-600/70" />
+                                        <span>{formatTime(selected.scheduled_at)}</span>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Action overlay top right */}
-                            <button
-                                type="button"
-                                onClick={() => handleDelete(appointment.id)}
-                                className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-lg text-rose-500 hover:text-rose-700 bg-rose-50 dark:bg-rose-950/20 hover:bg-rose-100 dark:hover:bg-rose-950/40 transition-all border border-rose-100/50 dark:border-rose-950/20"
-                                title="Hapus Pengajuan"
-                            >
-                                <Trash2 className="h-4 w-4" />
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            )}
+                            <DialogFooter className="border-t border-slate-100 dark:border-slate-800/80 pt-4 flex justify-between gap-3 sm:gap-0">
+                                <Button
+                                    type="button"
+                                    onClick={() => setSelected(null)}
+                                    variant="ghost"
+                                    className="rounded-xl font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+                                >
+                                    <X className="h-4 w-4 mr-1.5" />
+                                    Tutup
+                                </Button>
+                                <div className="flex gap-2">
+                                    <Button
+                                        type="button"
+                                        onClick={() => handleDelete(selected.id)}
+                                        variant="ghost"
+                                        className="rounded-xl font-semibold text-rose-500 hover:text-rose-400 hover:bg-rose-950/20"
+                                    >
+                                        <Trash2 className="h-4 w-4 mr-1.5" />
+                                        Hapus
+                                    </Button>
+                                    <a
+                                        href={getWaUrl(selected)}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-2 rounded-xl bg-green-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-green-700 transition-colors shadow-sm"
+                                    >
+                                        <PhoneCall className="h-4 w-4" />
+                                        Hubungi
+                                    </a>
+                                </div>
+                            </DialogFooter>
+                        </>
+                    )}
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }
