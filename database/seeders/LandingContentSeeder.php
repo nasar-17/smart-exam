@@ -147,10 +147,12 @@ class LandingContentSeeder extends Seeder
             // ── FOOTER ──────────────────────────────────────
             ['section' => 'footer', 'key' => 'tagline', 'value' => 'Platform ujian digital terpercaya untuk institusi pendidikan modern Indonesia.', 'type' => 'textarea', 'label' => 'Tagline', 'order' => 1],
             ['section' => 'footer', 'key' => 'copyright', 'value' => '© 2026 Smart Exam oleh Smart Inovasi. Hak cipta dilindungi.', 'type' => 'text', 'label' => 'Copyright', 'order' => 2],
-            ['section' => 'footer', 'key' => 'social_instagram', 'value' => '#', 'type' => 'text', 'label' => 'Link Instagram', 'order' => 3],
-            ['section' => 'footer', 'key' => 'social_twitter', 'value' => '#', 'type' => 'text', 'label' => 'Link Twitter/X', 'order' => 4],
-            ['section' => 'footer', 'key' => 'social_linkedin', 'value' => '#', 'type' => 'text', 'label' => 'Link LinkedIn', 'order' => 5],
-            ['section' => 'footer', 'key' => 'social_youtube', 'value' => '#', 'type' => 'text', 'label' => 'Link YouTube', 'order' => 6],
+            ['section' => 'footer', 'key' => 'links_social', 'type' => 'json', 'label' => 'Link Media Sosial (icon + URL)', 'order' => 3, 'value' => json_encode([
+                ['icon' => 'lucide:youtube', 'href' => '#'],
+                ['icon' => 'lucide:twitter', 'href' => '#'],
+                ['icon' => 'lucide:instagram', 'href' => '#'],
+                ['icon' => 'lucide:linkedin', 'href' => '#'],
+            ])],
             ['section' => 'footer', 'key' => 'links_product', 'type' => 'json', 'label' => 'Kolom Link — Produk', 'order' => 7, 'value' => json_encode([
                 ['label' => 'Fitur', 'href' => '#features'],
                 ['label' => 'Harga', 'href' => '#pricing'],
@@ -172,9 +174,9 @@ class LandingContentSeeder extends Seeder
                 ['label' => 'Syarat & Ketentuan', 'href' => '#'],
                 ['label' => 'Kebijakan Privasi', 'href' => '#'],
             ])],
-            ['section' => 'footer', 'key' => 'column_title_product', 'value' => 'Produk', 'type' => 'text', 'label' => 'Judul Kolom 1 (Produk)', 'order' => 10],
-            ['section' => 'footer', 'key' => 'column_title_company', 'value' => 'Perusahaan', 'type' => 'text', 'label' => 'Judul Kolom 2 (Perusahaan)', 'order' => 11],
-            ['section' => 'footer', 'key' => 'column_title_support', 'value' => 'Dukungan', 'type' => 'text', 'label' => 'Judul Kolom 3 (Dukungan)', 'order' => 12],
+            ['section' => 'footer', 'key' => 'column_title_product', 'value' => 'Produk', 'type' => 'text', 'label' => 'Judul Kolom 1 (Produk)', 'order' => 11],
+            ['section' => 'footer', 'key' => 'column_title_company', 'value' => 'Perusahaan', 'type' => 'text', 'label' => 'Judul Kolom 2 (Perusahaan)', 'order' => 12],
+            ['section' => 'footer', 'key' => 'column_title_support', 'value' => 'Dukungan', 'type' => 'text', 'label' => 'Judul Kolom 3 (Dukungan)', 'order' => 13],
         ];
 
         foreach ($data as $item) {

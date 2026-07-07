@@ -1,4 +1,4 @@
-import { Twitter, Linkedin, Instagram, Youtube } from 'lucide-react';
+import DynamicLucideIcon from '@/components/dynamic-lucide-icon';
 
 const DEFAULT_LINKS_PRODUCT = [
     { label: 'Fitur', href: '#features' },
@@ -25,28 +25,17 @@ const DEFAULT_LINKS_SUPPORT = [
 ];
 
 function parseJsonLinks(raw: any, fallback: { label: string; href: string }[]) {
-    if (!raw) {
-return fallback;
-}
-
+    if (!raw) return fallback;
     try {
         const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
-
-        if (Array.isArray(parsed) && parsed.length > 0) {
-return parsed;
-}
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     } catch (_) {}
-
     return fallback;
 }
 
 export default function Footer({ data }: { data?: any }) {
     const tagline = data?.tagline ?? 'Platform ujian digital terpercaya untuk institusi pendidikan modern Indonesia.';
     const copyright = data?.copyright ?? '© 2026 Smart Exam oleh Smart Inovasi. Hak cipta dilindungi.';
-    const socialInstagram = data?.social_instagram ?? '#';
-    const socialTwitter = data?.social_twitter ?? '#';
-    const socialLinkedin = data?.social_linkedin ?? '#';
-    const socialYoutube = data?.social_youtube ?? '#';
 
     const columnTitleProduct = data?.column_title_product ?? 'Produk';
     const columnTitleCompany = data?.column_title_company ?? 'Perusahaan';
@@ -55,18 +44,12 @@ export default function Footer({ data }: { data?: any }) {
     const linksProduct = parseJsonLinks(data?.links_product, DEFAULT_LINKS_PRODUCT);
     const linksCompany = parseJsonLinks(data?.links_company, DEFAULT_LINKS_COMPANY);
     const linksSupport = parseJsonLinks(data?.links_support, DEFAULT_LINKS_SUPPORT);
+    const linksSocial = data?.links_social ?? [];
 
     const footerColumns = [
         { title: columnTitleProduct, links: linksProduct, titleField: 'column_title_product', linksField: 'links_product' },
         { title: columnTitleCompany, links: linksCompany, titleField: 'column_title_company', linksField: 'links_company' },
         { title: columnTitleSupport, links: linksSupport, titleField: 'column_title_support', linksField: 'links_support' },
-    ];
-
-    const socials = [
-        { icon: Twitter, href: socialTwitter },
-        { icon: Linkedin, href: socialLinkedin },
-        { icon: Instagram, href: socialInstagram },
-        { icon: Youtube, href: socialYoutube },
     ];
 
     return (
@@ -101,19 +84,22 @@ export default function Footer({ data }: { data?: any }) {
                         <p className="mb-6 text-sm leading-relaxed" data-preview-field="tagline" style={{ color: 'var(--lp-text-secondary)' }}>
                             {tagline}
                         </p>
-                        <div className="flex gap-3">
-                            {socials.map((s, i) => (
+                        <div className="flex gap-3" data-preview-field="links_social">
+                            {linksSocial.map((s: any, i: number) => (
                                 <a
                                     key={i}
-                                    href={s.href}
+                                    href={s.href || '#'}
                                     className="flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-300 hover:scale-105 hover:bg-[#2563EB] group"
-                                    data-preview-field={['social_twitter', 'social_linkedin', 'social_instagram', 'social_youtube'][i]}
                                     style={{
                                         background: 'var(--lp-card-highlight)',
                                         border: '1px solid var(--lp-border-card)',
                                     }}
                                 >
-                                    <s.icon className="h-4 w-4 transition-colors group-hover:text-white" style={{ color: 'var(--lp-text-secondary)' }} />
+                                    <DynamicLucideIcon
+                                        name={s.icon}
+                                        className="h-4 w-4 transition-colors group-hover:text-white"
+                                        style={{ color: 'var(--lp-text-secondary)' }}
+                                    />
                                 </a>
                             ))}
                         </div>
@@ -130,7 +116,7 @@ export default function Footer({ data }: { data?: any }) {
                                 {col.title}
                             </h4>
                             <div className="space-y-3" data-preview-field={col.linksField}>
-                                {col.links.map((link: { label: string; href: string }) => (
+                                {col.links.map((link: any) => (
                                     <a
                                         key={link.label}
                                         href={link.href}
