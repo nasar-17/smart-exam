@@ -24,7 +24,13 @@ type Props = {
 };
 
 function getWaNumber(raw: string): string {
-    return raw.replace(/[^0-9]/g, '');
+    // Hapus semua karakter non-digit
+    let num = raw.replace(/[^0-9]/g, '');
+    // Jika diawali 0, ganti dengan kode negara Indonesia (62)
+    if (num.startsWith('0')) {
+        num = '62' + num.slice(1);
+    }
+    return num;
 }
 
 function getWaUrl(appointment: Appointment): string {
