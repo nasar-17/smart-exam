@@ -151,12 +151,17 @@ export default function JsonField({
                 <div className="grid gap-3 sm:grid-cols-2">
                     {items.map((item, idx) => {
                         const isPrimitive = item._is_primitive_string;
+                        const isSocialField = fieldKey === 'links_social';
                         const displayName = isPrimitive
                             ? String(item.value)
-                            : String(item.name || item.title || item.judul || item.label || item.href || `Item ${idx + 1}`);
+                            : isSocialField
+                                ? String(item.icon?.replace('lucide:', '')?.replace('-', ' ') || 'Link Sosial')
+                                : String(item.name || item.title || item.judul || item.label || item.href || `Item ${idx + 1}`);
                         const displayDesc = isPrimitive
                             ? ''
-                            : String(item.description || item.desc || item.deskripsi || item.price_monthly || item.target || '');
+                            : isSocialField
+                                ? String(item.href || '')
+                                : String(item.description || item.desc || item.deskripsi || item.price_monthly || item.target || '');
                         const iconVal = isPrimitive ? '' : String(item.icon || '');
 
                         return (
