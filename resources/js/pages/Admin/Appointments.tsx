@@ -1,10 +1,11 @@
 import { Head, router } from '@inertiajs/react';
-import { Calendar as CalendarIcon, Clock, Mail, PhoneCall, School, Trash2, User, X } from 'lucide-react';
-import { useState } from 'react';
+import { Calendar as CalendarIcon, Clock, Mail, PhoneCall, School, Search, Trash2, User, X } from 'lucide-react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 import { formatDate, formatTime } from '@/lib/formatters';
 
 type Appointment = {
@@ -35,6 +36,25 @@ function getWaUrl(appointment: Appointment): string {
 
 export default function Appointments({ appointments }: Props) {
     const [selected, setSelected] = useState<Appointment | null>(null);
+    const [search, setSearch] = useState('');
+
+    const filtered = useMemo(() => {
+        // Urut dari terbaru ke terlama berdasarkan created_at
+        const sorted = [...appointments].sort(
+            (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+        );
+
+        if (!search.trim()) return sorted;
+
+        const q = search.toLowerCase();
+        return sorted.filter(
+            (a) =>
+                a.name.toLowerCase().includes(q) ||
+                a.institution.toLowerCase().includes(q) ||
+                a.email.toLowerCase().includes(q) ||
+                a.whatsapp.includes(q),
+        );
+    }, [appointments, search]);
 
     const handleDelete = (id: number) => {
         if (confirm('Apakah Anda yakin ingin menghapus jadwal pendaftaran demo ini?')) {
@@ -64,15 +84,32 @@ export default function Appointments({ appointments }: Props) {
                 </p>
             </div>
 
-            {appointments.length === 0 ? (
+            {/* Search */}
+            <div className="relative mb-6">
+                <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <Input
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Cari berdasarkan nama, institusi, email, atau WhatsApp..."
+                    className="h-11 w-full max-w-md rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 pl-10 text-sm"
+                />
+            </div>
+
+            {filtered.length === 0 ? (
                 <div className="flex flex-col items-center justify-center p-12 bg-white dark:bg-[#151d2a] rounded-3xl border border-slate-100 dark:border-slate-800/80 shadow-sm text-center">
                     <CalendarIcon className="h-10 w-10 text-slate-300 dark:text-slate-700 mb-3" />
-                    <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">Belum ada pengajuan demo</p>
-                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Data akan otomatis bertambah saat pengguna mendaftar melalui landing page.</p>
+                    <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">
+                        {appointments.length === 0 ? 'Belum ada pengajuan demo' : 'Tidak ditemukan'}
+                    </p>
+                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
+                        {appointments.length === 0
+                            ? 'Data akan otomatis bertambah saat pengguna mendaftar melalui landing page.'
+                            : 'Coba gunakan kata kunci lain untuk mencari.'}
+                    </p>
                 </div>
             ) : (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {appointments.map((appointment) => (
+                    {filtered.map((appointment) => (
                         <button
                             type="button"
                             key={appointment.id}
