@@ -1,11 +1,12 @@
 import { Head, router } from '@inertiajs/react';
-import { Calendar as CalendarIcon, Clock, Mail, PhoneCall, School, Search, Trash2, User, X } from 'lucide-react';
+import { Calendar as CalendarIcon, CalendarDays, Clock, Mail, PhoneCall, School, Search, Trash2, User, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { formatDate, formatTime } from '@/lib/formatters';
 
 type Appointment = {
@@ -37,6 +38,8 @@ function getWaUrl(appointment: Appointment): string {
 export default function Appointments({ appointments }: Props) {
     const [selected, setSelected] = useState<Appointment | null>(null);
     const [search, setSearch] = useState('');
+    const [dateFrom, setDateFrom] = useState('');
+    const [dateTo, setDateTo] = useState('');
 
     const filtered = useMemo(() => {
         // Urut dari terbaru ke terlama berdasarkan created_at
@@ -44,17 +47,37 @@ export default function Appointments({ appointments }: Props) {
             (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
         );
 
-        if (!search.trim()) return sorted;
+        return sorted.filter((a) => {
+            // Filter teks
+            if (search.trim()) {
+                const q = search.toLowerCase();
+                if (
+                    !a.name.toLowerCase().includes(q) &&
+                    !a.institution.toLowerCase().includes(q) &&
+                    !a.email.toLowerCase().includes(q) &&
+                    !a.whatsapp.includes(q)
+                ) return false;
+            }
 
-        const q = search.toLowerCase();
-        return sorted.filter(
-            (a) =>
-                a.name.toLowerCase().includes(q) ||
-                a.institution.toLowerCase().includes(q) ||
-                a.email.toLowerCase().includes(q) ||
-                a.whatsapp.includes(q),
-        );
-    }, [appointments, search]);
+            // Filter tanggal mulai
+            if (dateFrom) {
+                const from = new Date(dateFrom);
+                from.setHours(0, 0, 0, 0);
+                const created = new Date(a.created_at);
+                if (created < from) return false;
+            }
+
+            // Filter tanggal selesai
+            if (dateTo) {
+                const to = new Date(dateTo);
+                to.setHours(23, 59, 59, 999);
+                const created = new Date(a.created_at);
+                if (created > to) return false;
+            }
+
+            return true;
+        });
+    }, [appointments, search, dateFrom, dateTo]);
 
     const handleDelete = (id: number) => {
         if (confirm('Apakah Anda yakin ingin menghapus jadwal pendaftaran demo ini?')) {
@@ -84,15 +107,52 @@ export default function Appointments({ appointments }: Props) {
                 </p>
             </div>
 
-            {/* Search */}
-            <div className="relative mb-6">
-                <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                <Input
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Cari berdasarkan nama, institusi, email, atau WhatsApp..."
-                    className="h-11 w-full max-w-md rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 pl-10 text-sm"
-                />
+            {/* Search & Filter */}
+            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end">
+                <div className="relative flex-1">
+                    <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                    <Input
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="Cari nama, institusi, email, atau WA..."
+                        className="h-11 w-full rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 pl-10 text-sm"
+                    />
+                </div>
+                <div className="flex items-end gap-3">
+                    <div className="space-y-1">
+                        <Label className="text-xs font-medium text-slate-500 dark:text-slate-400">Dari</Label>
+                        <div className="relative">
+                            <CalendarDays className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                            <input
+                                type="date"
+                                value={dateFrom}
+                                onChange={(e) => setDateFrom(e.target.value)}
+                                className="h-11 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 pl-10 pr-3 text-sm text-slate-700 dark:text-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
+                            />
+                        </div>
+                    </div>
+                    <div className="space-y-1">
+                        <Label className="text-xs font-medium text-slate-500 dark:text-slate-400">Sampai</Label>
+                        <div className="relative">
+                            <CalendarDays className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                            <input
+                                type="date"
+                                value={dateTo}
+                                onChange={(e) => setDateTo(e.target.value)}
+                                className="h-11 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 pl-10 pr-3 text-sm text-slate-700 dark:text-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
+                            />
+                        </div>
+                    </div>
+                    {(dateFrom || dateTo || search) && (
+                        <button
+                            type="button"
+                            onClick={() => { setSearch(''); setDateFrom(''); setDateTo(''); }}
+                            className="h-11 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 px-4 text-sm font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-all"
+                        >
+                            Reset
+                        </button>
+                    )}
+                </div>
             </div>
 
             {filtered.length === 0 ? (
