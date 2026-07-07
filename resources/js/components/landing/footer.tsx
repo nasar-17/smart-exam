@@ -46,6 +46,16 @@ export default function Footer({ data }: { data?: any }) {
     const linksSupport = parseJsonLinks(data?.links_support, DEFAULT_LINKS_SUPPORT);
     const linksSocial = data?.links_social ?? [];
 
+    // Fallback ke field legacy jika links_social masih kosong
+    const hasNewSocial = Array.isArray(linksSocial) && linksSocial.length > 0;
+    const legacyIcons = [
+        { icon: 'lucide:youtube', href: data?.social_youtube ?? '#' },
+        { icon: 'lucide:twitter', href: data?.social_twitter ?? '#' },
+        { icon: 'lucide:instagram', href: data?.social_instagram ?? '#' },
+        { icon: 'lucide:linkedin', href: data?.social_linkedin ?? '#' },
+    ];
+    const socialItems = hasNewSocial ? linksSocial : legacyIcons;
+
     const footerColumns = [
         { title: columnTitleProduct, links: linksProduct, titleField: 'column_title_product', linksField: 'links_product' },
         { title: columnTitleCompany, links: linksCompany, titleField: 'column_title_company', linksField: 'links_company' },
@@ -85,7 +95,7 @@ export default function Footer({ data }: { data?: any }) {
                             {tagline}
                         </p>
                         <div className="flex gap-3" data-preview-field="links_social">
-                            {linksSocial.map((s: any, i: number) => (
+                            {socialItems.map((s: any, i: number) => (
                                 <a
                                     key={i}
                                     href={s.href || '#'}
