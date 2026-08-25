@@ -26,6 +26,8 @@ Route::prefix('admin')
 
         Route::get('/appointments', [AdminAppointmentController::class, 'index'])
             ->name('appointments.index');
+        Route::get('/appointments/export', [AdminAppointmentController::class, 'export'])
+            ->name('appointments.export');
         Route::delete('/appointments/{id}', [AdminAppointmentController::class, 'destroy'])
             ->name('appointments.destroy');
 

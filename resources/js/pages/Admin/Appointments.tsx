@@ -1,5 +1,5 @@
 import { Head, router } from '@inertiajs/react';
-import { Calendar as CalendarIcon, CalendarDays, Clock, Mail, PhoneCall, School, Search, Trash2, User, X } from 'lucide-react';
+import { Calendar as CalendarIcon, CalendarDays, Clock, FileSpreadsheet, Mail, PhoneCall, School, Search, Trash2, User, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import AdminLayout from '@/components/admin/AdminLayout';
@@ -104,13 +104,24 @@ export default function Appointments({ appointments }: Props) {
         <div className="p-6">
             <Head title="Daftar Pengajuan Demo" />
 
-            <div className="mb-6">
-                <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-100">
-                    Daftar Pengajuan Demo Aplikasi
-                </h2>
-                <p className="text-sm text-gray-500 dark:text-slate-400">
-                    Berikut adalah daftar institusi yang telah menjadwalkan demo aplikasi Smart Exam.
-                </p>
+            <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+                <div>
+                    <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-100">
+                        Daftar Pengajuan Demo Aplikasi
+                    </h2>
+                    <p className="text-sm text-gray-500 dark:text-slate-400">
+                        Berikut adalah daftar institusi yang telah menjadwalkan demo aplikasi Smart Exam.
+                    </p>
+                </div>
+                <div>
+                    <a
+                        href="/admin/appointments/export"
+                        className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 text-sm font-bold text-white hover:bg-emerald-700 transition-colors shadow-sm cursor-pointer"
+                    >
+                        <FileSpreadsheet className="h-4 w-4" />
+                        Export Excel
+                    </a>
+                </div>
             </div>
 
             {/* Search & Filter */}
